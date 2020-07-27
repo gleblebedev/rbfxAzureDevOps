@@ -1,0 +1,37 @@
+# Build project for Mac
+
+jobs:
+- job: Build_Linux
+  displayName: 'Build Linux'
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+  - checkout: self
+    submodules: true
+    displayName: 'Checkout project'
+
+  - task: Bash@3
+    displayName: 'Install libs'
+    inputs:
+      targetType: inline
+      script: 'sudo apt-get install -y uuid-dev libgl-dev'
+      failOnStderr: true
+
+  - template: Build-rbfx.yaml
+    parameters:
+      buildDotNet: false
+
+  - task: CopyFiles@2
+    displayName: 'Copy libUrho3D.so'
+    inputs:
+      sourceFolder: '$(Agent.BuildDirectory)/s/rbfxbuild/bin'
+      contents: 'libUrho3D.so' 
+      targetFolder: '$(Build.ArtifactStagingDirectory)/nuget/native/linux'
+      overWrite: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish game binaries'
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/nuget'
+      artifactName: 'linux-nuget'

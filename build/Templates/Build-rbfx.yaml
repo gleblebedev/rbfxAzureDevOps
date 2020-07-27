@@ -1,0 +1,34 @@
+# Build Urho3D rbfx fork
+parameters:
+  buildDotNet: true
+
+steps:
+- script: mkdir rbfxbuild
+  displayName: 'Make rbfxbuild folder'
+  workingDirectory: $(Agent.BuildDirectory)/s
+  failOnStderr: true
+
+- task: CMake@1
+  displayName: 'Configure Urho3D'
+  inputs:
+    workingDirectory: '$(Agent.BuildDirectory)/s/rbfxbuild'
+    cmakeArgs: -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=OFF -DURHO3D_FEATURES=CSHARP;SYSTEMUI $(Agent.BuildDirectory)/s/rbfx
+
+- task: NuGetCommand@2
+  displayName: 'Restore rbfx dependencies'
+  inputs:
+    command: 'restore'
+    restoreSolution: '$(Agent.BuildDirectory)/s/rbfxbuild/*.sln'
+
+- task: CMake@1
+  displayName: 'Build Urho3D'
+  inputs:
+    workingDirectory: '$(Agent.BuildDirectory)/s/rbfxbuild'
+    cmakeArgs: --build . --config Release --target Urho3D
+
+- task: CMake@1
+  displayName: 'Build Urho3DNet'
+  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+  inputs:
+    workingDirectory: '$(Agent.BuildDirectory)/s/rbfxbuild'
+    cmakeArgs: --build . --config Release --target Urho3DNet

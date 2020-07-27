@@ -1,0 +1,41 @@
+# Build project for Windows
+
+jobs:
+- job: Build_Windows
+  displayName: 'Build Windows'
+  pool:
+    vmImage: 'windows-latest'
+
+  steps:
+  - checkout: self
+    submodules: true
+    displayName: 'Checkout project'
+
+  - template: Build-rbfx.yaml
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Agent.BuildDirectory)/s/rbfxbuild/bin/Release'
+      contents: 'Urho3D.dll' 
+      targetFolder: '$(Build.ArtifactStagingDirectory)/nuget/runtimes/win-x64/native'
+      overWrite: true
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Agent.BuildDirectory)/s/rbfx/bin/CoreData'
+      contents: '**' 
+      targetFolder: '$(Build.ArtifactStagingDirectory)/nuget/content/CoreData'
+      overWrite: true
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Agent.BuildDirectory)/s/rbfxbuild/bin/Release'
+      contents: 'Urho3DNet.dll' 
+      targetFolder: '$(Build.ArtifactStagingDirectory)/nuget/lib/net471'
+      overWrite: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish game binaries'
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/nuget'
+      artifactName: 'win-nuget'

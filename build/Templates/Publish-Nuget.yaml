@@ -1,0 +1,66 @@
+# Build project for Windows
+
+jobs:
+- job: Publish
+  displayName: 'Publish Nuget'
+  pool:
+    vmImage: 'windows-latest'
+
+  steps:
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download Windows binaries'
+    inputs:
+      source: 'current'
+      artifact: 'win-nuget'
+      #patterns: '**' # Optional
+      path: '$(Build.ArtifactStagingDirectory)/nuget'
+
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download Mac binaries'
+    inputs:
+      source: 'current'
+      artifact: 'osx-nuget'
+      #patterns: '**' # Optional
+      path: '$(Build.ArtifactStagingDirectory)/nuget'
+
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download Linux binaries'
+    inputs:
+      source: 'current'
+      artifact: 'linux-nuget'
+      #patterns: '**' # Optional
+      path: '$(Build.ArtifactStagingDirectory)/nuget'
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Agent.BuildDirectory)/s/nuget'
+      contents: 'LICENSE' 
+      targetFolder: '$(Build.ArtifactStagingDirectory)/nuget'
+      overWrite: true
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Agent.BuildDirectory)/s/nuget/build'
+      contents: '**' 
+      targetFolder: '$(Build.ArtifactStagingDirectory)/nuget/build'
+      overWrite: true
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Agent.BuildDirectory)/s/nuget'
+      contents: 'unofficial.Urho3DNet.nuspec' 
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+      overWrite: true
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'pack'
+      packagesToPack: '$(Build.ArtifactStagingDirectory)/unofficial.Urho3DNet.nuspec'
+      #versioningScheme: 'byBuildNumber'
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: '$(VstsFeed)'

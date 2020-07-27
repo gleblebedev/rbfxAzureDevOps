@@ -1,0 +1,20 @@
+#Azure DevOps yaml script to build and publish rbfx game on 2 platforms
+
+trigger: none
+#- master
+
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  - template: Templates/Build-Win.yaml
+  - template: Templates/Build-Mac.yaml
+  - template: Templates/Build-Linux.yaml
+
+- stage: Publish
+  displayName: Publish Nuget
+  dependsOn:
+    - Build
+  jobs:
+  - template: Templates/Publish-Nuget.yaml
+  

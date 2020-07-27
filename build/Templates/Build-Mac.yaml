@@ -1,0 +1,29 @@
+# Build project for Mac
+
+jobs:
+- job: Build_Mac
+  displayName: 'Build Mac'
+  pool:
+    vmImage: 'macOS-latest'
+
+  steps:
+  - checkout: self
+    submodules: true
+    displayName: 'Checkout project'
+
+  - template: Build-rbfx.yaml
+    parameters:
+      buildDotNet: false
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Agent.BuildDirectory)/s/rbfxbuild/bin'
+      contents: 'libUrho3D.dylib' 
+      targetFolder: '$(Build.ArtifactStagingDirectory)/nuget/native/osx'
+      overWrite: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish game binaries'
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/nuget'
+      artifactName: 'osx-nuget'
