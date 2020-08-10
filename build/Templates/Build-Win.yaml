@@ -11,6 +11,8 @@ jobs:
     submodules: true
     displayName: 'Checkout project'
 
+  - pwsh: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
+
   - template: Build-rbfx.yaml
 
   - task: CopyFiles@2
