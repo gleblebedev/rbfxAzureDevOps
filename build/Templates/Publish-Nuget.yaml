@@ -7,7 +7,11 @@ jobs:
     vmImage: 'windows-latest'
 
   steps:
-  - pwsh: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
+  - task: PowerShell@2
+    displayName: 'Generate version environment variable'
+    inputs:
+      filePath: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
+      arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/build/version.txt'
 
   - task: DownloadPipelineArtifact@2
     displayName: 'Download Windows binaries'

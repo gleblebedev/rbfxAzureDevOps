@@ -3,6 +3,12 @@ parameters:
   buildDotNet: true
 
 steps:
+- task: PowerShell@2
+  displayName: 'Generate version environment variable'
+  inputs:
+    filePath: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
+    arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/build/version.txt'
+
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
   workingDirectory: $(Agent.BuildDirectory)/s
