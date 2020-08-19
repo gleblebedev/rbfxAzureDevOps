@@ -18,7 +18,7 @@ steps:
   displayName: 'Configure Urho3D'
   inputs:
     workingDirectory: '$(Agent.BuildDirectory)/s/rbfxbuild'
-    cmakeArgs: -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=OFF -DURHO3D_FEATURES=CSHARP;SYSTEMUI $(Agent.BuildDirectory)/s/rbfx
+    cmakeArgs: -DCMAKE_TOOLCHAIN_FILE=$(Agent.BuildDirectory)/s/rbfx/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=OFF -DURHO3D_FEATURES=CSHARP;SYSTEMUI $(Agent.BuildDirectory)/s/rbfx
 
 - task: NuGetCommand@2
   displayName: 'Restore rbfx dependencies'
