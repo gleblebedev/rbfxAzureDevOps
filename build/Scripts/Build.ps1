@@ -6,11 +6,11 @@ New-Item -Force -ItemType "directory" -Path $rootFolder/rbfxbuild
 
 If ($IsWindows)
 {
-    "$rootFolder/rbfx/vcpkg/bootstrap-vcpkg.bat"
+    Invoke-Expression "$rootFolder/rbfx/vcpkg/bootstrap-vcpkg.bat"
 }
 else
 {
-    "$rootFolder/rbfx/vcpkg/bootstrap-vcpkg.sh"
+    Invoke-Expression "$rootFolder/rbfx/vcpkg/bootstrap-vcpkg.sh"
 }
 
 cd "$rootFolder/rbfxbuild"

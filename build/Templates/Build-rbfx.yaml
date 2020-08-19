@@ -12,11 +12,11 @@ steps:
 - pwsh: |
     If ($IsWindows)
     {
-        "$(Agent.BuildDirectory)/s/rbfx/vcpkg/bootstrap-vcpkg.bat"
+        Invoke-Expression "$(Agent.BuildDirectory)/s/rbfx/vcpkg/bootstrap-vcpkg.bat"
     }
     else
     {
-        "$(Agent.BuildDirectory)/s/rbfx/vcpkg/bootstrap-vcpkg.sh"
+        Invoke-Expression "$(Agent.BuildDirectory)/s/rbfx/vcpkg/bootstrap-vcpkg.sh"
     }
   displayName: 'Bootstrap vcpkg'
 
