@@ -9,6 +9,17 @@ steps:
     filePath: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
     arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/build/version.txt'
 
+- pwsh: |
+    If ($IsWindows)
+    {
+        "$(Agent.BuildDirectory)/s/rbfx/vcpkg/bootstrap-vcpkg.bat"
+    }
+    else
+    {
+        "$(Agent.BuildDirectory)/s/rbfx/vcpkg/bootstrap-vcpkg.sh"
+    }
+  displayName: 'Bootstrap vcpkg'
+
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
   workingDirectory: $(Agent.BuildDirectory)/s

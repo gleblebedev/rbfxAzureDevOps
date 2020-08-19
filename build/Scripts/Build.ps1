@@ -1,6 +1,19 @@
-New-Item -Force -ItemType "directory" -Path $PSScriptRoot/../../rbfxbuild
+$rootFolder = (Get-Item $PSScriptRoot/../..)
 
-cd $PSScriptRoot/../../rbfxbuild
+Write-Host "Root folder: $rootFolder"
 
-cmake -DCMAKE_TOOLCHAIN_FILE=$PSScriptRoot/../../rbfx/vcpkg/scripts/buildsystems/vcpkg.cmake -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=OFF -DURHO3D_FEATURES="CSHARP;SYSTEMUI" ../rbfx
+New-Item -Force -ItemType "directory" -Path $rootFolder/rbfxbuild
+
+If ($IsWindows)
+{
+    "$rootFolder/rbfx/vcpkg/bootstrap-vcpkg.bat"
+}
+else
+{
+    "$rootFolder/rbfx/vcpkg/bootstrap-vcpkg.sh"
+}
+
+cd "$rootFolder/rbfxbuild"
+
+cmake -DCMAKE_TOOLCHAIN_FILE="$rootFolder/rbfx/vcpkg/scripts/buildsystems/vcpkg.cmake" -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=OFF -DURHO3D_FEATURES="CSHARP;SYSTEMUI" ../rbfx
 
