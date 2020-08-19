@@ -18,6 +18,7 @@ steps:
     {
         Invoke-Expression "$(Agent.BuildDirectory)/s/rbfx/vcpkg/bootstrap-vcpkg.sh"
     }
+    Invoke-Expression "$(Agent.BuildDirectory)/s/rbfx/vcpkg/vcpkg install lz4"
   displayName: 'Bootstrap vcpkg'
 
 - script: mkdir rbfxbuild

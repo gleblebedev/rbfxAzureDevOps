@@ -12,6 +12,7 @@ else
 {
     Invoke-Expression "$rootFolder/rbfx/vcpkg/bootstrap-vcpkg.sh"
 }
+Invoke-Expression "$rootFolder/rbfx/vcpkg/vcpkg install lz4"
 
 cd "$rootFolder/rbfxbuild"
 
