@@ -9,17 +9,17 @@ steps:
     filePath: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
     arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/build/version.txt'
 
-- pwsh: |
-    If ($IsWindows)
-    {
-        Invoke-Expression "$(Agent.BuildDirectory)/s/rbfx/vcpkg/bootstrap-vcpkg.bat"
-    }
-    else
-    {
-        Invoke-Expression "$(Agent.BuildDirectory)/s/rbfx/vcpkg/bootstrap-vcpkg.sh"
-    }
-    Invoke-Expression "$(Agent.BuildDirectory)/s/rbfx/vcpkg/vcpkg install lz4"
+- task: PowerShell@2
   displayName: 'Bootstrap vcpkg'
+  inputs:
+    filePath: '$(Agent.BuildDirectory)/s/build/Scripts/BootstrapVcpkg.ps1'
+    arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/build/version.txt'
+
+- task: PowerShell@2
+  displayName: 'Install vcpkg packages'
+  inputs:
+    filePath: '$(Agent.BuildDirectory)/s/build/Scripts/InstallVcpkgPackage.ps1'
+    arguments: '-Packages lz4'
 
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
