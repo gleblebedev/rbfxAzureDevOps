@@ -26,6 +26,13 @@ steps:
     arguments: '-Packages lz4'
     pwsh: true
 
+- task: PublishPipelineArtifact@1
+  condition: always()
+  displayName: 'Publish vcpkg buildtrees logs'
+  inputs:
+    targetPath: '$(Agent.BuildDirectory)/s/rbfx/vcpkg/buildtrees/**/install-*-out.log'
+    artifactName: 'vcpkg_logs'
+
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
   workingDirectory: $(Agent.BuildDirectory)/s
