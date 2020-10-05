@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libBox2D.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libBullet.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libCivetweb.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libDetour.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libDetourCrowd.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libDetourTileCache.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libEASTL.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libETCPACK.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libfmt.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libFreeType.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libGLEW.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libik.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libImGui.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libLZ4.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libPugiXml.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libRecast.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libSDL.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libSLikeNet.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libStanHull.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libSTB.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libWebP.a"><Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx></NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/libUrho3D.a">
+      <Kind>Static</Kind><SmartLink>False</SmartLink><ForceLoad>True</ForceLoad><IsCxx>True</IsCxx>
+      <Frameworks>OpenGLES AVFoundation AudioToolbox CoreMotion GameController CoreGraphics QuartzCore CoreBluetooth</Frameworks>
+    </NativeReference>
+    <BundleResource Include="$(MSBuildThisFileDirectory)unofficial.Urho3DNet.dll.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="$(MSBuildThisFileDirectory)../../content/**">
+      <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </BundleResource>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,96 @@
+# Build project for iOS
+parameters:
+  configuration: 'Release'
+
+jobs:
+- job: Build_iOS
+  displayName: 'Build iOS'
+  pool:
+    vmImage: 'macOS-latest'
+  variables:
+    rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
+    buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+    nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+
+  steps:
+  - checkout: self
+    submodules: true
+    displayName: 'Checkout project'
+
+  - template: Add-ToolsToPath.yaml
+
+  - bash: xcodebuild -showsdks
+    displayName: 'xcodebuild -showsdks'
+
+  - script: mkdir $(buildFolder)
+    displayName: 'Make rbfxbuild folder'
+    failOnStderr: true
+
+  - task: CMake@1
+    displayName: 'Configure Urho3D'
+    inputs:
+      workingDirectory: '$(buildFolder)'
+      cmakeArgs: -G Xcode -DCMAKE_TOOLCHAIN_FILE=$(rbfxFolder)/CMake/Toolchains/IOS.cmake -DENABLE_BITCODE=OFF -DPLATFORM=OS64 -DDEPLOYMENT_TARGET=11 -DURHO3D_GRAPHICS_API=GLES3 -DBUILD_SHARED_LIBS=OFF -DURHO3D_GLOW=OFF -DURHO3D_FEATURES=CSHARP;SYSTEMUI -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF -DSWIG_MODULE_Urho3D_DLLIMPORT=__Internal -DSWIG_MODULE_ImGui_DLLIMPORT=__Internal $(rbfxFolder)
+
+  - pwsh: |
+      Get-ChildItem -Path $(buildFolder) -Filter *.xcodeproj -Recurse -Name| ForEach-Object {
+          Write-Host $_
+      }
+    displayName: 'Find all *.xcodeproj'
+
+  - bash: /usr/bin/xcodebuild -sdk iphoneos -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
+    displayName: 'Xcode build'
+
+
+  # - task: Xcode@5
+  #   displayName: 'Xcode build'
+  #   inputs:
+  #     configuration: '${{ parameters.configuration }}'
+  #     actions: build
+  #     xcWorkspacePath: $(buildFolder)/rbfx.xcodeproj
+  #     scheme: Urho3D
+  #     sdk: iphoneos
+  #     args: '-verbose OTHER_CFLAGS="-v"'
+
+  # - template: Build-rbfx.yaml
+  #   parameters:
+  #     buildDotNet: false
+  #     cmakeExtraArgs: -G Xcode -DCMAKE_TOOLCHAIN_FILE=$(rbfxFolder)/CMake/Toolchains/IOS.cmake -DPLATFORM=OS64 -DDEPLOYMENT_TARGET=11
+
+  # - pwsh: |
+  #     Get-ChildItem -Path $(buildFolder) -Filter *.dylib -Recurse -File -Name| ForEach-Object {
+  #         Write-Host $_
+  #     }
+  #   displayName: 'Find all *.dylib'
+
+  # - pwsh: |
+  #     New-Item -ItemType File -Path $(nugetFolder)/native/ios/libUrho3D.dylib -Force
+  #     copy-item $(Agent.BuildDirectory)/s/rbfxbuild/bin/${{ parameters.configuration }}/libUrho3D.dylib $(nugetFolder)/native/ios/libUrho3D.dylib -Force
+  #   displayName: 'Copy *.dylib to output'
+
+  - pwsh: |
+      Get-ChildItem -Path $(buildFolder)/lib/${{ parameters.configuration }} -Filter *.a -Recurse -File -Name| ForEach-Object {
+          Write-Host $_
+          New-Item -ItemType File -Path $(nugetFolder)/native/ios/$_ -Force
+          copy-item $(buildFolder)/lib/${{ parameters.configuration }}/$_ $(nugetFolder)/native/ios/$_ -Force
+      }
+    displayName: 'Find and copy all *.a'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish binaries'
+    inputs:
+      targetPath: '$(nugetFolder)'
+      artifactName: 'ios-nuget'
+
+  # - task: CopyFiles@2
+  #   inputs:
+  #     sourceFolder: '$(buildFolder)/bin'
+  #     contents: 'libUrho3D.dylib' 
+  #     targetFolder: '$(nugetFolder)/native/osx'
+  #     overWrite: true
+
+  # - task: PublishPipelineArtifact@1
+  #   displayName: 'Publish game binaries'
+  #   inputs:
+  #     targetPath: '$(nugetFolder)'
+  #     artifactName: 'osx-nuget'

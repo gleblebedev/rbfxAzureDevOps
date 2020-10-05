@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+
+println "projectDir:${project.projectDir}"
+println "buildDir:${project.buildDir}"
+// Minimum required CMake version. This is same as in ../CMakeLists.txt.
+def cmakeVersion = '3.14.0.0+'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        applicationId "com.github.rbfx"
+        versionCode 1
+        versionName "1.0"
+        minSdkVersion 17
+        targetSdkVersion 28
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
+        externalNativeBuild {
+            cmake {
+                if (project.hasProperty("armeabi-v7a")) {
+                    abiFilters 'armeabi-v7a'
+                } else if (project.hasProperty("arm64-v8a")) {
+                    abiFilters 'arm64-v8a'
+                } else if (project.hasProperty("x86")) {
+                    abiFilters 'x86'
+                } else if (project.hasProperty("x86_64")) {
+                    abiFilters 'x86_64'
+                } else {
+                    abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+                }
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21', '-DANDROID=1',
+                          '-DANDROID_ARM_MODE=arm', '-DBUILD_SHARED_LIBS=ON', '-DURHO3D_SAMPLES=OFF',
+                          '-DURHO3D_PLAYER=OFF', '-DURHO3D_PROFILING=OFF', '-DURHO3D_GRAPHICS_API=GLES3',
+                          '-DURHO3D_GLOW=OFF', '-DURHO3D_NETFX=netstandard2.0', '-DURHO3D_FEATURES=CSHARP;SYSTEMUI'
+            }
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            version "${cmakeVersion}"
+            path '../../../rbfx/CMakeLists.txt'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+        // If you get "Java heap error" you may need to add "org.gradle.jvmargs=-Xms128m -Xmx4096m" to gradle.properties
+        // in gradle service directory path (find it in Settings>Build>Gradle).
+    }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    ndkVersion '21.3.6528147'
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation project(path: ':rbfxsdl')
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+}

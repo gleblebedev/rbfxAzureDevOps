@@ -1,0 +1,3 @@
+include ':rbfxsdl'
+include ':app'
+rootProject.name = "rbfx"

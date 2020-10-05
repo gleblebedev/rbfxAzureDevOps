@@ -1,0 +1,10 @@
+parameters:
+  artifact: ''
+
+steps:
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download ${{ parameters.artifact }}'
+    inputs:
+      source: 'current'
+      artifact: '${{ parameters.artifact }}'
+      path: '$(nugetFolder)'

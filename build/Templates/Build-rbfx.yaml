@@ -1,8 +1,16 @@
 # Build Urho3D rbfx fork
 parameters:
   buildDotNet: true
+  cmakeExtraArgs: ''
+  configuration: 'RelWithDebInfo'
 
 steps:
+- task: PowerShell@2
+  displayName: 'Generate version environment variable'
+  inputs:
+    filePath: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
+    arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/build/version.txt'
+
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
   workingDirectory: $(Agent.BuildDirectory)/s
@@ -11,24 +19,30 @@ steps:
 - task: CMake@1
   displayName: 'Configure Urho3D'
   inputs:
-    workingDirectory: '$(Agent.BuildDirectory)/s/rbfxbuild'
-    cmakeArgs: -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=OFF -DURHO3D_FEATURES=CSHARP;SYSTEMUI $(Agent.BuildDirectory)/s/rbfx
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=OFF -DURHO3D_FEATURES=CSHARP;SYSTEMUI -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF ${{ parameters.cmakeExtraArgs }} $(rbfxFolder)
+
+- pwsh: |
+    Get-ChildItem -Path $(buildFolder) -Filter *.xcodeproj -Recurse -Name| ForEach-Object {
+        Write-Host $_
+    }
+  displayName: 'Find all *.xcodeproj'
 
 - task: NuGetCommand@2
   displayName: 'Restore rbfx dependencies'
   inputs:
     command: 'restore'
-    restoreSolution: '$(Agent.BuildDirectory)/s/rbfxbuild/*.sln'
+    restoreSolution: '$(buildFolder)/*.sln'
 
 - task: CMake@1
   displayName: 'Build Urho3D'
   inputs:
-    workingDirectory: '$(Agent.BuildDirectory)/s/rbfxbuild'
-    cmakeArgs: --build . --config Release --target Urho3D
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: --build . --config RelWithDebInfo --target Urho3D
 
 - task: CMake@1
   displayName: 'Build Urho3DNet'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   inputs:
-    workingDirectory: '$(Agent.BuildDirectory)/s/rbfxbuild'
-    cmakeArgs: --build . --config Release --target Urho3DNet
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet

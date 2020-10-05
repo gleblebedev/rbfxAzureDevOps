@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)/../../native/android/arm64-v8a/*.so">
+      <Abi>arm64-v8a</Abi>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)/../../native/android/armeabi-v7a/*.so">
+      <Abi>armeabi-v7a</Abi>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)/../../native/android/x86/*.so">
+      <Abi>x86</Abi>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)/../../native/android/x86_64/*.so">
+      <Abi>x86_64</Abi>
+    </AndroidNativeLibrary>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="$(MSBuildThisFileDirectory)/../../content/**">
+      <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </AndroidAsset>
+  </ItemGroup>
+</Project>

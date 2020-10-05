@@ -1,0 +1,15 @@
+# Add linux libraries
+steps:
+  - task: Bash@3
+    displayName: 'Update apt-get'
+    inputs:
+      targetType: inline
+      script: 'sudo apt-get update --fix-missing'
+      failOnStderr: true
+
+  - task: Bash@3
+    displayName: 'Install libs'
+    inputs:
+      targetType: inline
+      script: 'sudo apt-get install -y uuid-dev libgl-dev'
+      failOnStderr: true

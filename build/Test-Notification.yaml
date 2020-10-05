@@ -1,0 +1,18 @@
+#Azure DevOps yaml script to test notifications
+
+trigger: none
+#- master
+
+stages:
+- stage: Test_Notifications
+  displayName: Test Notifications
+  jobs:
+  - job: Test_Notifications_Job
+    displayName: 'Test Notifications'
+    pool:
+      vmImage: 'windows-latest'
+      
+    steps:
+    - template: Templates/Send-Notification.yaml
+      parameters:
+        message: 'Hello world!'

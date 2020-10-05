@@ -1,0 +1,21 @@
+# Send notification
+parameters:
+  message: ''
+
+steps:
+- task: SendTelegramNotification@0
+  condition: ne('$(TELEGRAM_BOT_TOKEN)', '')
+  inputs:
+    botToken: '$(TELEGRAM_BOT_TOKEN)'
+    chats: '$(TELEGRAM_CHAT_ID)'
+    message: '${{ parameters.message }}'
+
+- task: ado-discord-webhook@1
+  condition: and(ne('$(DISCORD_CHANNEL_ID)', ''), ne('$(DISCORD_WEBHOOK_KEY)', ''))
+  inputs:
+    channelId: '$(DISCORD_CHANNEL_ID)'
+    webhookKey: '$(DISCORD_WEBHOOK_KEY)'
+    name: 'Captain Hook'
+    messageType: 'content'
+    content: '${{ parameters.message }}'
+

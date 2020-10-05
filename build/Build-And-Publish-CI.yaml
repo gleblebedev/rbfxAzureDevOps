@@ -7,9 +7,11 @@ stages:
 - stage: Build
   displayName: Build
   jobs:
-  - template: Templates/Build-Win.yaml
   - template: Templates/Build-Mac.yaml
   - template: Templates/Build-Linux.yaml
+  - template: Templates/Build-Win.yaml
+  - template: Templates/Build-Android.yaml
+  - template: Templates/Build-iOS.yaml
 
 - stage: Publish
   displayName: Publish Nuget

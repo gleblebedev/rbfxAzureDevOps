@@ -1,0 +1,22 @@
+# Add tools to path
+steps:
+- pwsh: |
+    If ($IsWindows)
+    {
+      $toolsFolder = "$(Agent.BuildDirectory)\s\tools\win";
+      Write-Host "##vso[task.setvariable variable=PATH;]${toolsFolder};${env:PATH}";
+      Invoke-Expression "$toolsFolder\ninja.exe --version";
+    }
+    ElseIf ($IsLinux)
+    {
+      $toolsFolder = "$(Agent.BuildDirectory)/s/tools/linux";
+      Write-Host "##vso[task.setvariable variable=PATH;]${toolsFolder}:${env:PATH}";
+      Invoke-Expression "$toolsFolder/ninja --version";
+    }
+    ElseIf ($IsMacOS)
+    {
+      $toolsFolder = "$(Agent.BuildDirectory)/s/tools/mac";
+      Write-Host "##vso[task.setvariable variable=PATH;]${toolsFolder}:${env:PATH}";
+      Invoke-Expression "$toolsFolder/ninja --version";
+    }
+  displayName: 'Add tools to path'

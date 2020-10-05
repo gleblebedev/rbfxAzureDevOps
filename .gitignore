@@ -1,0 +1,40 @@
+﻿syntax: glob
+
+rbfxbuild
+
+# Android
+*.iml
+gradle/
+.gradle/
+local.properties
+.idea/
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+
+#NuGet things
+project.lock.json
+
+### VisualStudio ###
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+
+# Visual Studio 2015
+.vs/

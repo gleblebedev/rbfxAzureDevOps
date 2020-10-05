@@ -5,11 +5,17 @@ jobs:
   displayName: 'Build Mac'
   pool:
     vmImage: 'macOS-latest'
+  variables:
+    rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
+    buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+    nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
   steps:
   - checkout: self
     submodules: true
     displayName: 'Checkout project'
+
+  - template: Add-ToolsToPath.yaml
 
   - template: Build-rbfx.yaml
     parameters:
@@ -17,13 +23,19 @@ jobs:
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(Agent.BuildDirectory)/s/rbfxbuild/bin'
+      sourceFolder: '$(buildFolder)/bin'
       contents: 'libUrho3D.dylib' 
-      targetFolder: '$(Build.ArtifactStagingDirectory)/nuget/native/osx'
+      targetFolder: '$(nugetFolder)/native/osx'
       overWrite: true
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish game binaries'
     inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)/nuget'
+      targetPath: '$(nugetFolder)'
       artifactName: 'osx-nuget'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish swig'
+    inputs:
+      targetPath: '$(buildFolder)/bin/swig'
+      artifactName: 'mac-swig'
