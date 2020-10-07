@@ -30,7 +30,7 @@ jobs:
     displayName: 'Configure Urho3D'
     inputs:
       workingDirectory: '$(buildFolder)'
-      cmakeArgs: -G Xcode -DCMAKE_TOOLCHAIN_FILE=$(rbfxFolder)/CMake/Toolchains/IOS.cmake -DENABLE_BITCODE=OFF -DPLATFORM=OS64 -DDEPLOYMENT_TARGET=11 -DURHO3D_GRAPHICS_API=GLES3 -DBUILD_SHARED_LIBS=OFF -DURHO3D_GLOW=OFF -DURHO3D_FEATURES=CSHARP;SYSTEMUI -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF -DSWIG_MODULE_Urho3D_DLLIMPORT=__Internal -DSWIG_MODULE_ImGui_DLLIMPORT=__Internal $(rbfxFolder)
+      cmakeArgs: -G Xcode -DCMAKE_TOOLCHAIN_FILE=$(rbfxFolder)/CMake/Toolchains/IOS.cmake -DENABLE_BITCODE=OFF -DPLATFORM=OS64 -DDEPLOYMENT_TARGET=11 -DURHO3D_GRAPHICS_API=GLES3 -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=OFF -DURHO3D_FEATURES=CSHARP;SYSTEMUI -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF -DSWIG_MODULE_Urho3D_DLLIMPORT=__Internal -DSWIG_MODULE_ImGui_DLLIMPORT=__Internal $(rbfxFolder)
 
   - pwsh: |
       Get-ChildItem -Path $(buildFolder) -Filter *.xcodeproj -Recurse -Name| ForEach-Object {
@@ -68,13 +68,21 @@ jobs:
   #     copy-item $(Agent.BuildDirectory)/s/rbfxbuild/bin/${{ parameters.configuration }}/libUrho3D.dylib $(nugetFolder)/native/ios/libUrho3D.dylib -Force
   #   displayName: 'Copy *.dylib to output'
 
+  # - pwsh: |
+  #     Get-ChildItem -Path $(buildFolder)/lib/${{ parameters.configuration }} -Filter *.a -Recurse -File -Name| ForEach-Object {
+  #         Write-Host $_
+  #         New-Item -ItemType File -Path $(nugetFolder)/native/ios/$_ -Force
+  #         copy-item $(buildFolder)/lib/${{ parameters.configuration }}/$_ $(nugetFolder)/native/ios/$_ -Force
+  #     }
+  #   displayName: 'Find and copy all *.a'
+
   - pwsh: |
-      Get-ChildItem -Path $(buildFolder)/lib/${{ parameters.configuration }} -Filter *.a -Recurse -File -Name| ForEach-Object {
+      Get-ChildItem -Path $(buildFolder)/bin/${{ parameters.configuration }}/ -Filter *.framework -Name| ForEach-Object {
           Write-Host $_
-          New-Item -ItemType File -Path $(nugetFolder)/native/ios/$_ -Force
-          copy-item $(buildFolder)/lib/${{ parameters.configuration }}/$_ $(nugetFolder)/native/ios/$_ -Force
+          New-Item -ItemType Directory -Path $(nugetFolder)/native/ios/$_ -Force
+          Copy-item $(buildFolder)/bin/${{ parameters.configuration }}/$_ $(nugetFolder)/native/ios/$_ -Force
       }
-    displayName: 'Find and copy all *.a'
+    displayName: 'Copy framework'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish binaries'
