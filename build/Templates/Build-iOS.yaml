@@ -80,7 +80,7 @@ jobs:
       Get-ChildItem -Path $(buildFolder)/bin/${{ parameters.configuration }}/ -Filter *.framework -Name| ForEach-Object {
           Write-Host $_
           New-Item -ItemType Directory -Path $(nugetFolder)/native/ios/$_ -Force
-          Copy-item $(buildFolder)/bin/${{ parameters.configuration }}/$_ $(nugetFolder)/native/ios/$_ -Force
+          Copy-item $(buildFolder)/bin/${{ parameters.configuration }}/$_ $(nugetFolder)/native/ios/ -Recurse -Force
       }
     displayName: 'Copy framework'
 
