@@ -15,4 +15,7 @@
       <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
     </BundleResource>
   </ItemGroup>
+  <PropertyGroup>
+    <MtouchExtraArgs>--dynamic-symbol-mode=code</MtouchExtraArgs>
+  </PropertyGroup>
 </Project>
