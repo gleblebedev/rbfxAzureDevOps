@@ -1,0 +1,32 @@
+# Build project for Windows
+parameters:
+  configuration: 'RelWithDebInfo'
+
+jobs:
+- job: Build_UWP
+  displayName: 'Build UWP'
+  pool:
+    vmImage: 'windows-latest'
+  variables:
+    rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
+    buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+    nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+
+  steps:
+  - checkout: self
+    submodules: true
+    displayName: 'Checkout project'
+
+  - template: Add-ToolsToPath.yaml
+
+  - template: Build-rbfx.yaml
+    parameters:
+      buildDotNet: true
+      cmakeExtraArgs: -DURHO3D_GRAPHICS_API=D3D11 -VS=16 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0'
+      configuration: ${{ parameters.configuration }}
+
+  - pwsh: |
+      Get-ChildItem -Path $(buildFolder) -Filter *.dll -Recurse -Name| ForEach-Object {
+          Write-Host $_
+      }
+    displayName: 'Find all *.dll'
