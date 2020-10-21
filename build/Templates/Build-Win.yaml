@@ -34,7 +34,7 @@ jobs:
   - template: Build-rbfx.yaml
     parameters:
       buildDotNet: true
-      cmakeExtraArgs: -DURHO3D_GRAPHICS_API=D3D11
+      cmakeExtraArgs: -VS=15 -DURHO3D_GRAPHICS_API=D3D11
       configuration: ${{ parameters.configuration }}
 
   - pwsh: |
