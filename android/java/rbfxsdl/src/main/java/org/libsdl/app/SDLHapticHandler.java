@@ -8,6 +8,12 @@ import java.util.ArrayList;
 
 public class SDLHapticHandler {
 
+    class SDLHaptic {
+        public int device_id;
+        public String name;
+        public Vibrator vib;
+    }
+
     private ArrayList<SDLHaptic> mHaptics;
 
     public SDLHapticHandler() {

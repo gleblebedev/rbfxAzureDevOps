@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 //
 
-package org.libsdl.app;;
+package org.libsdl.app;
 
 import org.libsdl.app.SDLActivity;
 

@@ -3,19 +3,19 @@ package org.libsdl.app;
 import android.content.Context;
 
 public class SDLClipboardHandler_API11 implements
-    SDLClipboardHandler,
-    android.content.ClipboardManager.OnPrimaryClipChangedListener {
+        SDLClipboardHandler,
+        android.content.ClipboardManager.OnPrimaryClipChangedListener {
 
     protected android.content.ClipboardManager mClipMgr;
 
     SDLClipboardHandler_API11() {
-       mClipMgr = (android.content.ClipboardManager) SDL.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-       mClipMgr.addPrimaryClipChangedListener(this);
+        mClipMgr = (android.content.ClipboardManager) SDL.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        mClipMgr.addPrimaryClipChangedListener(this);
     }
 
     @Override
     public boolean clipboardHasText() {
-       return mClipMgr.hasText();
+        return mClipMgr.hasText();
     }
 
     @Override
@@ -23,16 +23,16 @@ public class SDLClipboardHandler_API11 implements
         CharSequence text;
         text = mClipMgr.getText();
         if (text != null) {
-           return text.toString();
+            return text.toString();
         }
         return null;
     }
 
     @Override
     public void clipboardSetText(String string) {
-       mClipMgr.removePrimaryClipChangedListener(this);
-       mClipMgr.setText(string);
-       mClipMgr.addPrimaryClipChangedListener(this);
+        mClipMgr.removePrimaryClipChangedListener(this);
+        mClipMgr.setText(string);
+        mClipMgr.addPrimaryClipChangedListener(this);
     }
 
     @Override

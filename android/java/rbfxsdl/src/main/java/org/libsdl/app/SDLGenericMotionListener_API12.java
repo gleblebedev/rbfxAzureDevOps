@@ -4,7 +4,7 @@ import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class SDLGenericMotionListener_API12 implements View.OnGenericMotionListener {
+class SDLGenericMotionListener_API12 implements View.OnGenericMotionListener {
     // Generic Motion (mouse hover, joystick...) events go here
     @Override
     public boolean onGenericMotion(View v, MotionEvent event) {
