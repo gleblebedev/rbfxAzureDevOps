@@ -7,7 +7,7 @@ import android.os.Build;
 import android.util.Log;
 import java.util.Arrays;
 
-class HIDDeviceUSB implements HIDDevice {
+public class HIDDeviceUSB implements HIDDevice {
 
     private static final String TAG = "hidapi";
 

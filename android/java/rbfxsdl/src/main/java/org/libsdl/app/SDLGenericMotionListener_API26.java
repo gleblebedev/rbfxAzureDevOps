@@ -8,7 +8,7 @@ import android.view.View;
 
 // Urho3D - suppress lint error
 @TargetApi(Build.VERSION_CODES.O)
-class SDLGenericMotionListener_API26 extends SDLGenericMotionListener_API24 {
+public class SDLGenericMotionListener_API26 extends SDLGenericMotionListener_API24 {
     // Generic Motion (mouse hover, joystick...) events go here
     private boolean mRelativeModeEnabled;
 

@@ -10,7 +10,7 @@ import android.view.inputmethod.InputConnection;
 /* This is a fake invisible editor view that receives the input and defines the
  * pan&scan region
  */
-class DummyEdit extends View implements View.OnKeyListener {
+public class DummyEdit extends View implements View.OnKeyListener {
     InputConnection ic;
 
     public DummyEdit(Context context) {

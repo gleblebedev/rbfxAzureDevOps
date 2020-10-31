@@ -7,7 +7,7 @@ import android.util.Log;
 
 // Urho3D - suppress lint error
 @TargetApi(Build.VERSION_CODES.O)
-class SDLHapticHandler_API26 extends SDLHapticHandler {
+public class SDLHapticHandler_API26 extends SDLHapticHandler {
     @Override
     public void run(int device_id, float intensity, int length) {
         SDLHaptic haptic = getHaptic(device_id);

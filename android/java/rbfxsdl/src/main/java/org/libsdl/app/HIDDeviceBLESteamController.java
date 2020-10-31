@@ -27,7 +27,7 @@ import java.util.UUID;
 
 // Urho3D - suppress lint error
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDevice {
+public class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDevice {
 
     private static final String TAG = "hidapi";
     private HIDDeviceManager mManager;
