@@ -22,7 +22,7 @@ jobs:
   - template: Build-rbfx.yaml
     parameters:
       buildDotNet: true
-      cmakeExtraArgs: -DURHO3D_GRAPHICS_API=D3D11 -VS=16 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0'
+      cmakeExtraArgs: -DURHO3D_GRAPHICS_API=D3D11 -VS=16 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0' -DSWIG_EXECUTABLE=$(Agent.BuildDirectory)/s/tools/win/swig.exe
       configuration: ${{ parameters.configuration }}
 
   - pwsh: |
