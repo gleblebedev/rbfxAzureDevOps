@@ -37,15 +37,19 @@ jobs:
       cmakeExtraArgs: -VS=15 -DURHO3D_GRAPHICS_API=D3D11
       configuration: ${{ parameters.configuration }}
 
+  # New-Item -ItemType Directory -Path $(nugetFolder)/runtimes/win-x64/native/ -Force
+  # copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/runtimes/win-x64/native/Urho3D.dll -Force
+  # copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb $(nugetFolder)/runtimes/win-x64/native/Urho3D.pdb -Force
+
   - pwsh: |
-      New-Item -ItemType Directory -Path $(nugetFolder)/runtimes/win-x64/native/ -Force
+      New-Item -ItemType Directory -Path $(nugetFolder)/native/win/x64/ -Force
       New-Item -ItemType Directory -Path $(nugetFolder)/lib/netstandard2.0/ -Force
       New-Item -ItemType Directory -Path $(nugetFolder)/lib/netcoreapp2.1/ -Force
       New-Item -ItemType Directory -Path $(nugetFolder)/lib/net46/ -Force
       New-Item -ItemType Directory -Path $(nugetFolder)/lib/net47/ -Force
       New-Item -ItemType Directory -Path $(nugetFolder)/lib/monoandroid90/ -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/runtimes/win-x64/native/Urho3D.dll -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb $(nugetFolder)/runtimes/win-x64/native/Urho3D.pdb -Force
+      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/native/win/x64/Urho3D.dll -Force
+      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb $(nugetFolder)/native/win/x64/Urho3D.pdb -Force
       copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.dll $(nugetFolder)/lib/netstandard2.0/Urho3DNet.dll -Force
       copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.pdb $(nugetFolder)/lib/netstandard2.0/Urho3DNet.pdb -Force
       copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netcoreapp2.1/Urho3DNet.dll $(nugetFolder)/lib/netcoreapp2.1/Urho3DNet.dll -Force

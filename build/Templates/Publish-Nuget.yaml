@@ -53,6 +53,10 @@ jobs:
     parameters:
       artifact: 'ios-nuget'
 
+  - template: Fetch-NugetArtifact.yaml
+    parameters:
+      artifact: 'win-x64-uap-nuget'
+
   - task: CopyFiles@2
     inputs:
       sourceFolder: '$(Agent.BuildDirectory)/s/nuget'

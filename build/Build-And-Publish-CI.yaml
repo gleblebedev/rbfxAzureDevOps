@@ -12,6 +12,7 @@ stages:
   - template: Templates/Build-Win.yaml
   - template: Templates/Build-Android.yaml
   - template: Templates/Build-iOS.yaml
+  - template: Templates/Build-UWP.yaml
 
 - stage: Publish
   displayName: Publish Nuget

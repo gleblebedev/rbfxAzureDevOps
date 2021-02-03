@@ -32,8 +32,10 @@ jobs:
     displayName: 'Find all *.dll'
 
   - pwsh: |
-      New-Item -ItemType Directory -Path $(nugetFolder)/runtimes/win-x64/lib/uap10.0 -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/runtimes/win-x64/lib/uap10.0/Urho3D.dll -Force
+      New-Item -ItemType Directory -Path $(nugetFolder)/native/uap/x64/ -Force
+      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/native/uap/x64/Urho3D.dll -Force
+      New-Item -ItemType Directory -Path $(nugetFolder)/lib/uap10.0 -Force
+      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.dll $(nugetFolder)/lib/uap10.0/Urho3DNet.dll -Force
     displayName: 'Copy binary to output'
 
   - task: PublishPipelineArtifact@1
