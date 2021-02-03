@@ -4,7 +4,7 @@ steps:
     displayName: 'Update yarn keys'
     inputs:
       targetType: inline
-      script: 'curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -'
+      script: 'sudo apt-key add $(Agent.BuildDirectory)/s/build/yarnpubkey.gpg'
       failOnStderr: true
 
   - task: Bash@3
