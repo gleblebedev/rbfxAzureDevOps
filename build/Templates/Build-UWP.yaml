@@ -35,3 +35,9 @@ jobs:
       New-Item -ItemType Directory -Path $(nugetFolder)/runtimes/win-x64/lib/uap10.0 -Force
       copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/runtimes/win-x64/lib/uap10.0/Urho3D.dll -Force
     displayName: 'Copy binary to output'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish game binaries'
+    inputs:
+      targetPath: '$(nugetFolder)'
+      artifactName: 'win-x64-uap-nuget'
