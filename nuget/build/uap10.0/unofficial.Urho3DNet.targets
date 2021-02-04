@@ -2,11 +2,16 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)/../../native/uap/x64/*.*">
-      <Link>%(FileName)%(Extension)</Link>
+      <Link>runtimes/win/native/%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack> 
+      <PackagePath>runtimes/win/native/%(FileName)%(Extension)</PackagePath> 
     </None>
     <Content Include="$(MSBuildThisFileDirectory)/../../content/**">
+      <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack> 
+      <PackagePath>%(RecursiveDir)%(FileName)%(Extension)</PackagePath> 
     </Content>
   </ItemGroup>
 </Project>
