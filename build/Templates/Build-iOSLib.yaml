@@ -2,6 +2,7 @@
 parameters:
   configuration: 'Release'
   sdk: 'iphoneos'
+  arch: arm64
   name: 'Build_iOS'
 
 jobs:
