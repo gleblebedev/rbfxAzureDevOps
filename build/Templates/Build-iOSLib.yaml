@@ -41,7 +41,7 @@ jobs:
       }
     displayName: 'Find all *.xcodeproj'
 
-  - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
+  - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
     displayName: 'Xcode build'
 
 
