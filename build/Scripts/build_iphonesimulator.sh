@@ -10,4 +10,4 @@ mkdir $BUILDFOLDER
 #-T buildsystem=1
 cmake -G Xcode -DSWIG_EXECUTABLE=SOURCE/../../tools/mac/swig -DCMAKE_TOOLCHAIN_FILE=$RBFXFOLDER/CMake/Toolchains/IOS.cmake -DENABLE_BITCODE=OFF -DPLATFORM=OS64COMBINED -DDEPLOYMENT_TARGET=11 -DURHO3D_GRAPHICS_API=GLES3 -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=OFF -DURHO3D_FEATURES="CSHARP;SYSTEMUI" -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF -DURHO3D_RMLUI=OFF -DSWIG_MODULE_Urho3D_DLLIMPORT=__Internal -DSWIG_MODULE_ImGui_DLLIMPORT=__Internal -S $RBFXFOLDER -B $BUILDFOLDER
 
-/usr/bin/xcodebuild -sdk iphonesimulator -arch x86-64 -configuration Debug -project $BUILDFOLDER/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
+/usr/bin/xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Debug -project $BUILDFOLDER/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
