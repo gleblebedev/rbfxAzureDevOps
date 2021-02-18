@@ -37,29 +37,29 @@ jobs:
       cmakeExtraArgs: -VS=15 -DURHO3D_GRAPHICS_API=D3D11 -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
 
-- task: CMake@1
-  displayName: 'Build Urho3DNet.Desktop'
-  inputs:
-    workingDirectory: '$(buildFolder)'
-    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.Desktop
+  - task: CMake@1
+    displayName: 'Build Urho3DNet.Desktop'
+    inputs:
+      workingDirectory: '$(buildFolder)'
+      cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.Desktop
 
-- task: CMake@1
-  displayName: 'Build Urho3DNet.UWP'
-  inputs:
-    workingDirectory: '$(buildFolder)'
-    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.UWP
+  - task: CMake@1
+    displayName: 'Build Urho3DNet.UWP'
+    inputs:
+      workingDirectory: '$(buildFolder)'
+      cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.UWP
 
-- task: CMake@1
-  displayName: 'Build Urho3DNet.IOS'
-  inputs:
-    workingDirectory: '$(buildFolder)'
-    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.IOS
+  - task: CMake@1
+    displayName: 'Build Urho3DNet.IOS'
+    inputs:
+      workingDirectory: '$(buildFolder)'
+      cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.IOS
 
-- task: CMake@1
-  displayName: 'Build Urho3DNet.Android'
-  inputs:
-    workingDirectory: '$(buildFolder)'
-    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.Android
+  - task: CMake@1
+    displayName: 'Build Urho3DNet.Android'
+    inputs:
+      workingDirectory: '$(buildFolder)'
+      cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.Android
 
 
   # New-Item -ItemType Directory -Path $(nugetFolder)/runtimes/win-x64/native/ -Force
