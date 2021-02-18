@@ -37,29 +37,77 @@ jobs:
       cmakeExtraArgs: -VS=15 -DURHO3D_GRAPHICS_API=D3D11 -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
 
+- task: CMake@1
+  displayName: 'Build Urho3DNet.Desktop'
+  inputs:
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.Desktop
+
+- task: CMake@1
+  displayName: 'Build Urho3DNet.UWP'
+  inputs:
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.UWP
+
+- task: CMake@1
+  displayName: 'Build Urho3DNet.IOS'
+  inputs:
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.IOS
+
+- task: CMake@1
+  displayName: 'Build Urho3DNet.Android'
+  inputs:
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.Android
+
+
   # New-Item -ItemType Directory -Path $(nugetFolder)/runtimes/win-x64/native/ -Force
   # copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/runtimes/win-x64/native/Urho3D.dll -Force
   # copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb $(nugetFolder)/runtimes/win-x64/native/Urho3D.pdb -Force
 
   - pwsh: |
-      New-Item -ItemType Directory -Path $(nugetFolder)/native/win/x64/ -Force
-      New-Item -ItemType Directory -Path $(nugetFolder)/lib/netstandard2.0/ -Force
-      New-Item -ItemType Directory -Path $(nugetFolder)/lib/netcoreapp2.1/ -Force
-      New-Item -ItemType Directory -Path $(nugetFolder)/lib/net46/ -Force
-      New-Item -ItemType Directory -Path $(nugetFolder)/lib/net47/ -Force
-      New-Item -ItemType Directory -Path $(nugetFolder)/lib/monoandroid90/ -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/native/win/x64/Urho3D.dll -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb $(nugetFolder)/native/win/x64/Urho3D.pdb -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.dll $(nugetFolder)/lib/netstandard2.0/Urho3DNet.dll -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.pdb $(nugetFolder)/lib/netstandard2.0/Urho3DNet.pdb -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netcoreapp2.1/Urho3DNet.dll $(nugetFolder)/lib/netcoreapp2.1/Urho3DNet.dll -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netcoreapp2.1/Urho3DNet.pdb $(nugetFolder)/lib/netcoreapp2.1/Urho3DNet.pdb -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/net46/Urho3DNet.dll $(nugetFolder)/lib/net46/Urho3DNet.dll -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/net46/Urho3DNet.pdb $(nugetFolder)/lib/net46/Urho3DNet.pdb -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/net47/Urho3DNet.dll $(nugetFolder)/lib/net47/Urho3DNet.dll -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/net47/Urho3DNet.pdb $(nugetFolder)/lib/net47/Urho3DNet.pdb -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/monoandroid90/Urho3DNet.dll $(nugetFolder)/lib/monoandroid90/Urho3DNet.dll -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/monoandroid90/Urho3DNet.pdb $(nugetFolder)/lib/monoandroid90/Urho3DNet.pdb -Force
+      function CopyFiles {
+          param ([string]$SourcePath, [string]$DestinationPath)
+
+          New-Item -ItemType Directory -Path "$DestinationPath" -Force
+
+          $files = Get-ChildItem $SourcePath
+          foreach ($file in $files)
+          {
+            $fileName = Join-Path -Path $DestinationPath -ChildPath $file.Name 
+            copy-item $file.FullName $fileName -Force
+          }
+      }
+      
+      # Native DLL
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.??? -DestinationPath $(nugetFolder)/native/win/x64/
+
+      # .Net Standard 2.0 assembly
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netstandard2.0
+
+      # .Net 4.6 assemblies
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net46/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net46
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/net46
+
+      # .Net 4.7 assemblies
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net47/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net47
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/net47
+
+      # .Net Core 2.1 assemblies
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netcoreapp2.1/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netcoreapp2.1
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/netcoreapp2.1
+
+      # Xamarin.IOS assemblies
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.IOS.??? -DestinationPath $(nugetFolder)/lib/xamarin.ios10
+
+      # Xamarin.Android assemblies
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/monoandroid90/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/monoandroid90
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.Android.??? -DestinationPath $(nugetFolder)/lib/monoandroid90
+
+      # UWP assemblies
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.UWP.??? -DestinationPath $(nugetFolder)/lib/uap10.0
+
     displayName: 'Copy binary to output'
 
   - pwsh: |
