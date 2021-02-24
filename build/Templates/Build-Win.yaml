@@ -81,7 +81,8 @@ jobs:
       }
       
       # Native DLL
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.??? -DestinationPath $(nugetFolder)/native/win/x64/
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll -DestinationPath $(nugetFolder)/native/win/x64/
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb -DestinationPath $(nugetFolder)/native/win/x64/
 
       # .Net Standard 2.0 assembly
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netstandard2.0
