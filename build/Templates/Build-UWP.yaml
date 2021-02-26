@@ -6,7 +6,7 @@ parameters:
 
 jobs:
 - job: Build_UWP_${{ parameters.platform }}
-  displayName: 'Build UWP'
+  displayName: 'Build UWP ${{ parameters.platform }}'
   pool:
     vmImage: 'windows-latest'
   variables:
