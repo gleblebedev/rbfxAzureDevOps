@@ -1,9 +1,11 @@
-# Build project for Windows
+# Build project for UWP
 parameters:
+  platform: 'x64'
   configuration: 'RelWithDebInfo'
+  buildDotNet: true
 
 jobs:
-- job: Build_UWP
+- job: Build_UWP_${{ parameters.platform }}
   displayName: 'Build UWP'
   pool:
     vmImage: 'windows-latest'
@@ -21,8 +23,8 @@ jobs:
 
   - template: Build-rbfx.yaml
     parameters:
-      buildDotNet: true
-      cmakeExtraArgs: -DURHO3D_GRAPHICS_API=D3D11 -VS=16 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0' -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
+      buildDotNet: ${{ parameters.buildDotNet }}
+      cmakeExtraArgs: -DURHO3D_GRAPHICS_API=D3D11 -G "Visual Studio 16 2019" -A ${{ parameters.platform }} -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0' -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
 
   - pwsh: |
@@ -32,14 +34,18 @@ jobs:
     displayName: 'Find all *.dll'
 
   - pwsh: |
-      New-Item -ItemType Directory -Path $(nugetFolder)/native/uap/x64/ -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/native/uap/x64/Urho3D.dll -Force
+      New-Item -ItemType Directory -Path $(nugetFolder)/native/uap/${{ parameters.platform }}/ -Force
+      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/native/uap/${{ parameters.platform }}/Urho3D.dll -Force
+    displayName: 'Copy binary to output'
+
+  - pwsh: |
       New-Item -ItemType Directory -Path $(nugetFolder)/lib/uap10.0 -Force
       copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.dll $(nugetFolder)/lib/uap10.0/Urho3DNet.dll -Force
-    displayName: 'Copy binary to output'
+    displayName: 'Copy .net binary to output'
+    condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish game binaries'
     inputs:
       targetPath: '$(nugetFolder)'
-      artifactName: 'win-x64-uap-nuget'
+      artifactName: 'win-${{ parameters.platform }}-uap-nuget'

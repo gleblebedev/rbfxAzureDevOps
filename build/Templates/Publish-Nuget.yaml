@@ -57,6 +57,10 @@ jobs:
     parameters:
       artifact: 'win-x64-uap-nuget'
 
+  - template: Fetch-NugetArtifact.yaml
+    parameters:
+      artifact: 'win-ARM64-uap-nuget'
+
   - task: CopyFiles@2
     inputs:
       sourceFolder: '$(Agent.BuildDirectory)/s/nuget'

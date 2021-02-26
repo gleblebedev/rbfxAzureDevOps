@@ -13,6 +13,13 @@ stages:
   - template: Templates/Build-Android.yaml
   - template: Templates/Build-iOS.yaml
   - template: Templates/Build-UWP.yaml
+    parameters:
+      platform: 'x64'
+      buildDotNet: true
+  - template: Templates/Build-UWP.yaml
+    parameters:
+      platform: 'ARM64'
+      buildDotNet: false
 
 - stage: Publish
   displayName: Publish Nuget
