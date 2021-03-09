@@ -36,6 +36,7 @@ jobs:
   - pwsh: |
       New-Item -ItemType Directory -Path $(nugetFolder)/native/uap/${{ parameters.platform }}/ -Force
       copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/native/uap/${{ parameters.platform }}/Urho3D.dll -Force
+      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb $(nugetFolder)/native/uap/${{ parameters.platform }}/Urho3D.pdb -Force
     displayName: 'Copy binary to output'
 
   - pwsh: |
