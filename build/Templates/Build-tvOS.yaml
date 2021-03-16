@@ -7,6 +7,7 @@ jobs:
   parameters:
     sdk: 'appletvsimulator'
     nativeFolder: 'tvos'
+    platform: 'TVOSCOMBINED'
     arch: x86_64
     name: 'Build_appletvsimulator'
 
@@ -14,6 +15,7 @@ jobs:
   parameters:
     sdk: 'appletvos'
     nativeFolder: 'tvos'
+    platform: 'TVOSCOMBINED'
     arch: arm64
     name: 'Build_appletvos'
 
