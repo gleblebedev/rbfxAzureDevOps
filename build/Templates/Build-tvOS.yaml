@@ -3,7 +3,7 @@ parameters:
   configuration: 'Release'
 
 jobs:
-- template: Build-tvOSLib.yaml
+- template: Build-iOSLib.yaml
   parameters:
     sdk: 'appletvsimulator'
     nativeFolder: 'tvos'
