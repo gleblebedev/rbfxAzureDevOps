@@ -9,3 +9,4 @@ stages:
   jobs:
   - template: Templates/Build-iOS.yaml
   
+  - template: Templates/Build-tvOS.yaml

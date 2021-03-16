@@ -1,0 +1,52 @@
+# Build project for iOS
+parameters:
+  configuration: 'Release'
+
+jobs:
+- template: Build-tvOSLib.yaml
+  parameters:
+    sdk: 'appletvsimulator'
+    nativeFolder: 'tvos'
+    arch: x86_64
+    name: 'Build_appletvsimulator'
+
+- template: Build-iOSLib.yaml
+  parameters:
+    sdk: 'appletvos'
+    nativeFolder: 'tvos'
+    arch: arm64
+    name: 'Build_appletvos'
+
+- job: Merge_iOS
+  displayName: 'Merge iOS Framework'
+  dependsOn: [ "Build_appletvos", "Build_appletvsimulator" ]
+  pool:
+    vmImage: 'macOS-latest'
+  variables:
+    rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
+    buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+    nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+
+  steps:
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download appletvos'
+    inputs:
+      source: 'current'
+      artifact: 'ios-nuget-appletvos'
+      path: '$(Build.ArtifactStagingDirectory)/appletvos'
+
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download appletvsimulator'
+    inputs:
+      source: 'current'
+      artifact: 'ios-nuget-appletvsimulator'
+      path: '$(Build.ArtifactStagingDirectory)/appletvsimulator'
+
+  - bash: lipo -create $(Build.ArtifactStagingDirectory)/appletvos/native/tvos/Urho3D.framework/Urho3D $(Build.ArtifactStagingDirectory)/appletvsimulator/native/tvos/Urho3D.framework/Urho3D -output $(Build.ArtifactStagingDirectory)/appletvos/native/tvos/Urho3D.framework/Urho3D
+    displayName: 'Run lipo'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish binaries'
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/appletvos/'
+      artifactName: 'tvos-nuget'
