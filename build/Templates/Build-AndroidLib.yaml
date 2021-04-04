@@ -18,6 +18,10 @@ jobs:
     submodules: recursive
     displayName: 'Checkout project'
 
+  - bash: |
+      echo "##vso[task.setvariable variable=CMAKE_VERSION]3.19.x"
+    displayName: 'set CMAKE_VERSION'
+
   - template: Add-ToolsToPath.yaml
 
   - template: Install-LinuxLibs.yaml
