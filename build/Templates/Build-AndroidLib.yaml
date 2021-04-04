@@ -22,8 +22,16 @@ jobs:
     displayName: 'CMake Version'
 
   - bash: |
-      echo "##vso[task.setvariable variable=CMAKE_VERSION]3.19.x"
-    displayName: 'set CMAKE_VERSION'
+      wget https://github.com/Kitware/CMake/releases/download/v3.19.7/cmake-3.19.7.tar.gz
+      tar -zxvf cmake-3.19.7.tar.gz
+      cd cmake-3.19.7/
+      ./bootstrap
+      make
+      sudo make install
+    displayName: 'Get stable cmake'
+
+  - bash: cmake --version
+    displayName: 'CMake Version'
 
   - template: Add-ToolsToPath.yaml
 
