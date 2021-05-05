@@ -69,7 +69,7 @@ stages:
         # Native DLL
         CopyFiles -SourcePath $(buildFolder)/bin/RelWithDebInfo/*.exe -DestinationPath $(nugetFolder)/tools/
         CopyFiles -SourcePath $(buildFolder)/bin/RelWithDebInfo/*.dll -DestinationPath $(nugetFolder)/tools/
-        CopyFiles -SourcePath $(buildFolder)/bin/RelWithDebInfo/*.pdb -DestinationPath $(nugetFolder)/tools/
+        # CopyFiles -SourcePath $(buildFolder)/bin/RelWithDebInfo/*.pdb -DestinationPath $(nugetFolder)/tools/
       displayName: 'Copy binary to output'
 
     - task: CopyFiles@2
