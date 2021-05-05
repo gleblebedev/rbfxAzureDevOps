@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <id>unofficial.Urho3DNet.RbfxEditor.nuspec</id>
+    <id>unofficial.Urho3DNet.RbfxEditor</id>
     <version>0.0.0.0-alpha</version>
     <authors>Rokas Kupstys and others</authors>
     <owners>glebedev</owners>
