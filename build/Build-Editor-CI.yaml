@@ -1,0 +1,60 @@
+#Azure DevOps yaml script to build and publish rbfx game on 2 platforms
+
+trigger: none
+#- master
+
+# Build project for Windows
+parameters:
+  configuration: 'RelWithDebInfo'
+
+stages:
+- stage: Editor_Build
+  displayName: Windows Editor Build
+  jobs:
+  - job: Build_Windows
+    displayName: 'Windows Editor Build'
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
+      buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+      nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+
+    steps:
+    - checkout: self
+      submodules: true
+      displayName: 'Checkout project'
+
+    - template: Templates/Add-ToolsToPath.yaml
+
+    - task: PowerShell@2
+      displayName: 'Generate version environment variable'
+      inputs:
+        filePath: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
+        arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/build/version.txt'
+
+    - script: mkdir rbfxbuild
+      displayName: 'Make rbfxbuild folder'
+      workingDirectory: $(Agent.BuildDirectory)/s
+      failOnStderr: true
+
+    - task: CMake@1
+      displayName: 'Configure Urho3D'
+      inputs:
+        workingDirectory: '$(buildFolder)'
+        cmakeArgs: -DBUILD_SHARED_LIBS=OFF -DURHO3D_GLOW=OFF -DURHO3D_FEATURES="SYSTEMUI" -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=ON -DURHO3D_RMLUI=ON -G "Visual Studio 16 2019" -A x64 -DURHO3D_GRAPHICS_API=D3D11 $(rbfxFolder)
+
+    - task: NuGetCommand@2
+      displayName: 'Restore rbfx dependencies'
+      condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(buildFolder)/*.sln'
+
+    - task: CMake@1
+      displayName: 'Build Urho3D'
+      inputs:
+        workingDirectory: '$(buildFolder)'
+        cmakeArgs: --build . --config RelWithDebInfo 
+        # --target Urho3D
+
