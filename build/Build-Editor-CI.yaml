@@ -3,10 +3,6 @@
 trigger: none
 #- master
 
-# Build project for Windows
-parameters:
-  configuration: 'RelWithDebInfo'
-
 stages:
 - stage: Editor_Build
   displayName: Windows Editor Build
@@ -46,7 +42,6 @@ stages:
 
     - task: NuGetCommand@2
       displayName: 'Restore rbfx dependencies'
-      condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
       inputs:
         command: 'restore'
         restoreSolution: '$(buildFolder)/*.sln'
