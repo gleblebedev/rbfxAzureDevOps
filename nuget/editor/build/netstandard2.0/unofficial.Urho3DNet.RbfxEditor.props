@@ -6,6 +6,6 @@
 
   <PropertyGroup Condition="'$(Configuration)'=='Editor'">
       <RunCommand>$(MSBuildThisFileDirectory)/../../tools/Editor.exe</RunCommand>
-      <RunArguments>$(OutputPath)</RunArguments>
+      <RunArguments>$(MSBuildProjectDirectory)/$(OutputPath)</RunArguments>
   </PropertyGroup>
 </Project>
