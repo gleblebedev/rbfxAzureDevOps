@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>unofficial.Urho3DNet.RbfxEditor.nuspec</id>
+    <version>0.0.0.0-alpha</version>
+    <authors>Rokas Kupstys and others</authors>
+    <owners>glebedev</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <description>rbfx game engine editor</description>
+    <tags>rbfx Urho3D gamedev csharp dotnet gameengine</tags>
+    <repository url="https://github.com/gleblebedev/rbfxAzureDevOps" />
+  </metadata>
+  <files>
+      <file src="nuget\**" target="" />
+  </files>
+</package>
