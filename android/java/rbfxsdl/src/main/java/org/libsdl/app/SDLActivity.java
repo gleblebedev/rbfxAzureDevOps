@@ -251,7 +251,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
         }
     }
 
-    protected void pauseNativeThread() {
+    protected static void pauseNativeThread() {
         mNextNativeState = NativeState.PAUSED;
         mIsResumedCalled = false;
 
@@ -266,7 +266,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
         SDLActivity.handleNativeState();
     }
 
-    protected void resumeNativeThread() {
+    protected static void resumeNativeThread() {
         mNextNativeState = NativeState.RESUMED;
         mIsResumedCalled = true;
 
@@ -291,10 +291,22 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
         }
     }
 
+    public static void globalOnPause() {
+        if (!mHasMultiWindow) {
+            pauseNativeThread();
+        }
+    }
+
     @Override
     protected void onResume() {
         Log.v(TAG, "onResume()");
         super.onResume();
+        if (!mHasMultiWindow) {
+            resumeNativeThread();
+        }
+    }
+
+    public static void globalOnResume() {
         if (!mHasMultiWindow) {
             resumeNativeThread();
         }
@@ -309,10 +321,22 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
         }
     }
 
+    public static void globalOnStop() {
+        if (mHasMultiWindow) {
+            pauseNativeThread();
+        }
+    }
+
     @Override
     protected void onStart() {
         Log.v(TAG, "onStart()");
         super.onStart();
+        if (mHasMultiWindow) {
+            resumeNativeThread();
+        }
+    }
+
+    public static void globalOnStart() {
         if (mHasMultiWindow) {
             resumeNativeThread();
         }
