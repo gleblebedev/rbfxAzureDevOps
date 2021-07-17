@@ -11,6 +11,10 @@ steps:
     filePath: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
     arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/build/version.txt'
 
+- pwsh: |
+    Write-Host "##vso[task.setvariable variable=CI]ON";
+  displayName: 'Set CI environment variable'
+
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
   workingDirectory: $(Agent.BuildDirectory)/s
