@@ -24,7 +24,7 @@ jobs:
   - bash: cmake --version
     displayName: 'CMake Version'
 
-  - bash: yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses
+  - bash: yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=/usr/lib/android-sdk/
     displayName: 'Accept license'
 
   - bash: gradle wrapper
