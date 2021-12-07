@@ -9,7 +9,7 @@ jobs:
     vmImage: 'ubuntu-latest'
   container:
     image: 'pipelines/android_dev'
-    endpoing: gloomproject-container-registry
+    endpoint: gloomproject-container-registry
   variables:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     gradleFolder: $(Agent.BuildDirectory)/s/android/java
