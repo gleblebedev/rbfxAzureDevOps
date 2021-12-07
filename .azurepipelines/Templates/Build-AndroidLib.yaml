@@ -24,6 +24,9 @@ jobs:
   - bash: cmake --version
     displayName: 'CMake Version'
 
+  - bash: yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses
+    displayName: 'Accept license'
+
   - bash: gradle wrapper
     displayName: 'gradle wrapper for SDL activity'
     workingDirectory: $(Agent.BuildDirectory)/s/android/java
