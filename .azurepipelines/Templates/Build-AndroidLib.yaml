@@ -24,8 +24,10 @@ jobs:
   - bash: cmake --version
     displayName: 'CMake Version'
 
-  - bash: yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=/usr/lib/android-sdk/
-    displayName: 'Accept license'
+  - bash: |
+      yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --licenses
+      /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "patcher;v4"
+      /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "ndk;21.1.6352462"
 
   - bash: gradle wrapper
     displayName: 'gradle wrapper for SDL activity'
