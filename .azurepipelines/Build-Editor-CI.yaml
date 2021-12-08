@@ -26,7 +26,7 @@ stages:
     - task: PowerShell@2
       displayName: 'Generate version environment variable'
       inputs:
-        filePath: '$(Agent.BuildDirectory)/s/build/Scripts/GenVersion.ps1'
+        filePath: '$(Agent.BuildDirectory)/s/.azurepipelines/Scripts/GenVersion.ps1'
         arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/.azurepipelines/version.txt'
 
     - script: mkdir rbfxbuild
