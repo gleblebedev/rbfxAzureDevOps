@@ -5,7 +5,7 @@ parameters:
 
 jobs:
 - job: '${{ parameters.name }}'
-  displayName: 'Build Android ${{ parameters.abi }}'
+  displayName: 'Build Android ${{ parameters.graphics }} ${{ parameters.abi }}'
   pool:
     vmImage: 'ubuntu-latest'
   container:
