@@ -1,5 +1,6 @@
 parameters:
   abi: 'arm64-v8a'
+  graphics: 'GLES2'
   name: 'Build_Android'
 
 jobs:
@@ -24,10 +25,6 @@ jobs:
   - bash: cmake --version
     displayName: 'CMake Version'
 
-  # - bash: yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --licenses
-  # - bash: yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "patcher;v4"
-  # - bash: yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "ndk;21.1.6352462"
-
   - bash: gradle wrapper
     displayName: 'gradle wrapper for SDL activity'
     workingDirectory: $(Agent.BuildDirectory)/s/android/java
@@ -35,7 +32,7 @@ jobs:
   - task: Gradle@2
     displayName: 'gradle build SDL activity'
     inputs:
-      options: -P${{ parameters.abi }} --stacktrace --scan
+      options: -P${{ parameters.abi }} -P${{ parameters.graphics }} --stacktrace --scan
       workingDirectory: android/java
       gradleWrapperFile: android/java/gradlew
       gradleOptions: -Xmx3072m
@@ -55,25 +52,21 @@ jobs:
     displayName: 'Find all *.jar'
 
   - pwsh: |
-      New-Item -ItemType File -Path $(nugetFolder)/native/android/${{ parameters.abi }}/libUrho3D.so -Force
-      copy-item $(gradleFolder)/app/build/intermediates/stripped_native_libs/release/out/lib/${{ parameters.abi }}/libUrho3D.so $(nugetFolder)/native/android/${{ parameters.abi }}/libUrho3D.so -Force
+      New-Item -ItemType File -Path $(nugetFolder)/native/android/${{ parameters.graphics }}/${{ parameters.abi }}/libUrho3D.so -Force
+      copy-item $(gradleFolder)/app/build/intermediates/stripped_native_libs/release/out/lib/${{ parameters.abi }}/libUrho3D.so $(nugetFolder)/native/android/${{ parameters.graphics }}/${{ parameters.abi }}/libUrho3D.so -Force
 
       New-Item -ItemType File -Path $(Build.ArtifactStagingDirectory)/jar/classes.jar -Force
       copy-item $(gradleFolder)/rbfxsdl/build/intermediates/runtime_library_classes_jar/release/classes.jar $(Build.ArtifactStagingDirectory)/jar/classes.jar -Force
     displayName: 'Copy *.so to output'
 
-  # - script: objdump.exe -p "$(gradleFolder)\app\build\intermediates\transforms\stripDebugSymbol\release\0\lib\x86_64\libUrho3D.so"
-  #   workingDirectory: C:/Program Files (x86)/Android/android-sdk/ndk-bundle/toolchains/x86_64-4.9/prebuilt/windows-x86_64/x86_64-linux-android/bin/
-  #   displayName: 'objdump.exe'
-
   - task: PublishPipelineArtifact@1
     displayName: 'Publish binaries'
     inputs:
       targetPath: '$(nugetFolder)'
-      artifactName: 'android-${{ parameters.abi }}-nuget'
+      artifactName: 'android-${{ parameters.graphics }}-${{ parameters.abi }}-nuget'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish jar'
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/jar'
-      artifactName: 'android-${{ parameters.abi }}-jar'
+      artifactName: 'android-${{ parameters.graphics }}-${{ parameters.abi }}-jar'
