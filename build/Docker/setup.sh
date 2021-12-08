@@ -54,7 +54,5 @@ echo "extracted"
 ./bin/installdependencies.sh
 cd ..
 
-chmod -R 777 /usr/lib/android-sdk/
-
 apt-get autoremove -y
 apt-get clean -y

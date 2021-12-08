@@ -4,6 +4,12 @@ println "projectDir:${project.projectDir}"
 println "buildDir:${project.buildDir}"
 // Minimum required CMake version. This is same as in ../CMakeLists.txt.
 def cmakeVersion = '3.14.0.0+'
+def GRAPHICS_API = 'GLES2'
+if (project.hasProperty("GLES2")) {
+    GRAPHICS_API = 'GLES2'
+} else if (project.hasProperty("GLES3")) {
+    GRAPHICS_API = 'GLES3'
+}
 
 android {
     compileSdkVersion 28
@@ -33,7 +39,7 @@ android {
                 }
                 arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21', '-DANDROID=1',
                           '-DANDROID_ARM_MODE=arm', '-DBUILD_SHARED_LIBS=ON', '-DURHO3D_SAMPLES=OFF',
-                          '-DURHO3D_PLAYER=OFF', '-DURHO3D_PROFILING=OFF', '-DURHO3D_GRAPHICS_API=GLES2',
+                          '-DURHO3D_PLAYER=OFF', '-DURHO3D_PROFILING=OFF', '-DURHO3D_GRAPHICS_API='+GRAPHICS_API,
                           '-DURHO3D_GLOW=OFF', '-DURHO3D_RMLUI=ON', '-DURHO3D_NETFX=netstandard2.0', '-DURHO3D_FEATURES=CSHARP;SYSTEMUI'
                 version "3.19.x"
             }
@@ -60,7 +66,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
     }
-    // ndkVersion '21.3.6528147'
+    // ndkVersion '21.4.7075529'
 }
 
 dependencies {
