@@ -40,30 +40,7 @@ apt-get install \
     powershell \
     -y
 
-CMAKE_VERSION=3.19.7
-wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz
-tar -zxvf cmake-${CMAKE_VERSION}.tar.gz
-cd cmake-${CMAKE_VERSION}/
-./bootstrap
-make
-make install
-cd ..
-rm -rf cmake-${CMAKE_VERSION}
-
-GRADLE_VERSION=6.5.1
-wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -P /tmp
-unzip -d /opt/gradle /tmp/gradle-${GRADLE_VERSION}-bin.zip
-ln -s /opt/gradle/gradle-${GRADLE_VERSION} /opt/gradle/latest
-GRADLE_HOME=/opt/gradle/latest
-PATH=${GRADLE_HOME}/bin:${PATH}
-rm -rf /tmp/gradle-${GRADLE_VERSION}-bin.zip
-
-wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -P /tmp
-unzip -d /usr/lib/android-sdk/ /tmp/commandlinetools-linux-7583922_latest.zip
-yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses
-rm -rf /tmp/commandlinetools-linux-7583922_latest.zip
-
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 AGENTRELEASE="$(curl -s https://api.github.com/repos/Microsoft/azure-pipelines-agent/releases/latest | grep -oP '"tag_name": "v\K(.*)(?=")')"
 AGENTURL="https://vstsagentpackage.azureedge.net/agent/${AGENTRELEASE}/vsts-agent-linux-x64-${AGENTRELEASE}.tar.gz"
@@ -75,6 +52,9 @@ tar zxvf vsts-agent-linux-x64-${AGENTRELEASE}.tar.gz
 chmod -R 777 .
 echo "extracted"
 ./bin/installdependencies.sh
+cd ..
+
+chmod -R 777 /usr/lib/android-sdk/
 
 apt-get autoremove -y
 apt-get clean -y
