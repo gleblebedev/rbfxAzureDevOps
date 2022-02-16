@@ -38,7 +38,7 @@ stages:
       displayName: 'Configure Urho3D'
       inputs:
         workingDirectory: '$(buildFolder)'
-        cmakeArgs: -DBUILD_SHARED_LIBS=OFF -DURHO3D_GLOW=OFF -DURHO3D_FEATURES="SYSTEMUI" -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=ON -DURHO3D_RMLUI=ON -G "Visual Studio 16 2019" -A x64 -DURHO3D_GRAPHICS_API=D3D11 $(rbfxFolder)
+        cmakeArgs: -DBUILD_SHARED_LIBS=OFF -DURHO3D_GLOW=ON -DURHO3D_FEATURES="SYSTEMUI" -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=ON -DURHO3D_RMLUI=ON -G "Visual Studio 16 2019" -A x64 -DURHO3D_GRAPHICS_API=D3D11 $(rbfxFolder)
 
     - task: NuGetCommand@2
       displayName: 'Restore rbfx dependencies'
