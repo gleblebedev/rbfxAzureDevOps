@@ -23,6 +23,11 @@ jobs:
     parameters:
       buildDotNet: false
 
+  - bash: strip ./libUrho3D.so
+    displayName: 'Strip libUrho3D.so'
+    workingDirectory: '$(buildFolder)/bin'
+    failOnStderr: true
+
   - task: CopyFiles@2
     displayName: 'Copy libUrho3D.so'
     inputs:
