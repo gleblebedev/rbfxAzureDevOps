@@ -8,7 +8,7 @@ jobs:
 - job: Build_UWP_${{ parameters.platform }}
   displayName: 'Build UWP ${{ parameters.platform }}'
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'windows-2019'
   variables:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild

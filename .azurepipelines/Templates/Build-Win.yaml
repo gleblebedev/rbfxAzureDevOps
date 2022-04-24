@@ -6,7 +6,7 @@ jobs:
 - job: Build_Windows
   displayName: 'Build Windows'
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'windows-2019'
   variables:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
