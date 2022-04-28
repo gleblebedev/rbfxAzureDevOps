@@ -33,8 +33,7 @@ jobs:
       ln -s $(buildFolder)/cmake/CMake.app/Contents/bin/cmake cmake/bin/
       cmake --version
     displayName: 'Downgrade cmake'
-    inputs:
-      workingDirectory: '$(buildFolder)'
+    workingDirectory: '$(buildFolder)'
 
   - bash: xcodebuild -showsdks
     displayName: 'xcodebuild -showsdks'
