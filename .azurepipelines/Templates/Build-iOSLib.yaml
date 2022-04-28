@@ -30,7 +30,7 @@ jobs:
       curl -OL "https://github.com/Kitware/CMake/releases/download/v3.18.1/cmake-3.18.1-Darwin-x86_64.tar.gz"
       tar xf "cmake-3.18.1-Darwin-x86_64.tar.gz"
       mv "cmake-3.18.1-Darwin-x86_64" cmake
-      ln -s $(Build.ArtifactStagingDirectory)/cmake/CMake.app/Contents/bin/cmake cmake/bin/
+      ln -s $(Build.ArtifactStagingDirectory)/cmake/CMake.app/Contents/bin/cmake /usr/local/bin/
       cmake --version
     displayName: 'Downgrade cmake'
     workingDirectory: '$(Build.ArtifactStagingDirectory)'
