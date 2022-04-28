@@ -30,9 +30,11 @@ jobs:
       curl -OL "https://github.com/Kitware/CMake/releases/download/v3.18.1/cmake-3.18.1-Darwin-x86_64.tar.gz"
       tar xf "cmake-3.18.1-Darwin-x86_64.tar.gz"
       mv "cmake-3.18.1-Darwin-x86_64" cmake
-      ln -s CMake.app/Contents/bin cmake/bin
+      ln -s $(buildFolder)/cmake/CMake.app/Contents/bin/cmake cmake/bin/
       cmake --version
     displayName: 'Downgrade cmake'
+    inputs:
+      workingDirectory: '$(buildFolder)'
 
   - bash: xcodebuild -showsdks
     displayName: 'xcodebuild -showsdks'
