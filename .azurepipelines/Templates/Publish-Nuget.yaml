@@ -17,6 +17,10 @@ jobs:
       filePath: '$(Agent.BuildDirectory)/s/.azurepipelines/Scripts/GenVersion.ps1'
       arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/.azurepipelines/version.txt'
 
+  - task: NuGetToolInstaller@1
+    inputs:
+      checkLatest: true
+
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'win-nuget'
