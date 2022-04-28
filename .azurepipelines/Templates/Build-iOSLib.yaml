@@ -30,8 +30,11 @@ jobs:
   - bash: brew uninstall cmake
     displayName: 'Search for cmake'
 
-  - bash: curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/de946dd0c0a91ecf6c78c843a4580bd7116c6bf0/Formula/cmake.rb && brew install ./cmake.rb
-    displayName: 'Downgrade cmake'
+  - bash: brew install cmake@3.18.1
+    displayName: 'Search for cmake'
+
+  #- bash: curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/de946dd0c0a91ecf6c78c843a4580bd7116c6bf0/Formula/cmake.rb && brew install ./cmake.rb
+  #  displayName: 'Downgrade cmake'
 
   - bash: xcodebuild -showsdks
     displayName: 'xcodebuild -showsdks'
