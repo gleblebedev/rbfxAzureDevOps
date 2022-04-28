@@ -25,6 +25,8 @@ jobs:
   - template: Add-ToolsToPath.yaml
 
   - bash: |
+      brew info cmake
+      brew update
       brew uninstall cmake
       brew tap-new azuredevops/local-cmake
       brew extract --version 3.18.1 --force cmake azuredevops/local-cmake
