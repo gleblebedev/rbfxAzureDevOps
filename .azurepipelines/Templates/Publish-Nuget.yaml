@@ -152,6 +152,5 @@ jobs:
   #     allowPackageConflicts: true
 
   - template: Send-Notification.yaml
-    condition: succeeded()
     parameters:
-      message: 'New nuget $(VERSION) published https://www.nuget.org/packages/unofficial.Urho3DNet/'
+      message: 'New nuget $(VERSION) published https://www.nuget.org/packages/unofficial.Urho3DNet/$(VERSION)'
