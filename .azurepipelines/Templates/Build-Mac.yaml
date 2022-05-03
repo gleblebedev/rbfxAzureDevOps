@@ -3,6 +3,7 @@
 jobs:
 - job: Build_Mac
   displayName: 'Build Mac'
+  timeoutInMinutes: 90
   pool:
     vmImage: 'macOS-latest'
   variables:

@@ -3,6 +3,7 @@
 jobs:
 - job: Build_Linux
   displayName: 'Build Linux'
+  timeoutInMinutes: 90
   pool:
     vmImage: 'ubuntu-latest'
   variables:
