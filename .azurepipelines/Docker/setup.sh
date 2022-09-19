@@ -9,6 +9,7 @@ apt-get update -y
 apt-get install apt-transport-https -y
 apt-get update -y
 apt-get install \
+    ccache \
     gcc \
     g++ \
     ninja-build \

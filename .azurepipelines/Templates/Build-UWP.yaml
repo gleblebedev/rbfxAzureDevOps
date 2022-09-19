@@ -14,6 +14,7 @@ jobs:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+    CCACHE_DIR: $(Build.BuildDirectory)/__ccache
 
   steps:
   - checkout: self
@@ -22,10 +23,16 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
+  - task: Cache@2 
+    displayName: 'Restore compiler cache'
+    inputs:
+      key: ccache | "v0.0.1" | "$(Agent.OS)" | "UWP" | "${{ parameters.configuration }}" | "${{ parameters.platform }}"
+      path: '$(CCACHE_DIR)'
+
   - template: Build-rbfx.yaml
     parameters:
       buildDotNet: ${{ parameters.buildDotNet }}
-      cmakeExtraArgs: -DURHO3D_GRAPHICS_API=D3D11 -G "Visual Studio 16 2019" -A ${{ parameters.platform }} -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0' -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
+      cmakeExtraArgs: -DURHO3D_GRAPHICS_API=D3D11 -G "Visual Studio 16 2019" -A ${{ parameters.platform }} -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0' -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
 
   - pwsh: |

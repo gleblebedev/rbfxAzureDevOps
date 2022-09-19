@@ -16,11 +16,17 @@ jobs:
     gradleFolder: $(Agent.BuildDirectory)/s/android/java
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
-
+    CCACHE_DIR: $(Build.BuildDirectory)/__ccache
   steps:
   - checkout: self
     submodules: recursive
     displayName: 'Checkout project'
+
+  - task: Cache@2 
+    displayName: 'Restore compiler cache'
+    inputs:
+      key: ccache | "v0.0.1" | "$(Agent.OS)" | "Android" | "${{ parameters.graphics }}" | "${{ parameters.abi }}"
+      path: '$(CCACHE_DIR)'
 
   - bash: cmake --version
     displayName: 'CMake Version'
@@ -38,6 +44,9 @@ jobs:
       gradleOptions: -Xmx3072m
       publishJUnitResults: false
       tasks: assembleRelease
+
+  - pwsh: ccache --show-stats --verbose
+    displayName: 'CCache stats'
 
   - pwsh: |
       Get-ChildItem -Path $(gradleFolder) -Filter *.so -Recurse -File -Name| ForEach-Object {

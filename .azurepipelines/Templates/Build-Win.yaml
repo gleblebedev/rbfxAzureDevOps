@@ -12,6 +12,7 @@ jobs:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+    CCACHE_DIR: $(Build.BuildDirectory)/__ccache
 
   steps:
   - checkout: self
@@ -19,6 +20,12 @@ jobs:
     displayName: 'Checkout project'
 
   - template: Add-ToolsToPath.yaml
+
+  - task: Cache@2 
+    displayName: 'Restore compiler cache'
+    inputs:
+      key: ccache | "v0.0.1" | "$(Agent.OS)" | "Windows" | "${{ parameters.configuration }}"
+      path: '$(CCACHE_DIR)'
 
   # - task: DotNetCoreCLI@2
   #   displayName: 'Restore'
@@ -35,7 +42,7 @@ jobs:
   - template: Build-rbfx.yaml
     parameters:
       buildDotNet: true
-      cmakeExtraArgs: -G "Visual Studio 16 2019" -A x64 -DURHO3D_GRAPHICS_API=D3D11 -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
+      cmakeExtraArgs: -G "Visual Studio 16 2019" -A x64 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DURHO3D_GRAPHICS_API=D3D11 -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
 
   - task: CMake@1
@@ -62,10 +69,12 @@ jobs:
       workingDirectory: '$(buildFolder)'
       cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet.Android
 
-
   # New-Item -ItemType Directory -Path $(nugetFolder)/runtimes/win-x64/native/ -Force
   # copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll $(nugetFolder)/runtimes/win-x64/native/Urho3D.dll -Force
   # copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb $(nugetFolder)/runtimes/win-x64/native/Urho3D.pdb -Force
+
+  - pwsh: ccache --show-stats --verbose
+    displayName: 'CCache stats'
 
   - pwsh: |
       function CopyFiles {

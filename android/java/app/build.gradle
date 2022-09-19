@@ -37,7 +37,8 @@ android {
                 } else {
                     abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
                 }
-                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21', '-DANDROID=1',
+                arguments '-DCMAKE_CXX_COMPILER_LAUNCHER=ccache', '-DCMAKE_C_COMPILER_LAUNCHER=ccache',
+                          '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21', '-DANDROID=1',
                           '-DANDROID_ARM_MODE=arm', '-DBUILD_SHARED_LIBS=ON', '-DURHO3D_SAMPLES=OFF',
                           '-DURHO3D_PLAYER=OFF', '-DURHO3D_PROFILING=OFF', '-DURHO3D_GRAPHICS_API='+GRAPHICS_API,
                           '-DURHO3D_COMPUTE=OFF',

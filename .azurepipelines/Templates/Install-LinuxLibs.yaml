@@ -18,5 +18,5 @@ steps:
     displayName: 'Install libs'
     inputs:
       targetType: inline
-      script: 'sudo apt-get install -y uuid-dev libgl-dev libssl-dev'
+      script: 'sudo apt-get install -y uuid-dev libgl-dev libssl-dev ccache'
       failOnStderr: true
