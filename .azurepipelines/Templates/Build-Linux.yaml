@@ -10,6 +10,7 @@ jobs:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+    CCACHE_DIR: $(Build.BuildDirectory)/__ccache
 
   steps:
   - checkout: self
@@ -20,8 +21,15 @@ jobs:
 
   - template: Install-LinuxLibs.yaml
 
+  - task: Cache@2 
+    displayName: 'Restore compiler cache'
+    inputs:
+      key: ccache | "v0.0.1" | "$(Agent.OS)" | "Linux"
+      path: '$(CCACHE_DIR)'
+
   - template: Build-rbfx.yaml
     parameters:
+      cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache
       buildDotNet: false
 
   - bash: strip ./libUrho3D.so

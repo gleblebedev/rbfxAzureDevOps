@@ -11,3 +11,8 @@ inside image
 cd /rbfxAzureDevOps/android/java
 gradle wrapper
 gradle assembleRelease -Parm64-v8a --stacktrace --scan
+
+pushing image
+
+docker tag android_dev:latest gloomprojects.azurecr.io/pipelines/android_dev:latest
+docker push gloomprojects.azurecr.io/pipelines/android_dev:latest

@@ -4,13 +4,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 COPY scripts/install-cmake.sh /tmp/
 RUN chmod +x /tmp/install-cmake.sh \
-  && /tmp/install-cmake.sh 3.19.7 \
+  && bash /tmp/install-cmake.sh 3.19.7 && cat /tmp/install-cmake.sh  \
   && rm -rf /tmp/install-cmake.sh /var/lib/apt/lists/*
 ENV PATH="/opt/cmake/bin:${PATH}"
 
 COPY scripts/install-android-dev.sh /tmp/
 RUN chmod +x /tmp/install-android-dev.sh \
-  && /tmp/install-android-dev.sh 6.5.1 \
+  && bash /tmp/install-android-dev.sh 6.5.1 \
   && rm -rf /tmp/install-android-dev.sh /var/lib/apt/lists/*
 ENV GRADLE_HOME="/opt/gradle/latest"
 ENV ANDROID_SDK_ROOT="/usr/lib/android-sdk/"
