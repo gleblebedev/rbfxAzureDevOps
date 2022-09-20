@@ -36,22 +36,6 @@ jobs:
       cmakeExtraArgs: -G "Ninja" -DCMAKE_SYSTEM_PROCESSOR=x64 -DCMAKE_BUILD_TYPE=${{ parameters.configuration }} -DCMAKE_SYSTEM_NAME=WindowsStore -DURHO3D_GRAPHICS_API=D3D11  -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0' -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
 
-  - pwsh: ccache --show-stats
-    displayName: 'CCache stats'
-
-  - template: 
-    inputs:
-      sourceFolder: '$(buildFolder)'
-      contents: '**/*.ccache-log'
-      targetFolder: '$(Build.ArtifactStagingDirectory)/ccache-log/$(Agent.JobName)/'
-    displayName: 'Copy CCache logs'
-
-  - task: PublishPipelineArtifact@1
-    displayName: 'Publish CCache logs'
-    inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)/ccache-log/'
-      artifactName: 'ccache-log'
-
   - pwsh: |
       Get-ChildItem -Path $(buildFolder) -Filter *.dll -Recurse -Name| ForEach-Object {
           Write-Host $_
