@@ -17,6 +17,7 @@ jobs:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+    CCACHE_DIR: $(Agent.BuildDirectory)/__ccache
 
   steps:
   - checkout: self
@@ -36,6 +37,17 @@ jobs:
     displayName: 'Downgrade cmake'
     workingDirectory: '$(Build.ArtifactStagingDirectory)'
 
+  - bash: |
+      brew install ccache
+    displayName: 'Install CCache'
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+
+  - task: Cache@2 
+    displayName: 'Restore compiler cache'
+    inputs:
+      key: ccache | "v0.0.1" | "$(Agent.OS)" | "iOS" | "${{ parameters.configuration }}" | "${{ parameters.sdk }}" | "${{ parameters.arch }}" | "${{ parameters.platform }}"
+      path: '$(CCACHE_DIR)'
+
   - bash: xcodebuild -showsdks
     displayName: 'xcodebuild -showsdks'
 
@@ -47,7 +59,7 @@ jobs:
     displayName: 'Configure Urho3D'
     inputs:
       workingDirectory: '$(buildFolder)'
-      cmakeArgs: -G Xcode -T buildsystem=1 -DSWIG_EXECUTABLE=$(Agent.BuildDirectory)/s/tools/mac/swig -DCMAKE_TOOLCHAIN_FILE=$(rbfxFolder)/CMake/Toolchains/IOS.cmake -DENABLE_BITCODE=OFF -DPLATFORM=${{ parameters.platform }} -DDEPLOYMENT_TARGET=11 -DURHO3D_COMPUTE=OFF -DURHO3D_GRAPHICS_API=GLES2 -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=ON -DURHO3D_FEATURES="CSHARP;SYSTEMUI" -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF -DURHO3D_RMLUI=ON -DSWIG_MODULE_Urho3D_DLLIMPORT=__Internal -DSWIG_MODULE_ImGui_DLLIMPORT=__Internal $(rbfxFolder)
+      cmakeArgs: -G Xcode -T buildsystem=1 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DSWIG_EXECUTABLE=$(Agent.BuildDirectory)/s/tools/mac/swig -DCMAKE_TOOLCHAIN_FILE=$(rbfxFolder)/CMake/Toolchains/IOS.cmake -DENABLE_BITCODE=OFF -DPLATFORM=${{ parameters.platform }} -DDEPLOYMENT_TARGET=11 -DURHO3D_COMPUTE=OFF -DURHO3D_GRAPHICS_API=GLES2 -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=ON -DURHO3D_FEATURES="CSHARP;SYSTEMUI" -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF -DURHO3D_RMLUI=ON -DSWIG_MODULE_Urho3D_DLLIMPORT=__Internal -DSWIG_MODULE_ImGui_DLLIMPORT=__Internal $(rbfxFolder)
 
   - pwsh: |
       Get-ChildItem -Path $(buildFolder) -Filter *.xcodeproj -Recurse -Name| ForEach-Object {
@@ -58,6 +70,8 @@ jobs:
   - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
     displayName: 'Xcode build'
 
+  - pwsh: ccache --show-stats
+    displayName: 'CCache stats'
 
   # - task: Xcode@5
   #   displayName: 'Xcode build'

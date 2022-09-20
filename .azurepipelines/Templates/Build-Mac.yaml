@@ -10,6 +10,7 @@ jobs:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+    CCACHE_DIR: $(Agent.BuildDirectory)/__ccache
 
   steps:
   - checkout: self
@@ -18,9 +19,24 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
+  - bash: |
+      brew install ccache
+    displayName: 'Install CCache'
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+
+  - task: Cache@2 
+    displayName: 'Restore compiler cache'
+    inputs:
+      key: ccache | "v0.0.1" | "$(Agent.OS)" | "MacOS"
+      path: '$(CCACHE_DIR)'
+
   - template: Build-rbfx.yaml
     parameters:
+      cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache
       buildDotNet: false
+
+  - pwsh: ccache --show-stats
+    displayName: 'CCache stats'
 
   - task: CopyFiles@2
     inputs:
