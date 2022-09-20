@@ -15,6 +15,7 @@ jobs:
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
     compilerPath: 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe'
+    winSDKPath: 'C:/Program Files (x86)/Microsoft Kits/10/bin/10.0.10240/x64'
     CCACHE_DIR: $(Agent.BuildDirectory)/__ccache
     CCACHE_DEBUG: 1
 
@@ -22,6 +23,8 @@ jobs:
   - checkout: self
     submodules: true
     displayName: 'Checkout project'
+    
+  - pwsh: Get-ChildItem -Path "C:/Program Files (x86)/Microsoft Kits/10/bin" -Filter 10.0.*
 
   - template: Add-ToolsToPath.yaml
 
@@ -30,7 +33,22 @@ jobs:
   - template: Build-rbfx.yaml
     parameters:
       buildDotNet: ${{ parameters.buildDotNet }}
-      cmakeExtraArgs: -G "Ninja" -DCMAKE_SYSTEM_PROCESSOR=x64 -DCMAKE_BUILD_TYPE=${{ parameters.configuration }} -DCMAKE_CXX_COMPILER="$(compilerPath)" -DCMAKE_C_COMPILER="$(compilerPath)" -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DURHO3D_GRAPHICS_API=D3D11  -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0' -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
+      cmakeExtraArgs: >-
+        -G "Ninja"
+        -DCMAKE_SYSTEM_PROCESSOR=x64
+        -DCMAKE_BUILD_TYPE=${{ parameters.configuration }}
+        -DCMAKE_CXX_COMPILER:FILEPATH="$(compilerPath)"
+        -DCMAKE_C_COMPILER:FILEPATH="$(compilerPath)"
+        -DCMAKE_RC_COMPILER:FILEPATH="$(winSDKPath)/rc.exe"
+        -DCMAKE_MT:FILEPATH="$(winSDKPath)/mt.exe"
+        -DCMAKE_SYSTEM_NAME=WindowsStore
+        -DCMAKE_SYSTEM_VERSION='10.0'
+        -DURHO3D_GRAPHICS_API=D3D11
+        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        -DCMAKE_C_COMPILER_LAUNCHER=ccache
+        -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0'
+        -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D
+        -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
 
   - pwsh: |
