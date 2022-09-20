@@ -70,42 +70,7 @@ jobs:
   - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
     displayName: 'Xcode build'
 
-  - pwsh: ccache --show-stats
-    displayName: 'CCache stats'
-
-  # - task: Xcode@5
-  #   displayName: 'Xcode build'
-  #   inputs:
-  #     configuration: '${{ parameters.configuration }}'
-  #     actions: build
-  #     xcWorkspacePath: $(buildFolder)/rbfx.xcodeproj
-  #     scheme: Urho3D
-  #     sdk: iphoneos
-  #     args: '-verbose OTHER_CFLAGS="-v"'
-
-  # - template: Build-rbfx.yaml
-  #   parameters:
-  #     buildDotNet: false
-  #     cmakeExtraArgs: -G Xcode -DCMAKE_TOOLCHAIN_FILE=$(rbfxFolder)/CMake/Toolchains/IOS.cmake -DPLATFORM=OS64 -DDEPLOYMENT_TARGET=11
-
-  # - pwsh: |
-  #     Get-ChildItem -Path $(buildFolder) -Filter *.dylib -Recurse -File -Name| ForEach-Object {
-  #         Write-Host $_
-  #     }
-  #   displayName: 'Find all *.dylib'
-
-  # - pwsh: |
-  #     New-Item -ItemType File -Path $(nugetFolder)/native/ios/libUrho3D.dylib -Force
-  #     copy-item $(Agent.BuildDirectory)/s/rbfxbuild/bin/${{ parameters.configuration }}/libUrho3D.dylib $(nugetFolder)/native/ios/libUrho3D.dylib -Force
-  #   displayName: 'Copy *.dylib to output'
-
-  # - pwsh: |
-  #     Get-ChildItem -Path $(buildFolder)/lib/${{ parameters.configuration }} -Filter *.a -Recurse -File -Name| ForEach-Object {
-  #         Write-Host $_
-  #         New-Item -ItemType File -Path $(nugetFolder)/native/ios/$_ -Force
-  #         copy-item $(buildFolder)/lib/${{ parameters.configuration }}/$_ $(nugetFolder)/native/ios/$_ -Force
-  #     }
-  #   displayName: 'Find and copy all *.a'
+  - template: Publish-CCacheLog.yaml
 
   - pwsh: |
       Get-ChildItem -Path $(buildFolder)/bin/${{ parameters.configuration }}/ -Filter *.framework -Name| ForEach-Object {
@@ -120,16 +85,3 @@ jobs:
     inputs:
       targetPath: '$(nugetFolder)'
       artifactName: 'ios-nuget-${{ parameters.sdk }}'
-
-  # - task: CopyFiles@2
-  #   inputs:
-  #     sourceFolder: '$(buildFolder)/bin'
-  #     contents: 'libUrho3D.dylib' 
-  #     targetFolder: '$(nugetFolder)/native/osx'
-  #     overWrite: true
-
-  # - task: PublishPipelineArtifact@1
-  #   displayName: 'Publish game binaries'
-  #   inputs:
-  #     targetPath: '$(nugetFolder)'
-  #     artifactName: 'osx-nuget'

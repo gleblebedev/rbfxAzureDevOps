@@ -34,9 +34,6 @@ jobs:
       cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache
       buildDotNet: false
 
-  - pwsh: ccache --show-stats
-    displayName: 'CCache stats'
-
   - bash: strip ./libUrho3D.so
     displayName: 'Strip libUrho3D.so'
     workingDirectory: '$(buildFolder)/bin'

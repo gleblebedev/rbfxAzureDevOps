@@ -15,6 +15,7 @@ jobs:
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
     CCACHE_DIR: $(Agent.BuildDirectory)/__ccache
+    CCACHE_DEBUG: 1
 
   steps:
   - checkout: self
@@ -26,14 +27,30 @@ jobs:
   - task: Cache@2 
     displayName: 'Restore compiler cache'
     inputs:
-      key: ccache | "v0.0.1" | "$(Agent.OS)" | "UWP" | "${{ parameters.configuration }}" | "${{ parameters.platform }}"
+      key: ccache | "v0.0.1" | "$(Agent.OS)" | "$(Agent.JobName)"
       path: '$(CCACHE_DIR)'
 
   - template: Build-rbfx.yaml
     parameters:
       buildDotNet: ${{ parameters.buildDotNet }}
-      cmakeExtraArgs: -DURHO3D_GRAPHICS_API=D3D11 -G "Visual Studio 16 2019" -A ${{ parameters.platform }} -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0' -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
+      cmakeExtraArgs: -G "Ninja" -DCMAKE_SYSTEM_PROCESSOR=x64 -DCMAKE_BUILD_TYPE=${{ parameters.configuration }} -DCMAKE_SYSTEM_NAME=WindowsStore -DURHO3D_GRAPHICS_API=D3D11  -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0' -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
+
+  - pwsh: ccache --show-stats
+    displayName: 'CCache stats'
+
+  - template: 
+    inputs:
+      sourceFolder: '$(buildFolder)'
+      contents: '**/*.ccache-log'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/ccache-log/$(Agent.JobName)/'
+    displayName: 'Copy CCache logs'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish CCache logs'
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/ccache-log/'
+      artifactName: 'ccache-log'
 
   - pwsh: |
       Get-ChildItem -Path $(buildFolder) -Filter *.dll -Recurse -Name| ForEach-Object {

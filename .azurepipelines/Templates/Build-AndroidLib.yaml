@@ -17,6 +17,7 @@ jobs:
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
     CCACHE_DIR: $(Agent.BuildDirectory)/__ccache
+    CCACHE_DEBUG: 1
   steps:
   - checkout: self
     submodules: recursive
@@ -25,7 +26,7 @@ jobs:
   - task: Cache@2 
     displayName: 'Restore compiler cache'
     inputs:
-      key: ccache | "v0.0.1" | "$(Agent.OS)" | "Android" | "${{ parameters.graphics }}" | "${{ parameters.abi }}"
+      key: ccache | "v0.0.1" | "$(Agent.OS)" | "$(Agent.JobName)"
       path: '$(CCACHE_DIR)'
 
   - bash: cmake --version
@@ -45,8 +46,7 @@ jobs:
       publishJUnitResults: false
       tasks: assembleRelease
 
-  - pwsh: ccache --show-stats
-    displayName: 'CCache stats'
+  - template: Publish-CCacheLog.yaml
 
   - pwsh: |
       Get-ChildItem -Path $(gradleFolder) -Filter *.so -Recurse -File -Name| ForEach-Object {
