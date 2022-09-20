@@ -26,12 +26,6 @@ steps:
     workingDirectory: '$(buildFolder)'
     cmakeArgs: -DBUILD_SHARED_LIBS=ON -DURHO3D_COMPUTE=OFF -DURHO3D_GLOW=ON -DURHO3D_FEATURES="CSHARP;SYSTEMUI" -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF -DURHO3D_RMLUI=ON ${{ parameters.cmakeExtraArgs }} $(rbfxFolder)
 
-- pwsh: |
-    Get-ChildItem -Path $(buildFolder) -Filter *.xcodeproj -Recurse -Name| ForEach-Object {
-        Write-Host $_
-    }
-  displayName: 'Find all *.xcodeproj'
-
 - task: NuGetCommand@2
   displayName: 'Restore rbfx dependencies'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
@@ -51,3 +45,6 @@ steps:
   inputs:
     workingDirectory: '$(buildFolder)'
     cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet
+
+- template: Publish-CCacheLog.yaml
+

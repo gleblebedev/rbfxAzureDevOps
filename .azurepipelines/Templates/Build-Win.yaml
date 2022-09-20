@@ -28,22 +28,10 @@ jobs:
       key: ccache | "v0.0.1" | "$(Agent.OS)" | "$(Agent.JobName)"
       path: '$(CCACHE_DIR)'
 
-  # - task: DotNetCoreCLI@2
-  #   displayName: 'Restore'
-  #   inputs:
-  #     command: restore
-  #     projects: 'temp/xamarin_compatibility/xamarin_compatibility.csproj'
-
-  # - task: MSBuild@1
-  #   displayName: 'test xamarin compatibility'
-  #   inputs:
-  #     solution: 'temp/xamarin_compatibility/xamarin_compatibility.sln'
-  #     configuration: Release
-
   - template: Build-rbfx.yaml
     parameters:
       buildDotNet: true
-      cmakeExtraArgs: -G "Ninja" -DCMAKE_SYSTEM_PROCESSOR=x64 -DCMAKE_BUILD_TYPE=${{ parameters.configuration }} -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DURHO3D_GRAPHICS_API=D3D11 -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
+      cmakeExtraArgs: -G "Ninja" -DCMAKE_SYSTEM_PROCESSOR=x64 -DCMAKE_BUILD_TYPE=${{ parameters.configuration }} -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_VERSION=6.2 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DURHO3D_GRAPHICS_API=D3D11 -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
 
   - task: CMake@1

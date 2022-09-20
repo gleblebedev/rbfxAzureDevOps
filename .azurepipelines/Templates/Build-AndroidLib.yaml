@@ -14,7 +14,7 @@ jobs:
   variables:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     gradleFolder: $(Agent.BuildDirectory)/s/android/java
-    buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+    buildFolder: $(Agent.BuildDirectory)/s/android/java/app/.cxx
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
     CCACHE_DIR: $(Agent.BuildDirectory)/__ccache
     CCACHE_DEBUG: 1
