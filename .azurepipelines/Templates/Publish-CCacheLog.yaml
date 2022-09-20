@@ -3,7 +3,7 @@ steps:
     displayName: 'CCache stats'
 
   - task: CopyFiles@2
-    condition: eq(${{ parameters.CCACHE_DEBUG }}, '1')
+    # condition: eq(${{ parameters.CCACHE_DEBUG }}, '1')
     inputs:
       sourceFolder: '$(buildFolder)'
       contents: '**/*.ccache-log'
@@ -11,7 +11,7 @@ steps:
     displayName: 'Copy CCache logs'
 
   - task: PublishPipelineArtifact@1
-    condition: eq(${{ parameters.CCACHE_DEBUG }}, '1')
+    # condition: eq(${{ parameters.CCACHE_DEBUG }}, '1')
     displayName: 'Publish CCache logs'
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/ccache-log/'
