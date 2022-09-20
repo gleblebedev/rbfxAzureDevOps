@@ -45,7 +45,7 @@ jobs:
       publishJUnitResults: false
       tasks: assembleRelease
 
-  - pwsh: ccache --show-stats --verbose
+  - pwsh: ccache --show-stats
     displayName: 'CCache stats'
 
   - pwsh: |

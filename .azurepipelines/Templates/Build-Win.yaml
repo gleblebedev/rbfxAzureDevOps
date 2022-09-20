@@ -21,6 +21,8 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
+  - pwsh: New-Item -Path "$(Build.CCACHE_DIR)" -ItemType "directory"
+
   - task: Cache@2 
     displayName: 'Restore compiler cache'
     inputs:
@@ -42,7 +44,7 @@ jobs:
   - template: Build-rbfx.yaml
     parameters:
       buildDotNet: true
-      cmakeExtraArgs: -G "Visual Studio 16 2019" -A x64 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DURHO3D_GRAPHICS_API=D3D11 -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
+      cmakeExtraArgs: -G "Ninja" -A x64 -DCMAKE_BUILD_TYPE=${{ parameters.configuration }} -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DURHO3D_GRAPHICS_API=D3D11 -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
       configuration: ${{ parameters.configuration }}
 
   - task: CMake@1
