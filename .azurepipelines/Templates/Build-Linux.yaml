@@ -21,6 +21,8 @@ jobs:
 
   - template: Install-LinuxLibs.yaml
 
+  - pwsh: New-Item -Path "$(CCACHE_DIR)" -ItemType "directory"
+
   - task: Cache@2 
     displayName: 'Restore compiler cache'
     inputs:
