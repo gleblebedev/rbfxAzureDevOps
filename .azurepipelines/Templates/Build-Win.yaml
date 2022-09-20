@@ -22,6 +22,10 @@ jobs:
     submodules: true
     displayName: 'Checkout project'
 
+  - pwsh: Get-ChildItem -Path "C:/Program Files (x86)/" -Filter M*
+
+  - pwsh: Get-ChildItem -Path "C:/Program Files (x86)/Microsoft Kits/10/"
+
   - pwsh: Get-ChildItem -Path "C:/Program Files (x86)/Microsoft Kits/10/bin" -Filter 10.0.*
 
   - template: Add-ToolsToPath.yaml
