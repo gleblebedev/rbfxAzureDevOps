@@ -21,8 +21,6 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
-  - pwsh: New-Item -Path "$(CCACHE_DIR)" -ItemType "directory"
-
   - task: Cache@2 
     displayName: 'Restore compiler cache'
     inputs:
