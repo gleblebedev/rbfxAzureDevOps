@@ -42,11 +42,7 @@ jobs:
     displayName: 'Install CCache'
     workingDirectory: '$(Build.ArtifactStagingDirectory)'
 
-  - task: Cache@2 
-    displayName: 'Restore compiler cache'
-    inputs:
-      key: ccache | "v0.0.1" | "$(Agent.OS)" | "iOS" | "${{ parameters.configuration }}" | "${{ parameters.sdk }}" | "${{ parameters.arch }}" | "${{ parameters.platform }}"
-      path: '$(CCACHE_DIR)'
+  - template: Fetch-CCache.yaml
 
   - bash: xcodebuild -showsdks
     displayName: 'xcodebuild -showsdks'

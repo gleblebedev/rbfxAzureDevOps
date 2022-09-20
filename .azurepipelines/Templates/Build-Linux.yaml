@@ -23,11 +23,7 @@ jobs:
 
   - pwsh: New-Item -Path "$(CCACHE_DIR)" -ItemType "directory"
 
-  - task: Cache@2 
-    displayName: 'Restore compiler cache'
-    inputs:
-      key: ccache | "v0.0.1" | "$(Agent.OS)" | "Linux"
-      path: '$(CCACHE_DIR)'
+  - template: Fetch-CCache.yaml
 
   - template: Build-rbfx.yaml
     parameters:

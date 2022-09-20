@@ -23,11 +23,7 @@ jobs:
     submodules: recursive
     displayName: 'Checkout project'
 
-  - task: Cache@2 
-    displayName: 'Restore compiler cache'
-    inputs:
-      key: ccache | "v0.0.1" | "$(Agent.OS)" | "$(Agent.JobName)"
-      path: '$(CCACHE_DIR)'
+  - template: Fetch-CCache.yaml
 
   - bash: cmake --version
     displayName: 'CMake Version'
