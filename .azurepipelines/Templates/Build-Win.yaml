@@ -24,7 +24,8 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
-  - pwsh: dotnet $(Agent.BuildDirectory)/s/tools/dotnet/PipelineTools.dll vsenv
+  - script: dotnet $(Agent.BuildDirectory)/s/tools/dotnet/PipelineTools.dll vsenv
+    displayName: 'Setup Visual Studio Environment'
 
   - template: Fetch-CCache.yaml
 
