@@ -12,7 +12,7 @@ jobs:
   displayName: 'Build ${{ parameters.name }}'
   timeoutInMinutes: 90
   pool:
-    vmImage: 'macOS-10.15'
+    vmImage: 'macOS-latest'
   variables:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
