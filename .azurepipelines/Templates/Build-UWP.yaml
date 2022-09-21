@@ -24,9 +24,11 @@ jobs:
     submodules: true
     displayName: 'Checkout project'
 
-  - pwsh: Get-ChildItem -Path "C:/Program Files (x86)/Microsoft Kits/10/bin" -Filter 10.0.*
-
   - template: Add-ToolsToPath.yaml
+
+  - pwsh: dotnet $(Agent.BuildDirectory)/s/tools/dotnet/PipelineTools.dll winsdkenv --buildPlatform  ${{ parameters.platform }}
+
+  - pwsh: dotnet $(Agent.BuildDirectory)/s/tools/dotnet/PipelineTools.dll vsenv --buildPlatform  ${{ parameters.platform }}
 
   - template: Fetch-CCache.yaml
 

@@ -24,6 +24,8 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
+  - pwsh: dotnet $(Agent.BuildDirectory)/s/tools/dotnet/PipelineTools.dll vsenv
+
   - template: Fetch-CCache.yaml
 
   - template: Build-rbfx.yaml
