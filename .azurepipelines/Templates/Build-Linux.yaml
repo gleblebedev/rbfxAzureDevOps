@@ -11,6 +11,7 @@ jobs:
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
     CCACHE_DIR: $(Agent.BuildDirectory)/__ccache
+    CCACHE_DEBUG: 1
 
   steps:
   - checkout: self

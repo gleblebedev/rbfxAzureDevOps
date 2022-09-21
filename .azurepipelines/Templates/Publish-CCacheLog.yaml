@@ -13,6 +13,7 @@ steps:
   - task: PublishPipelineArtifact@1
     # condition: eq(${{ parameters.CCACHE_DEBUG }}, '1')
     displayName: 'Publish CCache logs'
+    continueOnError: true 
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/ccache-log/'
       artifactName: 'ccache-log-$(Agent.JobName)'
