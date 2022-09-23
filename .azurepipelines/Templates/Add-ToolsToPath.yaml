@@ -1,5 +1,11 @@
 # Add tools to path
 steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET 6 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+
 - script: dotnet tool restore
   displayName: 'Restore dotnet tools'
   workingDirectory: $(Build.SourcesDirectory)
