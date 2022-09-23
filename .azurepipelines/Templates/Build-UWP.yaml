@@ -22,10 +22,10 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
-  - script: dotnet $(Agent.BuildDirectory)/s/tools/dotnet/PipelineTools.dll winsdkenv --buildPlatform  ${{ parameters.platform }}
+  - script: dotnet tool run azurepipelinetool winsdkenv --buildPlatform x64
     displayName: 'Setup Windows SDK Environment'
 
-  - script: dotnet $(Agent.BuildDirectory)/s/tools/dotnet/PipelineTools.dll vsenv --buildPlatform  ${{ parameters.platform }}
+  - script: dotnet tool run azurepipelinetool vsenv --buildPlatform x64
     displayName: 'Setup Visual Studio Environment'
 
   - template: Fetch-CCache.yaml
