@@ -12,10 +12,12 @@ steps:
     Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS]1"
     Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS_LEVEL]9"
     Write-Host "##vso[task.setvariable variable=EM_COMPILER_WRAPPER]ccache"
+  displayName: 'Enable CCache'
   condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
 
 - pwsh: |
     Write-Host "##vso[task.setvariable variable=CCACHE_DEBUG]1"
+  displayName: 'Enable CCache Debug mode'
   condition: and(succeeded(), eq(${{ parameters.debugCache }}, 'true'))
 
 - task: Cache@2 

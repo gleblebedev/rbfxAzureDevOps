@@ -1,6 +1,7 @@
 # Add tools to path
 steps:
 - script: dotnet tool restore
+  displayName: 'Restore dotnet tools'
   workingDirectory: $(Build.SourcesDirectory)
   
 - pwsh: |

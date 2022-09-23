@@ -20,8 +20,6 @@ jobs:
 
   - template: Install-LinuxLibs.yaml
 
-  - pwsh: New-Item -Path "$(CCACHE_DIR)" -ItemType "directory"
-
   - template: Fetch-CCache.yaml
       
   - template: Build-rbfx.yaml
