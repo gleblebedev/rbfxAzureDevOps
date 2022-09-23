@@ -1,6 +1,26 @@
+parameters:
+- name: enableCache
+  default: true
+  type: boolean
+- name: debugCache
+  default: true
+  type: boolean
+
 steps:
+- pwsh: |
+    Write-Host "##vso[task.setvariable variable=CCACHE_DIR]$(Build.ArtifactStagingDirectory)/.ccache"
+    Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS]1"
+    Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS_LEVEL]9"
+    Write-Host "##vso[task.setvariable variable=EM_COMPILER_WRAPPER]ccache"
+  condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
+
+- pwsh: |
+    Write-Host "##vso[task.setvariable variable=CCACHE_DEBUG]1"
+  condition: and(succeeded(), eq(${{ parameters.debugCache }}, 'true'))
+
 - task: Cache@2 
   displayName: 'Restore compiler cache'
+  condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
   inputs:
     key: ccache | "v0.0.1" | "$(Agent.OS)" | "$(Agent.JobName)"
     path: '$(CCACHE_DIR)'

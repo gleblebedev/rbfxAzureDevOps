@@ -1,9 +1,18 @@
+parameters:
+- name: enableCache
+  default: true
+  type: boolean
+- name: debugCache
+  default: true
+  type: boolean
+
 steps:
   - pwsh: ccache --show-stats
+    condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
     displayName: 'CCache stats'
 
   - task: CopyFiles@2
-    # condition: eq(${{ parameters.CCACHE_DEBUG }}, '1')
+    condition: and(succeeded(), and(eq(${{ parameters.enableCache }}, 'true'), eq(${{ parameters.debugCache }}, 'true')))
     inputs:
       sourceFolder: '$(buildFolder)'
       contents: '**/*.ccache-log'
@@ -11,7 +20,7 @@ steps:
     displayName: 'Copy CCache logs'
 
   - task: PublishPipelineArtifact@1
-    # condition: eq(${{ parameters.CCACHE_DEBUG }}, '1')
+    condition: and(succeeded(), and(eq(${{ parameters.enableCache }}, 'true'), eq(${{ parameters.debugCache }}, 'true')))
     displayName: 'Publish CCache logs'
     continueOnError: true 
     inputs:

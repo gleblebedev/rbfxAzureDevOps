@@ -14,8 +14,6 @@ jobs:
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
     compilerPath: 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe'
     winSDKPath: 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.16299.0/x64'
-    CCACHE_DIR: $(Agent.BuildDirectory)/__ccache
-    CCACHE_DEBUG: 1
 
   steps:
   - checkout: self
@@ -24,10 +22,10 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
-  - script: dotnet $(Agent.BuildDirectory)/s/tools/dotnet/PipelineTools.dll winsdkenv --buildPlatform x64
+  - script: dotnet tool run azurepipelinetool winsdkenv --buildPlatform x64
     displayName: 'Setup Windows SDK Environment'
 
-  - script: dotnet $(Agent.BuildDirectory)/s/tools/dotnet/PipelineTools.dll vsenv --buildPlatform x64
+  - script: dotnet tool run azurepipelinetool vsenv --buildPlatform x64
     displayName: 'Setup Visual Studio Environment'
 
   - template: Fetch-CCache.yaml
@@ -39,14 +37,12 @@ jobs:
         -G "Ninja"
         -DCMAKE_SYSTEM_PROCESSOR=x64
         -DCMAKE_BUILD_TYPE=${{ parameters.configuration }}
-        -DCMAKE_CXX_COMPILER:FILEPATH="$(compilerPath)"
-        -DCMAKE_C_COMPILER:FILEPATH="$(compilerPath)"
-        -DCMAKE_RC_COMPILER:FILEPATH="$(winSDKPath)/rc.exe"
-        -DCMAKE_MT:FILEPATH="$(winSDKPath)/mt.exe"
+        -DCMAKE_CXX_COMPILER="cl"
+        -DCMAKE_C_COMPILER="cl"
         -DCMAKE_SYSTEM_NAME=Windows
         -DCMAKE_SYSTEM_VERSION=6.2
-        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-        -DCMAKE_C_COMPILER_LAUNCHER=ccache
+        -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
+        -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
         -DURHO3D_GRAPHICS_API=D3D11
         -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D
         -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D

@@ -1,5 +1,8 @@
 # Add tools to path
 steps:
+- script: dotnet tool restore
+  workingDirectory: $(Build.SourcesDirectory)
+  
 - pwsh: |
     If ($IsWindows)
     {

@@ -10,8 +10,6 @@ jobs:
     rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
     buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
-    CCACHE_DIR: $(Agent.BuildDirectory)/__ccache
-    CCACHE_DEBUG: 1
 
   steps:
   - checkout: self
@@ -29,7 +27,7 @@ jobs:
 
   - template: Build-rbfx.yaml
     parameters:
-      cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache
+      cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
       buildDotNet: false
 
   - task: CopyFiles@2
