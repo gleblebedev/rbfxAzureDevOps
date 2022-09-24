@@ -6,16 +6,16 @@ jobs:
   pool:
     vmImage: 'windows-latest'
   variables:
-    rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
-    buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+    rbfxFolder: $(Build.SourcesDirectory)/rbfx
+    buildFolder: $(Build.SourcesDirectory)/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
   steps:
   - task: PowerShell@2
     displayName: 'Generate version environment variable'
     inputs:
-      filePath: '$(Agent.BuildDirectory)/s/.azurepipelines/Scripts/GenVersion.ps1'
-      arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/.azurepipelines/version.txt'
+      filePath: '$(Build.SourcesDirectory)/.azurepipelines/Scripts/GenVersion.ps1'
+      arguments: '-versionTemplateFile $(Build.SourcesDirectory)/.azurepipelines/version.txt'
 
   - task: NuGetToolInstaller@1
     inputs:
@@ -83,21 +83,21 @@ jobs:
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(Agent.BuildDirectory)/s/nuget'
+      sourceFolder: '$(Build.SourcesDirectory)/nuget'
       contents: 'LICENSE' 
       targetFolder: '$(nugetFolder)'
       overWrite: true
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(Agent.BuildDirectory)/s/nuget/build'
+      sourceFolder: '$(Build.SourcesDirectory)/nuget/build'
       contents: '**' 
       targetFolder: '$(nugetFolder)/build'
       overWrite: true
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(Agent.BuildDirectory)/s/nuget'
+      sourceFolder: '$(Build.SourcesDirectory)/nuget'
       contents: 'unofficial.Urho3DNet.nuspec' 
       targetFolder: '$(Build.ArtifactStagingDirectory)'
       overWrite: true

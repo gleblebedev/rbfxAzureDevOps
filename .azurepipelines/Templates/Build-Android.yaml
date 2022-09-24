@@ -55,9 +55,9 @@ jobs:
   pool:
     vmImage: 'windows-latest'
   variables:
-    rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
-    gradleFolder: $(Agent.BuildDirectory)/s/android/java
-    buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+    rbfxFolder: $(Build.SourcesDirectory)/rbfx
+    gradleFolder: $(Build.SourcesDirectory)/android/java
+    buildFolder: $(Build.SourcesDirectory)/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
   steps:
@@ -84,7 +84,7 @@ jobs:
 
   - pwsh: |
       New-Item -ItemType File -Path $(nugetFolder)/lib/monoandroid90/Urho3DNet.AndroidSDL.dll -Force
-      copy-item $(Agent.BuildDirectory)/s/android/Urho3DNet.AndroidSDL/bin/Release/Urho3DNet.AndroidSDL.dll $(nugetFolder)/lib/monoandroid90/Urho3DNet.AndroidSDL.dll -Force
+      copy-item $(Build.SourcesDirectory)/android/Urho3DNet.AndroidSDL/bin/Release/Urho3DNet.AndroidSDL.dll $(nugetFolder)/lib/monoandroid90/Urho3DNet.AndroidSDL.dll -Force
     displayName: 'Copy *.so to output'
 
   - task: PublishPipelineArtifact@1

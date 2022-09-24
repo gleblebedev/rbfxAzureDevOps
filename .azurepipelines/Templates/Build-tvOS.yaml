@@ -25,8 +25,8 @@ jobs:
   pool:
     vmImage: 'macOS-latest'
   variables:
-    rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
-    buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+    rbfxFolder: $(Build.SourcesDirectory)/rbfx
+    buildFolder: $(Build.SourcesDirectory)/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
   steps:

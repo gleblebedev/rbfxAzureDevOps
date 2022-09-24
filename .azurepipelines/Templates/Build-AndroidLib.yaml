@@ -31,7 +31,7 @@ jobs:
 
   - bash: gradle wrapper
     displayName: 'gradle wrapper for SDL activity'
-    workingDirectory: $(Agent.BuildDirectory)/s/android/java
+    workingDirectory: $(Build.SourcesDirectory)/android/java
 
   - task: Gradle@2
     displayName: 'gradle build SDL activity'

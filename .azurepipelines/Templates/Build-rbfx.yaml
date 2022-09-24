@@ -8,8 +8,8 @@ steps:
 - task: PowerShell@2
   displayName: 'Generate version environment variable'
   inputs:
-    filePath: '$(Agent.BuildDirectory)/s/.azurepipelines/Scripts/GenVersion.ps1'
-    arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/.azurepipelines/version.txt'
+    filePath: '$(Build.SourcesDirectory)/.azurepipelines/Scripts/GenVersion.ps1'
+    arguments: '-versionTemplateFile $(Build.SourcesDirectory)/.azurepipelines/version.txt'
 
 - pwsh: |
     Write-Host "##vso[task.setvariable variable=CI]ON";
@@ -17,7 +17,7 @@ steps:
 
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
-  workingDirectory: $(Agent.BuildDirectory)/s
+  workingDirectory: $(Build.SourcesDirectory)
   failOnStderr: true
 
 - task: CMake@1

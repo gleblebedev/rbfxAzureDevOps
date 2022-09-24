@@ -12,8 +12,8 @@ stages:
     pool:
       vmImage: 'windows-latest'
     variables:
-      rbfxFolder: $(Agent.BuildDirectory)/s/rbfx
-      buildFolder: $(Agent.BuildDirectory)/s/rbfxbuild
+      rbfxFolder: $(Build.SourcesDirectory)/rbfx
+      buildFolder: $(Build.SourcesDirectory)/rbfxbuild
       nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
     steps:
@@ -26,12 +26,12 @@ stages:
     - task: PowerShell@2
       displayName: 'Generate version environment variable'
       inputs:
-        filePath: '$(Agent.BuildDirectory)/s/.azurepipelines/Scripts/GenVersion.ps1'
-        arguments: '-versionTemplateFile $(Agent.BuildDirectory)/s/.azurepipelines/version.txt'
+        filePath: '$(Build.SourcesDirectory)/.azurepipelines/Scripts/GenVersion.ps1'
+        arguments: '-versionTemplateFile $(Build.SourcesDirectory)/.azurepipelines/version.txt'
 
     - script: mkdir rbfxbuild
       displayName: 'Make rbfxbuild folder'
-      workingDirectory: $(Agent.BuildDirectory)/s
+      workingDirectory: $(Build.SourcesDirectory)
       failOnStderr: true
 
     - task: CMake@1
@@ -74,14 +74,14 @@ stages:
 
     - task: CopyFiles@2
       inputs:
-        sourceFolder: '$(Agent.BuildDirectory)/s/nuget'
+        sourceFolder: '$(Build.SourcesDirectory)/nuget'
         contents: 'LICENSE' 
         targetFolder: '$(nugetFolder)'
         overWrite: true
 
     - task: CopyFiles@2
       inputs:
-        sourceFolder: '$(Agent.BuildDirectory)/s/nuget/editor'
+        sourceFolder: '$(Build.SourcesDirectory)/nuget/editor'
         contents: '**' 
         targetFolder: '$(nugetFolder)'
         overWrite: true
@@ -102,7 +102,7 @@ stages:
 
     - task: CopyFiles@2
       inputs:
-        sourceFolder: '$(Agent.BuildDirectory)/s/nuget'
+        sourceFolder: '$(Build.SourcesDirectory)/nuget'
         contents: 'unofficial.Urho3DNet.RbfxEditor.nuspec' 
         targetFolder: '$(Build.ArtifactStagingDirectory)'
         overWrite: true
