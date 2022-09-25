@@ -45,9 +45,3 @@ jobs:
     inputs:
       targetPath: '$(nugetFolder)'
       artifactName: 'linux-nuget'
-
-  - task: PublishPipelineArtifact@1
-    displayName: 'Publish swig'
-    inputs:
-      targetPath: '$(buildFolder)/bin/swig'
-      artifactName: 'linux-swig'

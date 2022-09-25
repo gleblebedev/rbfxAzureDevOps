@@ -43,8 +43,3 @@ jobs:
       targetPath: '$(nugetFolder)'
       artifactName: 'osx-nuget'
 
-  - task: PublishPipelineArtifact@1
-    displayName: 'Publish swig'
-    inputs:
-      targetPath: '$(buildFolder)/bin/swig'
-      artifactName: 'mac-swig'

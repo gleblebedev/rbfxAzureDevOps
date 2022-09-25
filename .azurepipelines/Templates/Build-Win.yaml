@@ -191,9 +191,3 @@ jobs:
     inputs:
       targetPath: '$(nugetFolder)'
       artifactName: 'win-nuget'
-
-  - task: PublishPipelineArtifact@1
-    displayName: 'Publish swig'
-    inputs:
-      targetPath: '$(buildFolder)/bin/${{ parameters.configuration }}/swig.exe'
-      artifactName: 'win-swig'
