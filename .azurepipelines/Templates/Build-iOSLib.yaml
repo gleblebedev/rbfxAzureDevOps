@@ -62,6 +62,9 @@ jobs:
       }
     displayName: 'Find all *.xcodeproj'
 
+  - script: dotnet tool run azurepipelinetool xcode-setbuildsystemtype -i $(buildFolder) --buildsystemtype Original
+    displayName: 'Patch build system type'
+
   - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
     displayName: 'Xcode build'
 
