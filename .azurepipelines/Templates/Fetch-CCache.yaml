@@ -10,9 +10,6 @@ parameters:
   type: string
 
 steps:
-- script: ccache --max-size ${{ parameters.maxCacheSize }}
-  condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
-  displayName: 'Limit CCache size to ${{ parameters.maxCacheSize }}'
 
 - pwsh: |
     Write-Host "##vso[task.setvariable variable=CCACHE_DIR]$(Build.ArtifactStagingDirectory)/.ccache"
@@ -21,6 +18,9 @@ steps:
     Write-Host "##vso[task.setvariable variable=EM_COMPILER_WRAPPER]ccache"
   displayName: 'Enable CCache'
   condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
+
+- pwsh: New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name ".ccache" -ItemType "directory"
+  displayName: 'Make CCache folder'
 
 - pwsh: |
     Write-Host "##vso[task.setvariable variable=CCACHE_DEBUG]1"
@@ -33,4 +33,8 @@ steps:
   inputs:
     key: ccache | "v0.0.2" | "$(Agent.OS)" | "$(Agent.JobName)"
     path: '$(CCACHE_DIR)'
+
+- script: ccache --max-size ${{ parameters.maxCacheSize }}
+  condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
+  displayName: 'Limit CCache size to ${{ parameters.maxCacheSize }}'
     
