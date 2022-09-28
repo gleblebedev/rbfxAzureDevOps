@@ -7,9 +7,12 @@ parameters:
   type: boolean
 
 steps:
-  - pwsh: ccache --show-stats
+  - script: ccache --show-stats
     condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
     displayName: 'CCache stats'
+
+  - pwsh: New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name "ccache-log" -ItemType "directory"
+    displayName: 'Make CCache log folder'
 
   - task: CopyFiles@2
     condition: and(succeeded(), and(eq(${{ parameters.enableCache }}, 'true'), eq(${{ parameters.debugCache }}, 'true')))
