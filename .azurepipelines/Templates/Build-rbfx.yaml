@@ -44,7 +44,7 @@ steps:
   displayName: 'Build folder content'
   workingDirectory: '$(buildFolder)'
 
-- script: >-
+- script: |
     mkdir "$(Build.SourcesDirectory)/tools/win/cl"
     mklink "$(Build.SourcesDirectory)/tools/win/cl/cl.exe" "$(Build.SourcesDirectory)/tools/win/ccache.exe"
     msbuild -r -p:Configuration=${{ parameters.configuration }} -maxcpucount:2 -p:TrackFileAccess=false -p:DebugInformationFormat=OldStyle -p:CLToolExe=cl.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win/cl" "$(buildFolder)/rbfx.sln" -target:Urho3D
