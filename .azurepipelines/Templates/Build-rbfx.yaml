@@ -44,12 +44,11 @@ steps:
   displayName: 'Build folder content'
   workingDirectory: '$(buildFolder)'
 
-- script: msbuild -r -p:Configuration=${{ parameters.configuration }} -maxcpucount:2 -p:TrackFileAccess=false -p:DebugInformationFormat=OldStyle -p:CLToolExe=ccache.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win" "$(buildFolder)/rbfx.sln" -target:Urho3D
-  displayName: 'Build Urho3D'
-  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', 'true'))
-  workingDirectory: '$(buildFolder)'
-
-- script: msbuild -r -p:Configuration=${{ parameters.configuration }} -maxcpucount:2 -p:TrackFileAccess=false -p:DebugInformationFormat=OldStyle -p:CLToolExe=ccache.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win" "$(buildFolder)/rbfx.sln" -target:Urho3DNet
+- script: >-
+    mkdir "$(Build.SourcesDirectory)/tools/win/cl"
+    mklink "$(Build.SourcesDirectory)/tools/win/cl/cl.exe" "$(Build.SourcesDirectory)/tools/win/ccache.exe"
+    msbuild -r -p:Configuration=${{ parameters.configuration }} -maxcpucount:2 -p:TrackFileAccess=false -p:DebugInformationFormat=OldStyle -p:CLToolExe=cl.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win/cl" "$(buildFolder)/rbfx.sln" -target:Urho3D
+    msbuild -r -p:Configuration=${{ parameters.configuration }} -maxcpucount:2 -p:TrackFileAccess=false -p:DebugInformationFormat=OldStyle -p:CLToolExe=cl.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win/cl" "$(buildFolder)/rbfx.sln" -target:Urho3DNet
   displayName: 'Build Urho3D'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', 'true'))
   workingDirectory: '$(buildFolder)'
