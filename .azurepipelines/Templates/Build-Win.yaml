@@ -34,10 +34,6 @@ jobs:
       cmakeExtraArgs: >-
         -G "Visual Studio 17 2022" -A x64
         -DCMAKE_BUILD_TYPE=${{ parameters.configuration }}
-        -DVS_GLOBAL_CLToolExe=ccache.exe
-        -DVS_GLOBAL_CLToolPath=$(Build.SourcesDirectory)/tools/win
-        -DVS_GLOBAL_TrackFileAccess=false
-        -DVS_GLOBAL_UseMultiToolTask=true
         -DVS_GLOBAL_DebugInformationFormat=OldStyle
         -DURHO3D_GRAPHICS_API=D3D11
         -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D
