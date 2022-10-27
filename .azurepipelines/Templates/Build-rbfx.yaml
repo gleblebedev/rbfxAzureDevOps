@@ -40,17 +40,15 @@ steps:
     workingDirectory: '$(buildFolder)'
     cmakeArgs: --build . --config RelWithDebInfo --target Urho3D
 
-- script: msbuild -r -p:Configuration=${{ parameters.configuration }} -maxcpucount:2 -p:TrackFileAccess=false -p:CLToolExe=ccache.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win" '$(buildFolder)/*.sln' -target:Urho3D
+- script: msbuild -r -p:Configuration=${{ parameters.configuration }} -maxcpucount:2 -p:TrackFileAccess=false -p:CLToolExe=ccache.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win" '$(buildFolder)/rbfx.sln' -target:Urho3D
   displayName: 'Build Urho3D'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', 'true'))
   workingDirectory: '$(buildFolder)'
 
-- task: CMake@1
-  displayName: 'Build Urho3DNet'
+- script: msbuild -r -p:Configuration=${{ parameters.configuration }} -maxcpucount:2 -p:TrackFileAccess=false -p:CLToolExe=ccache.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win" '$(buildFolder)/rbfx.sln' -target:Urho3DNet
+  displayName: 'Build Urho3D'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', 'true'))
-  inputs:
-    workingDirectory: '$(buildFolder)'
-    cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet
+  workingDirectory: '$(buildFolder)'
 
 - template: Publish-CCacheLog.yaml
 
