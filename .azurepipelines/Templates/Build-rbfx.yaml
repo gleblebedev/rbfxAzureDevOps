@@ -43,8 +43,7 @@ steps:
 - script: msbuild -r -p:Configuration=${{ parameters.configuration }} -maxcpucount:2 -p:TrackFileAccess=false -p:CLToolExe=ccache.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win" *.sln -target:Urho3D
   displayName: 'Build Urho3D'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', 'true'))
-  inputs:
-    workingDirectory: '$(buildFolder)'
+  workingDirectory: '$(buildFolder)'
 
 - task: CMake@1
   displayName: 'Build Urho3DNet'
