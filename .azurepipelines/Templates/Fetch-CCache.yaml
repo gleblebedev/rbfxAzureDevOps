@@ -1,13 +1,7 @@
 parameters:
-- name: enableCache
-  default: true
-  type: boolean
-- name: debugCache
-  default: true
-  type: boolean
-- name: maxCacheSize
-  default: 1G
-  type: string
+  enableCache: true
+  debugCache: true
+  maxCacheSize: 1G
 
 steps:
 
@@ -17,7 +11,7 @@ steps:
     Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS_LEVEL]9"
     Write-Host "##vso[task.setvariable variable=EM_COMPILER_WRAPPER]ccache"
   displayName: 'Enable CCache'
-  condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
+  condition: and(succeeded(), eq('${{ parameters.enableCache }}', 'true'))
 
 - pwsh: New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name ".ccache" -ItemType "directory"
   displayName: 'Make CCache folder'
@@ -25,16 +19,16 @@ steps:
 - pwsh: |
     Write-Host "##vso[task.setvariable variable=CCACHE_DEBUG]1"
   displayName: 'Enable CCache Debug mode'
-  condition: and(succeeded(), eq(${{ parameters.debugCache }}, 'true'))
+  condition: and(succeeded(), eq('${{ parameters.debugCache }}', 'true'))
 
 - task: Cache@2 
   displayName: 'Restore compiler cache'
-  condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
+  condition: and(succeeded(), eq('${{ parameters.enableCache }}', 'true'))
   inputs:
     key: ccache | "v0.0.2" | "$(Agent.OS)" | "$(Agent.JobName)"
     path: '$(CCACHE_DIR)'
 
 - script: ccache --max-size ${{ parameters.maxCacheSize }}
-  condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
+  condition: and(succeeded(), eq('${{ parameters.enableCache }}', 'true'))
   displayName: 'Limit CCache size to ${{ parameters.maxCacheSize }}'
     

@@ -1,21 +1,17 @@
 parameters:
-- name: enableCache
-  default: true
-  type: boolean
-- name: debugCache
-  default: true
-  type: boolean
+  enableCache: true
+  debugCache: true
 
 steps:
   - script: ccache --show-stats
-    condition: and(succeeded(), eq(${{ parameters.enableCache }}, 'true'))
+    condition: and(succeeded(), eq('${{ parameters.enableCache }}', 'true'))
     displayName: 'CCache stats'
 
   - pwsh: New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name "ccache-log" -ItemType "directory"
     displayName: 'Make CCache log folder'
 
   - task: CopyFiles@2
-    condition: and(succeeded(), and(eq(${{ parameters.enableCache }}, 'true'), eq(${{ parameters.debugCache }}, 'true')))
+    condition: and(succeeded(), and(eq('${{ parameters.enableCache }}', 'true'), eq('${{ parameters.debugCache }}', 'true')))
     inputs:
       sourceFolder: '$(buildFolder)'
       contents: '**/*.ccache-log'
@@ -23,7 +19,7 @@ steps:
     displayName: 'Copy CCache logs'
 
   - task: PublishPipelineArtifact@1
-    condition: and(succeeded(), and(eq(${{ parameters.enableCache }}, 'true'), eq(${{ parameters.debugCache }}, 'true')))
+    condition: and(succeeded(), and(eq('${{ parameters.enableCache }}', 'true'), eq('${{ parameters.debugCache }}', 'true')))
     displayName: 'Publish CCache logs'
     continueOnError: true 
     inputs:

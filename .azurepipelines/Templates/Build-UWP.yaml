@@ -41,8 +41,11 @@ jobs:
         -DCMAKE_SYSTEM_NAME=WindowsStore
         -DCMAKE_SYSTEM_VERSION='10.0'
         -DURHO3D_GRAPHICS_API=D3D11
-        -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
-        -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
+        -DVS_GLOBAL_CLToolExe=ccache.exe
+        -DVS_GLOBAL_CLToolPath=$(Build.SourcesDirectory)/tools/win
+        -DVS_GLOBAL_TrackFileAccess=false
+        -DVS_GLOBAL_UseMultiToolTask=true
+        -DVS_GLOBAL_DebugInformationFormat=OldStyle
         -DVS_WINDOWS_TARGET_PLATFORM_MIN_VERSION='10.0.10240.0'
         -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D
         -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
