@@ -28,6 +28,13 @@ steps:
     key: ccache | "v0.0.2" | "$(Agent.OS)" | "$(Agent.JobName)"
     path: '$(CCACHE_DIR)'
 
+- task: Cache@2 
+  displayName: 'Restore compiler cache if failed'
+  condition: and(failed(), eq('${{ parameters.enableCache }}', 'true'))
+  inputs:
+    key: ccache | "v0.0.2" | "$(Agent.OS)" | "$(Agent.JobName)"
+    path: '$(CCACHE_DIR)'
+
 - script: ccache --max-size ${{ parameters.maxCacheSize }}
   condition: and(succeeded(), eq('${{ parameters.enableCache }}', 'true'))
   displayName: 'Limit CCache size to ${{ parameters.maxCacheSize }}'
