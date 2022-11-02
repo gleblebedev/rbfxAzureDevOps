@@ -6,7 +6,7 @@ steps:
   - ${{ if eq(parameters['enableCache'], 'true') }}:
     - script: |
         ccache --show-stats
-        dotnet tool run azurepipelinetool -- zip-to-blob --connection-string '$(CCACHE_BLOB_CONNECTION_STRING)' -i $(CCACHE_DIR) -c ccache -n $(CCACHE_KEY) -l Fastest --overwrite
+        dotnet tool run azurepipelinetool -- zip-to-blob --connection-string '$(CCACHE_BLOB_CONNECTION_STRING)' -i $(CCACHE_DIR) -c ccache -n "$(CCACHE_KEY)" -l Fastest --overwrite
       continueOnError: true 
       displayName: 'CCache stats'
 
