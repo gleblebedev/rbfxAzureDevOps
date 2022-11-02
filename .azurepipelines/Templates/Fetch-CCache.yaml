@@ -4,7 +4,7 @@ parameters:
   maxCacheSize: 1G
 
 steps:
-  - ${{ if eq(parameters['enableCache'], 'true') }}
+  - ${{ if eq(parameters['enableCache'], 'true') }}:
     - pwsh: |
         Write-Host "##vso[task.setvariable variable=CCACHE_DIR]$(Build.ArtifactStagingDirectory)/.ccache"
         Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS]1"
