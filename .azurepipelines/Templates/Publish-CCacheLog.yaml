@@ -3,25 +3,27 @@ parameters:
   debugCache: true
 
 steps:
-  - script: ccache --show-stats
-    condition: and(succeeded(), eq('${{ parameters.enableCache }}', 'true'))
-    displayName: 'CCache stats'
+  - ${{ if eq(parameters['enableCache'], 'true') }}
+    - script: |
+        ccache --show-stats
+        dotnet tool run azurepipelinetool -- zip-to-blob --connection-string '$(CCACHE_BLOB_CONNECTION_STRING)' -i $(CCACHE_DIR) -c ccache -n $(CCACHE_KEY) -l Fastest --overwrite
+      continueOnError: true 
+      displayName: 'CCache stats'
 
-  - pwsh: New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name "ccache-log" -ItemType "directory"
-    displayName: 'Make CCache log folder'
+    - ${{ if eq(parameters['debugCache'], 'true') }}
+      - pwsh: New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name "ccache-log" -ItemType "directory"
+        displayName: 'Make CCache log folder'
 
-  - task: CopyFiles@2
-    condition: and(succeeded(), and(eq('${{ parameters.enableCache }}', 'true'), eq('${{ parameters.debugCache }}', 'true')))
-    inputs:
-      sourceFolder: '$(buildFolder)'
-      contents: '**/*.ccache-log'
-      targetFolder: '$(Build.ArtifactStagingDirectory)/ccache-log/'
-    displayName: 'Copy CCache logs'
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: '$(buildFolder)'
+          contents: '**/*.ccache-log'
+          targetFolder: '$(Build.ArtifactStagingDirectory)/ccache-log/'
+        displayName: 'Copy CCache logs'
 
-  - task: PublishPipelineArtifact@1
-    condition: and(succeeded(), and(eq('${{ parameters.enableCache }}', 'true'), eq('${{ parameters.debugCache }}', 'true')))
-    displayName: 'Publish CCache logs'
-    continueOnError: true 
-    inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)/ccache-log/'
-      artifactName: 'ccache-log-$(Agent.JobName)'
+      - task: PublishPipelineArtifact@1
+        displayName: 'Publish CCache logs'
+        continueOnError: true 
+        inputs:
+          targetPath: '$(Build.ArtifactStagingDirectory)/ccache-log/'
+          artifactName: 'ccache-log-$(Agent.JobName)'
