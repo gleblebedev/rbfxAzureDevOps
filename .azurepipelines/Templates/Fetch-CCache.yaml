@@ -4,7 +4,7 @@ parameters:
   maxCacheSize: 1G
 
 steps:
-  - ${{ if eq(parameters['enableCache'], 'true') }}:
+  - ${{ if and(always(), eq(parameters['enableCache'], 'true')) }}:
     - pwsh: |
         Write-Host "##vso[task.setvariable variable=CCACHE_DIR]$(Build.ArtifactStagingDirectory)/.ccache"
         Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS]1"
@@ -22,7 +22,7 @@ steps:
       condition: and(succeeded(), eq('${{ parameters.debugCache }}', 'true'))
 
     - script: |
-        dotnet tool run azurepipelinetool -- unzip-blob --connection-string '$(CCACHE_BLOB_CONNECTION_STRING)' -o $(CCACHE_DIR) -c ccache -n "$(CCACHE_KEY)"
+        dotnet tool run azurepipelinetool -- unzip-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)"" -o "$(CCACHE_DIR)" -c ccache -n "$(CCACHE_KEY)"
         ccache --max-size ${{ parameters.maxCacheSize }}
         ccache --show-stats
       continueOnError: true
