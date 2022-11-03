@@ -28,6 +28,7 @@ steps:
 
 - task: NuGetCommand@2
   displayName: 'Restore rbfx dependencies'
+  continueOnError: true
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   inputs:
     command: 'restore'
