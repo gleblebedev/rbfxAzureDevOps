@@ -13,6 +13,7 @@ steps:
 
     - ${{ if eq(parameters['debugCache'], 'true') }}:
       - pwsh: New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name "ccache-log" -ItemType "directory"
+        condition: true
         displayName: 'Make CCache log folder'
 
       - task: CopyFiles@2
@@ -20,10 +21,12 @@ steps:
           sourceFolder: '$(buildFolder)'
           contents: '**/*.ccache-log'
           targetFolder: '$(Build.ArtifactStagingDirectory)/ccache-log/'
+        condition: true
         displayName: 'Copy CCache logs'
 
       - task: PublishPipelineArtifact@1
         displayName: 'Publish CCache logs'
+        condition: true
         continueOnError: true 
         inputs:
           targetPath: '$(Build.ArtifactStagingDirectory)/ccache-log/'
