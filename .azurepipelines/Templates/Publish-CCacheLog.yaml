@@ -8,6 +8,7 @@ steps:
         ccache --show-stats
         dotnet tool run azurepipelinetool -- zip-to-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -i "$(CCACHE_DIR)" -c "ccache" -n "$(CCACHE_KEY)" -l Fastest --overwrite
       continueOnError: true 
+      condition: true
       displayName: 'CCache stats'
 
     - ${{ if eq(parameters['debugCache'], 'true') }}:

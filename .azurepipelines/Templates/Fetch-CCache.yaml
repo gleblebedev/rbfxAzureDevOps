@@ -11,6 +11,7 @@ steps:
         Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS_LEVEL]9"
         Write-Host "##vso[task.setvariable variable=EM_COMPILER_WRAPPER]ccache"
         Write-Host "##vso[task.setvariable variable=CCACHE_KEY]$(Agent.JobName)"
+      condition: true
       displayName: 'Enable CCache'
 
     - pwsh: New-Item -Path "$(Build.ArtifactStagingDirectory)" -Name ".ccache" -ItemType "directory"
@@ -26,5 +27,6 @@ steps:
         ccache --max-size ${{ parameters.maxCacheSize }}
         ccache --show-stats
       continueOnError: true
+      condition: true
       displayName: 'Restore and set CCache size to ${{ parameters.maxCacheSize }}'
       
