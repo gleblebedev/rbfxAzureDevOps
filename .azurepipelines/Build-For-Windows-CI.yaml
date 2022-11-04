@@ -8,4 +8,6 @@ stages:
   displayName: Windows Build
   jobs:
   - template: Templates/Build-Win.yaml
-  
+    parameters:
+    enableCache: true
+    debugCache: true

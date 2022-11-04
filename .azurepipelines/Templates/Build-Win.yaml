@@ -1,6 +1,8 @@
 # Build project for Windows
 parameters:
   configuration: 'RelWithDebInfo'
+  enableCache: true
+  debugCache: false
 
 jobs:
 - job: Build_Windows
@@ -20,16 +22,21 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
-  - script: dotnet tool run azurepipelinetool winsdkenv --build-platform x64
+  - script: dotnet tool run ezpipeline winsdkenv --build-platform x64
     displayName: 'Setup Windows SDK Environment'
 
-  - script: dotnet tool run azurepipelinetool vsenv --build-platform x64
+  - script: dotnet tool run ezpipeline vsenv --build-platform x64
     displayName: 'Setup Visual Studio Environment'
 
   - template: Fetch-CCache.yaml
+    parameters:
+      enableCache:  ${{ parameters.enableCache }}
+      debugCache:  ${{ parameters.debugCache }}
 
   - template: Build-rbfx.yaml
     parameters:
+      enableCache:  ${{ parameters.enableCache }}
+      debugCache:  ${{ parameters.debugCache }}
       buildDotNet: true
       cmakeExtraArgs: >-
         -G "Visual Studio 17 2022" -A x64

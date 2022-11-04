@@ -3,6 +3,8 @@ parameters:
   buildDotNet: true
   cmakeExtraArgs: ''
   configuration: 'RelWithDebInfo'
+  enableCache: true
+  debugCache: false
 
 steps:
 - task: PowerShell@2
@@ -46,8 +48,8 @@ steps:
   workingDirectory: '$(buildFolder)'
 
 - script: |
-    dotnet tool run azurepipelinetool -- cpu-info -i Count
-    dotnet tool run azurepipelinetool -- cpu-info -i Arch
+    dotnet tool run ezpipeline -- cpu-info -i Count
+    dotnet tool run ezpipeline -- cpu-info -i Arch
     mkdir "$(Build.SourcesDirectory)/tools/win/cl"
     mklink "$(Build.SourcesDirectory)/tools/win/cl/cl.exe" "$(Build.SourcesDirectory)/tools/win/ccache.exe"
     msbuild -r -p:Configuration=${{ parameters.configuration }} -m -p:TrackFileAccess=false -p:DebugInformationFormat=OldStyle -p:CLToolExe=cl.exe -p:CLToolPath="$(Build.SourcesDirectory)/tools/win/cl" "$(buildFolder)/rbfx.sln" -target:Urho3D
@@ -57,4 +59,6 @@ steps:
   workingDirectory: '$(buildFolder)'
 
 - template: Publish-CCacheLog.yaml
-
+  parameters:
+    enableCache:  ${{ parameters.enableCache }}
+    debugCache:  ${{ parameters.debugCache }}

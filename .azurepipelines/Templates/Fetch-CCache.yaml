@@ -23,7 +23,7 @@ steps:
       condition: and(succeeded(), eq('${{ parameters.debugCache }}', 'true'))
 
     - script: |
-        dotnet tool run azurepipelinetool -- unzip-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -o "$(CCACHE_DIR)" -c ccache -n "$(CCACHE_KEY)"
+        dotnet tool run ezpipeline -- unzip-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -o "$(CCACHE_DIR)" -c ccache -n "$(CCACHE_KEY)"
         ccache --max-size ${{ parameters.maxCacheSize }}
         ccache --show-stats
       continueOnError: true
