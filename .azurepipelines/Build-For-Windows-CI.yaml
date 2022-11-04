@@ -9,5 +9,5 @@ stages:
   jobs:
   - template: Templates/Build-Win.yaml
     parameters:
-    enableCache: true
-    debugCache: true
+      enableCache: true
+      debugCache: true
