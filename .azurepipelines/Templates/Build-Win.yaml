@@ -20,15 +20,13 @@ jobs:
     submodules: true
     displayName: 'Checkout project'
 
-  - script: |
-      dotnet tool restore
-      dotnet ezpipeline winsdkenv --build-platform x64
+  - template: Add-ToolsToPath.yaml
+
+  - script: dotnet ezpipeline winsdkenv --build-platform x64
     displayName: 'Setup Windows SDK Environment'
 
   - script: dotnet ezpipeline vsenv --build-platform x64
     displayName: 'Setup Visual Studio Environment'
-
-  - template: Add-ToolsToPath.yaml
 
   - template: Fetch-CCache.yaml
     parameters:
@@ -47,6 +45,8 @@ jobs:
         -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D
         -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
         -DURHO3D_PCH=Off
+        -DCMAKE_C_COMPILER="$(Build.SourcesDirectory)/tools/win/cl/cl.exe"
+        -DCMAKE_CXX_COMPILER="$(Build.SourcesDirectory)/tools/win/cl/cl.exe" 
         -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
         -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
       configuration: ${{ parameters.configuration }}
