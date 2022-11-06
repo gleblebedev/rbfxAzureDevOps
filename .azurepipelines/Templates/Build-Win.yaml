@@ -20,7 +20,9 @@ jobs:
     submodules: true
     displayName: 'Checkout project'
 
-  - script: dotnet ezpipeline winsdkenv --build-platform x64
+  - script: |
+      dotnet tool restore
+      dotnet ezpipeline winsdkenv --build-platform x64
     displayName: 'Setup Windows SDK Environment'
 
   - script: dotnet ezpipeline vsenv --build-platform x64

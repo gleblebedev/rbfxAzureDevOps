@@ -13,6 +13,7 @@ steps:
 - pwsh: |
     If ($IsWindows)
     {
+      New-Item -ItemType SymbolicLink -Path "$(Agent.BuildDirectory)\s\tools\win\cl.exe" -Target "$(Agent.BuildDirectory)\s\tools\win\ccache.exe"
       $toolsFolder = "$(Agent.BuildDirectory)\s\tools\win";
       Write-Host "##vso[task.setvariable variable=PATH;]${toolsFolder};${env:PATH}";
       Invoke-Expression "$toolsFolder\ninja.exe --version";
