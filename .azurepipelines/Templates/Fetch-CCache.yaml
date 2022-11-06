@@ -6,6 +6,16 @@ parameters:
 steps:
   - ${{ if eq(parameters['enableCache'], 'true') }}:
     - pwsh: |
+        If ($IsWindows)
+        {
+          $clPath = "$(Agent.BuildDirectory)\s\tools\win\cl\cl.exe"
+          New-Item -ItemType Directory -Path "$(Agent.BuildDirectory)\s\tools\win\cl\"
+          New-Item -ItemType SymbolicLink -Path $clPath -Target "$(Agent.BuildDirectory)\s\tools\win\ccache.exe"
+
+          $clPath = $clPath.replace('\\','/');
+          Write-Host "##vso[task.setvariable variable=CMAKE_C_COMPILER;]$clPath";
+          Write-Host "##vso[task.setvariable variable=CMAKE_CXX_COMPILER;]$clPath";
+        }
         Write-Host "##vso[task.setvariable variable=CCACHE_DIR]$(Build.ArtifactStagingDirectory)/.ccache"
         Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS]1"
         Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS_LEVEL]9"
