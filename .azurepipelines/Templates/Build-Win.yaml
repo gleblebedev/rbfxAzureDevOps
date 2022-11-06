@@ -45,8 +45,8 @@ jobs:
         -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D
         -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
         -DURHO3D_PCH=Off
-        -DCMAKE_C_COMPILER="$(Build.SourcesDirectory)/tools/win/cl/cl.exe"
-        -DCMAKE_CXX_COMPILER="$(Build.SourcesDirectory)/tools/win/cl/cl.exe" 
+        -DCMAKE_C_COMPILER="${{ replace(Build.SourcesDirectory, '\\', '/') }}/tools/win/cl/cl.exe"
+        -DCMAKE_CXX_COMPILER="${{ replace(Build.SourcesDirectory, '\\', '/') }}/tools/win/cl/cl.exe" 
         -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
         -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
       configuration: ${{ parameters.configuration }}
