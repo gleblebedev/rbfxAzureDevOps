@@ -10,4 +10,4 @@ stages:
   - template: Templates/Build-Win.yaml
     parameters:
       enableCache: true
-      debugCache: true
+      debugCache: false
