@@ -1,7 +1,7 @@
 parameters:
   enableCache: true
   debugCache: true
-  maxCacheSize: 1G
+  maxCacheSize: 2G
 
 steps:
   - ${{ if eq(parameters['enableCache'], 'true') }}:
