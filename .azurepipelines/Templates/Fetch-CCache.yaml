@@ -12,9 +12,11 @@ steps:
           New-Item -ItemType Directory -Path "$(Agent.BuildDirectory)\s\tools\win\cl\" -Force
           New-Item -ItemType SymbolicLink -Path $clPath -Target "$(Agent.BuildDirectory)\s\tools\win\ccache.exe" -Force
 
+          Write-Host "CMAKE_C*_COMPILER = $clPath"
           $clPath = $clPath.replace('\\','/')
-          Write-Host "##vso[task.setvariable variable=CMAKE_C_COMPILER;]$clPath"
-          Write-Host "##vso[task.setvariable variable=CMAKE_CXX_COMPILER;]$clPath"
+          Write-Host "CMAKE_C*_COMPILER = $clPath"
+          Write-Host "##vso[task.setvariable variable=CMAKE_C_COMPILER]$clPath"
+          Write-Host "##vso[task.setvariable variable=CMAKE_CXX_COMPILER]$clPath"
         }
         Write-Host "##vso[task.setvariable variable=CCACHE_DIR]$(Build.ArtifactStagingDirectory)/.ccache"
         Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS]1"
