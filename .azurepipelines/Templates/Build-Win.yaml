@@ -47,8 +47,6 @@ jobs:
         -DURHO3D_PCH=Off
         -DCMAKE_C_COMPILER="$(CMAKE_C_COMPILER)"
         -DCMAKE_CXX_COMPILER="$(CMAKE_CXX_COMPILER)"
-        -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
-        -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
       configuration: ${{ parameters.configuration }}
 
   - task: CMake@1
