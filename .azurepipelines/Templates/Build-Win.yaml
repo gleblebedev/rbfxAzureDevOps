@@ -12,8 +12,6 @@ jobs:
     vmImage: 'windows-latest'
   variables:
     rbfxFolder: $(Build.SourcesDirectory)/rbfx
-    # toolsFolder: ${{ replace(variables['Build.SourcesDirectory'], '\\', '/') }}/tools
-    toolsFolder: ${{ variables['Build.SourcesDirectory'] }}/tools
     buildFolder: $(Build.SourcesDirectory)/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
@@ -47,8 +45,8 @@ jobs:
         -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D
         -DSWIG_MODULE_ImGui_DLLIMPORT=Urho3D
         -DURHO3D_PCH=Off
-        -DCMAKE_C_COMPILER="$(toolsFolder)/win/cl/cl.exe"
-        -DCMAKE_CXX_COMPILER="$(toolsFolder)/win/cl/cl.exe" 
+        -DCMAKE_C_COMPILER="$[ variables['Build.SourcesDirectory'] ]/tools/win/cl/cl.exe"
+        -DCMAKE_CXX_COMPILER="$[ variables['Build.SourcesDirectory'] ]/tools/win/cl/cl.exe" 
         -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
         -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
       configuration: ${{ parameters.configuration }}
