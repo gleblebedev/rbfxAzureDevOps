@@ -20,13 +20,13 @@ jobs:
     submodules: true
     displayName: 'Checkout project'
 
-  - template: Add-ToolsToPath.yaml
-
-  - script: dotnet tool run ezpipeline winsdkenv --build-platform x64
+  - script: dotnet ezpipeline winsdkenv --build-platform x64
     displayName: 'Setup Windows SDK Environment'
 
-  - script: dotnet tool run ezpipeline vsenv --build-platform x64
+  - script: dotnet ezpipeline vsenv --build-platform x64
     displayName: 'Setup Visual Studio Environment'
+
+  - template: Add-ToolsToPath.yaml
 
   - template: Fetch-CCache.yaml
     parameters:
@@ -39,7 +39,7 @@ jobs:
       debugCache:  ${{ parameters.debugCache }}
       buildDotNet: true
       cmakeExtraArgs: >-
-        -G "Visual Studio 17 2022" -A x64
+        -G "Ninja"
         -DCMAKE_BUILD_TYPE=${{ parameters.configuration }}
         -DURHO3D_GRAPHICS_API=D3D11
         -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D
