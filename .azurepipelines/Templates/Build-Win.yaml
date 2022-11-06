@@ -12,7 +12,8 @@ jobs:
     vmImage: 'windows-latest'
   variables:
     rbfxFolder: $(Build.SourcesDirectory)/rbfx
-    toolsFolder: ${{ replace(variables['Build.SourcesDirectory'], '\\', '/') }}/tools
+    # toolsFolder: ${{ replace(variables['Build.SourcesDirectory'], '\\', '/') }}/tools
+    toolsFolder: $(Build.SourcesDirectory)/tools
     buildFolder: $(Build.SourcesDirectory)/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
