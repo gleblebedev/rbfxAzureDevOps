@@ -13,7 +13,7 @@ jobs:
   variables:
     rbfxFolder: $(Build.SourcesDirectory)/rbfx
     # toolsFolder: ${{ replace(variables['Build.SourcesDirectory'], '\\', '/') }}/tools
-    toolsFolder: $(Build.SourcesDirectory)/tools
+    toolsFolder: ${{ variables['Build.SourcesDirectory'] }}/tools
     buildFolder: $(Build.SourcesDirectory)/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
