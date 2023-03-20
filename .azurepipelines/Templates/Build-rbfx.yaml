@@ -44,7 +44,7 @@ steps:
 
 - task: CMake@1
   displayName: 'Build Urho3DNet'
-  condition: and(succeeded(), ne('${{ parameters.buildDotNet }}', 'true'))
+  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   inputs:
     workingDirectory: '$(buildFolder)'
     cmakeArgs: --build . --config RelWithDebInfo --target Urho3DNet
