@@ -74,7 +74,7 @@ jobs:
   - script: dotnet tool run ezpipeline xcode-setbuildsystemtype -i $(buildFolder) --build-system-type Original
     displayName: 'Patch build system type'
 
-  - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
+  - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="-"
     displayName: 'Xcode build'
 
   - template: Publish-CCacheLog.yaml
