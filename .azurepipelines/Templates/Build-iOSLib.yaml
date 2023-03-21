@@ -46,6 +46,15 @@ jobs:
   - bash: xcodebuild -showsdks
     displayName: 'xcodebuild -showsdks'
 
+  - bash: xcode-select -p
+    displayName: 'xcode-select -p'
+
+  - bash: sudo xcode-select --reset
+    displayName: 'xcode-select --reset'
+
+  - bash: xcode-select -p
+    displayName: 'xcode-select -p'
+
   - script: mkdir $(buildFolder)
     displayName: 'Make rbfxbuild folder'
     failOnStderr: true
@@ -62,12 +71,8 @@ jobs:
       }
     displayName: 'Find all *.xcodeproj'
 
-  - script: cat /Users/runner/work/1/s/rbfxbuild/rbfx.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
-
   - script: dotnet tool run ezpipeline xcode-setbuildsystemtype -i $(buildFolder) --build-system-type Original
     displayName: 'Patch build system type'
-
-  - script: cat /Users/runner/work/1/s/rbfxbuild/rbfx.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
 
   - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO
     displayName: 'Xcode build'
