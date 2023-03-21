@@ -39,7 +39,6 @@ jobs:
       debugCache:  ${{ parameters.debugCache }}
       buildDotNet: true
       cmakeExtraArgs: >-
-        -G "Ninja"
         -DCMAKE_BUILD_TYPE=${{ parameters.configuration }}
         -DURHO3D_GRAPHICS_API=D3D11
         -DSWIG_MODULE_Urho3D_DLLIMPORT=Urho3D
