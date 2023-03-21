@@ -105,8 +105,9 @@ jobs:
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netcoreapp2.1/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netcoreapp2.1
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/netcoreapp2.1
 
+      # iOS temporally disabled
       # Xamarin.IOS assemblies
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.IOS.??? -DestinationPath $(nugetFolder)/lib/xamarin.ios10
+      # CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.IOS.??? -DestinationPath $(nugetFolder)/lib/xamarin.ios10
 
       # Xamarin.Android assemblies
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/monoandroid90/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/monoandroid90
