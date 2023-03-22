@@ -11,7 +11,7 @@ import java.util.List;
 /* Actual joystick functionality available for API >= 12 devices */
 public class SDLJoystickHandler_API16 extends SDLJoystickHandler {
 
-    static class SDLJoystick {
+    public static class SDLJoystick {
         public int device_id;
         public String name;
         public String desc;
