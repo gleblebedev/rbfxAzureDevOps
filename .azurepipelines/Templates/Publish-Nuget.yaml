@@ -69,9 +69,10 @@ jobs:
     parameters:
       artifact: 'android-jar-nuget'
 
-  - template: Fetch-NugetArtifact.yaml
-    parameters:
-      artifact: 'ios-nuget'
+  # iOS temporally disabled
+  # - template: Fetch-NugetArtifact.yaml
+  #   parameters:
+  #     artifact: 'ios-nuget'
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
