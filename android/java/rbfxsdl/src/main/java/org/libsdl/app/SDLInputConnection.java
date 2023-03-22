@@ -6,7 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
 
-class SDLInputConnection extends BaseInputConnection {
+public class SDLInputConnection extends BaseInputConnection {
 
     public SDLInputConnection(View targetView, boolean fullEditor) {
         super(targetView, fullEditor);

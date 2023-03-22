@@ -5,7 +5,7 @@ import android.util.Log;
 /**
  * Simple runnable to start the SDL application
  */
-class SDLMain implements Runnable {
+public class SDLMain implements Runnable {
     @Override
     public void run() {
         // Runs SDL_main()

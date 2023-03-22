@@ -3,7 +3,7 @@ package org.libsdl.app;
 import android.os.VibrationEffect;
 import android.util.Log;
 
-class SDLHapticHandler_API26 extends SDLHapticHandler {
+public class SDLHapticHandler_API26 extends SDLHapticHandler {
     @Override
     public void run(int device_id, float intensity, int length) {
         SDLHaptic haptic = getHaptic(device_id);

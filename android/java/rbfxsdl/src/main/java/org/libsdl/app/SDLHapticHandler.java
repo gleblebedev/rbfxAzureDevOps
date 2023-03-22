@@ -6,7 +6,7 @@ import android.view.InputDevice;
 
 import java.util.ArrayList;
 
-class SDLHapticHandler {
+public class SDLHapticHandler {
 
     static class SDLHaptic {
         public int device_id;

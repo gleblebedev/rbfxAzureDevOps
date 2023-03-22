@@ -4,7 +4,7 @@ import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.view.View;
 
-class SDLGenericMotionListener_API24 extends SDLGenericMotionListener_API12 {
+public class SDLGenericMotionListener_API24 extends SDLGenericMotionListener_API12 {
     // Generic Motion (mouse hover, joystick...) events go here
 
     private boolean mRelativeModeEnabled;

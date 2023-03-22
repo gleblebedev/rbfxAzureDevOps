@@ -2,7 +2,7 @@ package org.libsdl.app;
 
 import android.view.MotionEvent;
 
-class SDLJoystickHandler {
+public class SDLJoystickHandler {
 
     /**
      * Handles given MotionEvent.

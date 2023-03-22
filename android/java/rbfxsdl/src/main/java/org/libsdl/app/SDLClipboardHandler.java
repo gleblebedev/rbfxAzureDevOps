@@ -4,7 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 
-class SDLClipboardHandler implements
+public class SDLClipboardHandler implements
         ClipboardManager.OnPrimaryClipChangedListener {
 
     protected ClipboardManager mClipMgr;

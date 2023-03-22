@@ -2,7 +2,7 @@ package org.libsdl.app;
 
 import android.hardware.usb.UsbDevice;
 
-interface HIDDevice
+public interface HIDDevice
 {
     public int getId();
     public int getVendorId();

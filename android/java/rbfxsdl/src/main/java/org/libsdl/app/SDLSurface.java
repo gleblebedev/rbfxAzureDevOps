@@ -25,7 +25,7 @@ import android.view.WindowManager;
  * <p>
  * Because of this, that's where we set up the SDL thread
  */
-class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
+public class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         View.OnKeyListener, View.OnTouchListener, SensorEventListener {
 
     // Sensors
@@ -464,3 +464,4 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
     }
 
 }
+

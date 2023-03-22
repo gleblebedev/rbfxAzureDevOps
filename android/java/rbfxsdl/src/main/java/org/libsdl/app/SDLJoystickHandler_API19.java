@@ -3,7 +3,7 @@ package org.libsdl.app;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 
-class SDLJoystickHandler_API19 extends SDLJoystickHandler_API16 {
+public class SDLJoystickHandler_API19 extends SDLJoystickHandler_API16 {
 
     @Override
     public int getProductId(InputDevice joystickDevice) {
