@@ -351,25 +351,32 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
 
         // Urho3D - auto load all the shared libraries available in the library path
         String errorMsgBrokenLib = "";
+        ArrayList<String> libraryNames = null;
+        String lastKnownLibrary = "";
         try {
-            //loadLibraries();
-            onLoadLibrary(UrhoActivity.getLibraryNames(this));
+            libraryNames = UrhoActivity.getLibraryNames(this);
+            if (libraryNames != null) {
+                for (final String name : libraryNames) {
+                    SDL.loadLibrary(name);
+                }
+                mMainSharedLib = "lib" + libraryNames.get(libraryNames.size() - 1) + ".so";
+            }
             mBrokenLibraries = false; /* success */
         } catch(UnsatisfiedLinkError e) {
             System.err.println(e.getMessage());
             mBrokenLibraries = true;
-            errorMsgBrokenLib = e.getMessage();
+            errorMsgBrokenLib = e.getClass().getName()+"("+e.getMessage()+")";
         } catch(Exception e) {
             //System.err.println(e.getMessage());
             mBrokenLibraries = true;
-            errorMsgBrokenLib = e.getMessage();
+            errorMsgBrokenLib = e.getClass().getName()+"("+e.getMessage()+")";
         }
 
         if (mBrokenLibraries)
         {
             mSingleton = this;
             AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
-            dlgAlert.setMessage("An error occurred while trying to start the application. Please try again and/or reinstall."
+            dlgAlert.setMessage("An error occurred while trying to load native library (" + lastKnownLibrary + "). Please try again and/or reinstall."
                   + System.getProperty("line.separator")
                   + System.getProperty("line.separator")
                   + "Error: " + errorMsgBrokenLib);

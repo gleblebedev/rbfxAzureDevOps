@@ -21,11 +21,12 @@
 // THE SOFTWARE.
 //
 
-package org.libsdl.app;;
+package org.libsdl.app;
 
 import org.libsdl.app.SDLActivity;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.*;
 
 public class UrhoActivity extends SDLActivity {
@@ -45,16 +46,24 @@ public class UrhoActivity extends SDLActivity {
 
     public static ArrayList<String> getLibraryNames(SDLActivity activity)
     {
-        File[] files = new File(activity.getApplicationInfo().nativeLibraryDir).listFiles((dir, filename) -> {
-            // Only list libraries, i.e. exclude gdbserver when it presents
-            return filename.matches("^lib.*\\.so$");
+        File[] files = new File(activity.getApplicationInfo().nativeLibraryDir).listFiles(new FilenameFilter(){
+            public boolean accept(File f, String filename)
+            {
+                return filename.matches("^lib.*\\.so$");
+            }
         });
         if (files == null) {
             return null;
         } else {
-            Arrays.sort(files, (lhs, rhs) -> Long.valueOf(lhs.lastModified()).compareTo(rhs.lastModified()));
+            Arrays.sort(files, new Comparator<File>() {
+                @Override
+                public int compare(File lhs, File rhs) {
+                    return Long.valueOf(lhs.lastModified()).compareTo(rhs.lastModified());
+                }
+            });
             ArrayList<String> libraryNames = new ArrayList<>(files.length);
             for (final File libraryFilename : files) {
+                Log.v(TAG, "Native library: " + libraryFilename.getName());
                 libraryNames.add(libraryFilename.getName().replaceAll("^lib(.*)\\.so$", "$1"));
             }
 
