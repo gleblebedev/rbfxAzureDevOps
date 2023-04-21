@@ -25,6 +25,8 @@ package org.libsdl.app;
 
 import org.libsdl.app.SDLActivity;
 
+import android.util.Log;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.*;

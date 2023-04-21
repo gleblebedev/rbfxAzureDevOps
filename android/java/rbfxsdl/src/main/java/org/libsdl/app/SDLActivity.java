@@ -56,9 +56,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.List;
+import java.util.*;
 
 import org.libsdl.app.UrhoActivity;
 
