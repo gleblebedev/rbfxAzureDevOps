@@ -353,11 +353,15 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
         String lastKnownLibrary = "";
         try {
             libraryNames = UrhoActivity.getLibraryNames(this);
-            if (libraryNames != null) {
+            if (libraryNames != null && libraryNames.size() > 0) {
                 for (final String name : libraryNames) {
                     SDL.loadLibrary(name);
                 }
                 mMainSharedLib = "lib" + libraryNames.get(libraryNames.size() - 1) + ".so";
+            }
+            else
+            {
+                Log.v(TAG, "No native libraries found");
             }
             mBrokenLibraries = false; /* success */
         } catch(UnsatisfiedLinkError e) {
