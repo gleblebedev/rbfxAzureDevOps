@@ -413,8 +413,10 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
 
         // Set up the surface
         mSurface = new SDLSurface(getApplication());
+        mSurface.setContentDescription("Game screen");
 
         mLayout = new RelativeLayout(this);
+        mLayout.setContentDescription("Game screen layout");
         mLayout.addView(mSurface);
 
         // Get our current screen orientation and pass it down.
