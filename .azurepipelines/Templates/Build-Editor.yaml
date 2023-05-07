@@ -1,0 +1,36 @@
+# Build editor
+parameters:
+  cmakeExtraArgs: ''
+  
+steps:
+- task: PowerShell@2
+  displayName: 'Generate version environment variable'
+  inputs:
+    filePath: '$(Build.SourcesDirectory)/.azurepipelines/Scripts/GenVersion.ps1'
+    arguments: '-versionTemplateFile $(Build.SourcesDirectory)/.azurepipelines/version.txt'
+
+- script: mkdir rbfxbuild
+  displayName: 'Make rbfxbuild folder'
+  workingDirectory: $(Build.SourcesDirectory)
+  failOnStderr: true
+
+- task: CMake@1
+  displayName: 'Configure Urho3D'
+  inputs:
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=ON -DURHO3D_FEATURES="CSHARP;SYSTEMUI" -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=ON -DURHO3D_RMLUI=ON ${{ parameters.cmakeExtraArgs }} -S $(rbfxFolder)
+
+- task: NuGetCommand@2
+  displayName: 'Restore rbfx dependencies'
+  inputs:
+    command: 'restore'
+    restoreSolution: '$(buildFolder)/*.sln'
+
+- task: CMake@1
+  displayName: 'Build Urho3D'
+  inputs:
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: --build . --config RelWithDebInfo 
+
+- script: dotnet pack $(rbfxFolder)/Source/Editor/ManagedHost/Editor.csproj -c RelWithDebInfo -p:PackageVersion=$(VERSION) -o $(nugetFolder)
+  displayName: 'Pack nuget'

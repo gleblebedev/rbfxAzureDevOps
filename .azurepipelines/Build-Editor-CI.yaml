@@ -23,113 +23,46 @@ stages:
 
     - template: Templates/Add-ToolsToPath.yaml
 
-    - task: PowerShell@2
-      displayName: 'Generate version environment variable'
-      inputs:
-        filePath: '$(Build.SourcesDirectory)/.azurepipelines/Scripts/GenVersion.ps1'
-        arguments: '-versionTemplateFile $(Build.SourcesDirectory)/.azurepipelines/version.txt'
+    - template: Templates/Build-Editor.yaml
+      parameters:
+        cmakeExtraArgs: -G "Visual Studio 17 2022" -A x64 -DURHO3D_GRAPHICS_API=D3D11
 
-    - script: mkdir rbfxbuild
-      displayName: 'Make rbfxbuild folder'
-      workingDirectory: $(Build.SourcesDirectory)
-      failOnStderr: true
+  - job: Build_Mac
+    displayName: 'Mac Editor Build'
+    timeoutInMinutes: 90
+    pool:
+      vmImage: 'macOS-latest'
+    variables:
+      rbfxFolder: $(Build.SourcesDirectory)/rbfx
+      buildFolder: $(Build.SourcesDirectory)/rbfxbuild
+      nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
-    - task: CMake@1
-      displayName: 'Configure Urho3D'
-      inputs:
-        workingDirectory: '$(buildFolder)'
-        cmakeArgs: -DBUILD_SHARED_LIBS=OFF -DURHO3D_GLOW=ON -DURHO3D_FEATURES="SYSTEMUI" -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=ON -DURHO3D_RMLUI=ON -G "Visual Studio 16 2019" -A x64 -DURHO3D_GRAPHICS_API=D3D11 $(rbfxFolder)
+    steps:
+    - checkout: self
+      submodules: true
+      displayName: 'Checkout project'
 
-    - task: NuGetCommand@2
-      displayName: 'Restore rbfx dependencies'
-      inputs:
-        command: 'restore'
-        restoreSolution: '$(buildFolder)/*.sln'
+    - template: Templates/Add-ToolsToPath.yaml
 
-    - task: CMake@1
-      displayName: 'Build Urho3D'
-      inputs:
-        workingDirectory: '$(buildFolder)'
-        cmakeArgs: --build . --config RelWithDebInfo 
-        
-    - pwsh: |
-        function CopyFiles {
-            param ([string]$SourcePath, [string]$DestinationPath)
+    - template: Templates/Build-Editor.yaml
 
-            New-Item -ItemType Directory -Path "$DestinationPath" -Force
+  - job: Build_Linux
+    displayName: 'Linux Editor Build'
+    timeoutInMinutes: 90
+    pool:
+      vmImage: 'ubuntu-latest'
+    variables:
+      rbfxFolder: $(Build.SourcesDirectory)/rbfx
+      buildFolder: $(Build.SourcesDirectory)/rbfxbuild
+      nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
-            $files = Get-ChildItem $SourcePath
-            foreach ($file in $files)
-            {
-              $fileName = Join-Path -Path $DestinationPath -ChildPath $file.Name 
-              copy-item $file.FullName $fileName -Force
-            }
-        }
-        
-        # Native DLL
-        CopyFiles -SourcePath $(buildFolder)/bin/RelWithDebInfo/*.exe -DestinationPath $(nugetFolder)/tools/
-        CopyFiles -SourcePath $(buildFolder)/bin/RelWithDebInfo/*.dll -DestinationPath $(nugetFolder)/tools/
-        # CopyFiles -SourcePath $(buildFolder)/bin/RelWithDebInfo/*.pdb -DestinationPath $(nugetFolder)/tools/
-      displayName: 'Copy binary to output'
+    steps:
+    - checkout: self
+      submodules: true
+      displayName: 'Checkout project'
 
-    - task: CopyFiles@2
-      inputs:
-        sourceFolder: '$(Build.SourcesDirectory)/nuget'
-        contents: 'LICENSE' 
-        targetFolder: '$(nugetFolder)'
-        overWrite: true
+    - template: Templates/Add-ToolsToPath.yaml
 
-    - task: CopyFiles@2
-      inputs:
-        sourceFolder: '$(Build.SourcesDirectory)/nuget/editor'
-        contents: '**' 
-        targetFolder: '$(nugetFolder)'
-        overWrite: true
+    - template: Templates/Install-LinuxLibs.yaml
 
-    - task: CopyFiles@2
-      inputs:
-        sourceFolder: '$(rbfxFolder)/bin/CoreData'
-        contents: '**' 
-        targetFolder: '$(nugetFolder)/tools/CoreData'
-        overWrite: true
-
-    - task: CopyFiles@2
-      inputs:
-        sourceFolder: '$(rbfxFolder)/bin/EditorData'
-        contents: '**' 
-        targetFolder: '$(nugetFolder)/tools/EditorData'
-        overWrite: true
-
-    - task: CopyFiles@2
-      inputs:
-        sourceFolder: '$(Build.SourcesDirectory)/nuget'
-        contents: 'unofficial.Urho3DNet.RbfxEditor.nuspec' 
-        targetFolder: '$(Build.ArtifactStagingDirectory)'
-        overWrite: true
-
-    - task: NuGetCommand@2
-      inputs:
-        command: 'pack'
-        packagesToPack: '$(Build.ArtifactStagingDirectory)/unofficial.Urho3DNet.RbfxEditor.nuspec'
-        versioningScheme: 'byEnvVar'
-        versionEnvVar: 'VERSION'
-
-    - task: NuGetCommand@2
-      displayName: 'Publish to local feed'
-      inputs:
-        command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-        nuGetFeedType: 'internal'
-        publishVstsFeed: '$(VstsFeed)'
-        allowPackageConflicts: true
-
-    - task: NuGetCommand@2
-      displayName: 'Publish to nuget.org'
-      inputs:
-        command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-        publishFeedCredentials: 'rbfx_nuget_org'
-        nuGetFeedType: 'external'
-        versioningScheme: 'byEnvVar'
-        versionEnvVar: 'VERSION'
-        allowPackageConflicts: true
+    - template: Templates/Build-Editor.yaml

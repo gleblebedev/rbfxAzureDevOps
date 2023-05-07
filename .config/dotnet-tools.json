@@ -7,6 +7,12 @@
       "commands": [
         "ezpipeline"
       ]
+    },
+    "nbgv": {
+      "version": "3.6.128",
+      "commands": [
+        "nbgv"
+      ]
     }
   }
 }
