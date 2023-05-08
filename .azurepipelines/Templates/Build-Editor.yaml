@@ -9,6 +9,13 @@ steps:
     filePath: '$(Build.SourcesDirectory)/.azurepipelines/Scripts/GenVersion.ps1'
     arguments: '-versionTemplateFile $(Build.SourcesDirectory)/.azurepipelines/version.txt'
 
+- pwsh: |
+    $NUM_CPUS = dotnet tool run ezpipeline cpu-info
+    Write-Host "##vso[task.setvariable variable=NUM_CPUS;]${NUM_CPUS}";
+  displayName: 'Get number of CPUs'
+  workingDirectory: $(Build.SourcesDirectory)
+
+
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
   workingDirectory: $(Build.SourcesDirectory)
@@ -18,7 +25,7 @@ steps:
   displayName: 'Configure Urho3D'
   inputs:
     workingDirectory: '$(buildFolder)'
-    cmakeArgs: -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=ON -DURHO3D_FEATURES="CSHARP;SYSTEMUI" -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=ON -DURHO3D_RMLUI=ON ${{ parameters.cmakeExtraArgs }} -S $(rbfxFolder)
+    cmakeArgs: -DBUILD_SHARED_LIBS=ON -DURHO3D_NETFX=net7.0 -DURHO3D_NETFX_RUNTIME_VERSION=7.0 -DURHO3D_GLOW=ON -DURHO3D_FEATURES="CSHARP;SYSTEMUI" -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=ON -DURHO3D_RMLUI=ON ${{ parameters.cmakeExtraArgs }} -S $(rbfxFolder)
 
 - task: NuGetCommand@2
   displayName: 'Restore rbfx dependencies'
@@ -30,7 +37,7 @@ steps:
   displayName: 'Build Urho3D'
   inputs:
     workingDirectory: '$(buildFolder)'
-    cmakeArgs: --build . --config RelWithDebInfo 
+    cmakeArgs: --build . --config RelWithDebInfo -j $(NUM_CPUS)
 
 - script: dotnet pack $(rbfxFolder)/Source/Editor/ManagedHost/Editor.csproj -c RelWithDebInfo -p:PackageVersion=$(VERSION) -o $(nugetFolder)
   displayName: 'Pack nuget'

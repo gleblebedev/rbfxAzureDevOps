@@ -26,6 +26,12 @@ stages:
     - template: Templates/Build-Editor.yaml
       parameters:
         cmakeExtraArgs: -G "Visual Studio 17 2022" -A x64 -DURHO3D_GRAPHICS_API=D3D11
+        
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'Win'
+        publishLocation: 'Container'
 
   - job: Build_Mac
     displayName: 'Mac Editor Build'
@@ -45,6 +51,12 @@ stages:
     - template: Templates/Add-ToolsToPath.yaml
 
     - template: Templates/Build-Editor.yaml
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'OSX'
+        publishLocation: 'Container'
 
   - job: Build_Linux
     displayName: 'Linux Editor Build'
@@ -66,3 +78,9 @@ stages:
     - template: Templates/Install-LinuxLibs.yaml
 
     - template: Templates/Build-Editor.yaml
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'Linux'
+        publishLocation: 'Container'

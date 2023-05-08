@@ -93,17 +93,9 @@ jobs:
       # .Net Standard 2.0 assembly
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netstandard2.0
 
-      # .Net 4.6 assemblies
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net46/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net46
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/net46
-
-      # .Net 4.7 assemblies
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net47/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net47
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/net47
-
-      # .Net Core 2.1 assemblies
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netcoreapp2.1/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netcoreapp2.1
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/netcoreapp2.1
+      # .Net 7.0 assemblies
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net7.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/net7.0
 
       # iOS temporally disabled
       # Xamarin.IOS assemblies
