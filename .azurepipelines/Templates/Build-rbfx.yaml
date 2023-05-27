@@ -42,22 +42,22 @@ steps:
     workingDirectory: '$(buildFolder)'
     cmakeArgs: --build . --config RelWithDebInfo --target Urho3D
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=netstandard2.0
+- script: dotnet build Urho3DNet.csproj -p:TargetFramework=netstandard2.0 -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
   displayName: 'Build Urho3DNet netstandard2.0'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0
+- script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0 -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
   displayName: 'Build Urho3DNet Net7.0'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=monoandroid90
+- script: dotnet build Urho3DNet.csproj -p:TargetFramework=monoandroid90 -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
   displayName: 'Build Urho3DNet monoandroid90'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=xamarin.ios10
+- script: dotnet build Urho3DNet.csproj -p:TargetFramework=xamarin.ios10 -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
   displayName: 'Build Urho3DNet xamarin.ios10'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
