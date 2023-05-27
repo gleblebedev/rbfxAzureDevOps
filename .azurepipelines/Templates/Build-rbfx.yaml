@@ -17,6 +17,10 @@ steps:
     Write-Host "##vso[task.setvariable variable=CI]ON";
   displayName: 'Set CI environment variable'
 
+- script: dotnet workload install android
+  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+  displayName: 'Install workload android'
+
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
   workingDirectory: $(Build.SourcesDirectory)
@@ -40,7 +44,7 @@ steps:
   displayName: 'Build Urho3D'
   inputs:
     workingDirectory: '$(buildFolder)'
-    cmakeArgs: --build . --config RelWithDebInfo --target Urho3D
+    cmakeArgs: --build . --config RelWithDebInfo --target Urho3D --parallel 2
 
 - script: dotnet build Urho3DNet.csproj -p:TargetFramework=netstandard2.0 -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
   displayName: 'Build Urho3DNet netstandard2.0'
