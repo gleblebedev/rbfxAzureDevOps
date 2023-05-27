@@ -35,6 +35,14 @@ jobs:
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
+      artifact: 'win-x64-uap-nuget'
+
+  - template: Fetch-NugetArtifact.yaml
+    parameters:
+      artifact: 'win-ARM64-uap-nuget'
+
+  - template: Fetch-NugetArtifact.yaml
+    parameters:
       artifact: 'android-GLES2-armeabi-v7a-nuget'
 
   - template: Fetch-NugetArtifact.yaml
@@ -65,22 +73,14 @@ jobs:
     parameters:
       artifact: 'android-GLES3-x86_64-nuget'
 
-  - template: Fetch-NugetArtifact.yaml
-    parameters:
-      artifact: 'android-jar-nuget'
+  # - template: Fetch-NugetArtifact.yaml
+  #   parameters:
+  #     artifact: 'android-jar-nuget'
 
   # iOS temporally disabled
   # - template: Fetch-NugetArtifact.yaml
   #   parameters:
   #     artifact: 'ios-nuget'
-
-  - template: Fetch-NugetArtifact.yaml
-    parameters:
-      artifact: 'win-x64-uap-nuget'
-
-  - template: Fetch-NugetArtifact.yaml
-    parameters:
-      artifact: 'win-ARM64-uap-nuget'
 
   - task: CopyFiles@2
     inputs:
