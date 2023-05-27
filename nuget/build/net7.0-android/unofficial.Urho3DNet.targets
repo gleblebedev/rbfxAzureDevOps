@@ -33,4 +33,9 @@
       <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
     </AndroidAsset>
   </ItemGroup>
+  <ItemGroup>
+    <AndroidJavaSource Include="$(MSBuildThisFileDirectory)/../../native/android/**/*.java">
+      <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </AndroidJavaSource>
+  </ItemGroup>
 </Project>

@@ -88,6 +88,9 @@ jobs:
           }
       }
       
+      # Java sources
+      Copy-Item -Path $(Build.SourcesDirectory)/android/java/rbfxsdl/src/main/java/ -Destination $(nugetFolder)/native/android/java/ -Recurse -Force
+
       # Native DLL
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.dll -DestinationPath $(nugetFolder)/native/win/x64/
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb -DestinationPath $(nugetFolder)/native/win/x64/
