@@ -52,15 +52,15 @@ steps:
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=monoandroid90 -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
-  displayName: 'Build Urho3DNet monoandroid90'
+- script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-android -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+  displayName: 'Build Urho3DNet net7.0-android'
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=xamarin.ios10 -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
-  displayName: 'Build Urho3DNet xamarin.ios10'
-  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
-  workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
+# - script: dotnet build Urho3DNet.csproj -p:TargetFramework=xamarin.ios10 -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+#   displayName: 'Build Urho3DNet xamarin.ios10'
+#   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+#   workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
 - template: Publish-CCacheLog.yaml
   parameters:

@@ -49,46 +49,46 @@ jobs:
     name: 'Build_Android_GLES3_x86_64'
     graphics: 'GLES3'
 
-- job: Build_Android_JavaBindings
-  displayName: 'Build Android Java Bindings'
-  dependsOn: Build_Android_GLES2_x86_64
-  pool:
-    vmImage: 'windows-latest'
-  variables:
-    rbfxFolder: $(Build.SourcesDirectory)/rbfx
-    gradleFolder: $(Build.SourcesDirectory)/android/java
-    buildFolder: $(Build.SourcesDirectory)/rbfxbuild
-    nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+# - job: Build_Android_JavaBindings
+#   displayName: 'Build Android Java Bindings'
+#   dependsOn: Build_Android_GLES2_x86_64
+#   pool:
+#     vmImage: 'windows-latest'
+#   variables:
+#     rbfxFolder: $(Build.SourcesDirectory)/rbfx
+#     gradleFolder: $(Build.SourcesDirectory)/android/java
+#     buildFolder: $(Build.SourcesDirectory)/rbfxbuild
+#     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
 
-  steps:
-  - checkout: self
-    displayName: 'Checkout project'
+#   steps:
+#   - checkout: self
+#     displayName: 'Checkout project'
 
-  - task: DownloadPipelineArtifact@2
-    displayName: 'Download jar'
-    inputs:
-      source: 'current'
-      artifact: 'android-GLES2-x86_64-jar'
-      path: '$(Build.ArtifactStagingDirectory)/jar'
+#   - task: DownloadPipelineArtifact@2
+#     displayName: 'Download jar'
+#     inputs:
+#       source: 'current'
+#       artifact: 'android-GLES2-x86_64-jar'
+#       path: '$(Build.ArtifactStagingDirectory)/jar'
 
-  - pwsh: |
-      New-Item -ItemType File -Path $(gradleFolder)/rbfxsdl/build/intermediates/runtime_library_classes_jar/release/classes.jar -Force
-      copy-item $(Build.ArtifactStagingDirectory)/jar/classes.jar $(gradleFolder)/rbfxsdl/build/intermediates/runtime_library_classes_jar/release/classes.jar -Force
-    displayName: 'Copy jar'
+#   - pwsh: |
+#       New-Item -ItemType File -Path $(gradleFolder)/rbfxsdl/build/intermediates/runtime_library_classes_jar/release/classes.jar -Force
+#       copy-item $(Build.ArtifactStagingDirectory)/jar/classes.jar $(gradleFolder)/rbfxsdl/build/intermediates/runtime_library_classes_jar/release/classes.jar -Force
+#     displayName: 'Copy jar'
 
-  - task: MSBuild@1
-    displayName: 'build .net binding for SDL activity'
-    inputs:
-      solution: 'android/Urho3DNet.AndroidSDL/Urho3DNet.AndroidSDL.sln'
-      configuration: Release
+#   - task: MSBuild@1
+#     displayName: 'build .net binding for SDL activity'
+#     inputs:
+#       solution: 'android/Urho3DNet.AndroidSDL/Urho3DNet.AndroidSDL.sln'
+#       configuration: Release
 
-  - pwsh: |
-      New-Item -ItemType File -Path $(nugetFolder)/lib/monoandroid90/Urho3DNet.AndroidSDL.dll -Force
-      copy-item $(Build.SourcesDirectory)/android/Urho3DNet.AndroidSDL/bin/Release/Urho3DNet.AndroidSDL.dll $(nugetFolder)/lib/monoandroid90/Urho3DNet.AndroidSDL.dll -Force
-    displayName: 'Copy *.so to output'
+#   - pwsh: |
+#       New-Item -ItemType File -Path $(nugetFolder)/lib/monoandroid90/Urho3DNet.AndroidSDL.dll -Force
+#       copy-item $(Build.SourcesDirectory)/android/Urho3DNet.AndroidSDL/bin/Release/Urho3DNet.AndroidSDL.dll $(nugetFolder)/lib/monoandroid90/Urho3DNet.AndroidSDL.dll -Force
+#     displayName: 'Copy *.so to output'
 
-  - task: PublishPipelineArtifact@1
-    displayName: 'Publish binaries'
-    inputs:
-      targetPath: '$(nugetFolder)'
-      artifactName: 'android-jar-nuget'
+#   - task: PublishPipelineArtifact@1
+#     displayName: 'Publish binaries'
+#     inputs:
+#       targetPath: '$(nugetFolder)'
+#       artifactName: 'android-jar-nuget'

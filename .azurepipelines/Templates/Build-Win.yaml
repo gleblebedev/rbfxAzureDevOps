@@ -60,11 +60,11 @@ jobs:
       workingDirectory: '$(buildFolder)'
       cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3DNet.UWP
 
-  - task: CMake@1
-    displayName: 'Build Urho3DNet.IOS'
-    inputs:
-      workingDirectory: '$(buildFolder)'
-      cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3DNet.IOS
+  # - task: CMake@1
+  #   displayName: 'Build Urho3DNet.IOS'
+  #   inputs:
+  #     workingDirectory: '$(buildFolder)'
+  #     cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3DNet.IOS
 
   - task: CMake@1
     displayName: 'Build Urho3DNet.Android'
@@ -102,80 +102,69 @@ jobs:
       # CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.IOS.??? -DestinationPath $(nugetFolder)/lib/xamarin.ios10
 
       # Xamarin.Android assemblies
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/monoandroid90/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/monoandroid90
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.Android.??? -DestinationPath $(nugetFolder)/lib/monoandroid90
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net7.0-android/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0-android
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.Android.??? -DestinationPath $(nugetFolder)/lib/net7.0-android
 
       # UWP assemblies
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.UWP.??? -DestinationPath $(nugetFolder)/lib/uap10.0
 
     displayName: 'Copy binary to output'
 
-  - pwsh: |
-      $path = "$(buildFolder)\Source\Urho3D\Urho3DCSharp";
-      Get-ChildItem -Path $path -Filter *.cs -Recurse -Name | ForEach-Object {
-        $content = Get-Content -path $path\$_ -Raw
-        $newContent = $content -replace "DllImport\(\`"Urho3D", "DllImport(`"__Internal"
-        $newContent = $newContent -replace "DllImportModule = \`"Urho3D\`"", "DllImportModule = `"__Internal`""
-        $newContent = $newContent -replace "internal delegate System.IntPtr CreateObjectDelegate\(System.IntPtr context, uint type\);", "[ObjCRuntime.MonoNativeFunctionWrapper] `$0"
-        $newContent = $newContent -replace "private static System.IntPtr CreateObject\(System.IntPtr context, uint type\)", "[ObjCRuntime.MonoPInvokeCallback (typeof (CreateObjectDelegate))] `$0"
+  # - pwsh: |
+  #     $path = "$(buildFolder)\Source\Urho3D\Urho3DCSharp";
+  #     Get-ChildItem -Path $path -Filter *.cs -Recurse -Name | ForEach-Object {
+  #       $content = Get-Content -path $path\$_ -Raw
+  #       $newContent = $content -replace "DllImport\(\`"Urho3D", "DllImport(`"__Internal"
+  #       $newContent = $newContent -replace "DllImportModule = \`"Urho3D\`"", "DllImportModule = `"__Internal`""
+  #       $newContent = $newContent -replace "internal delegate System.IntPtr CreateObjectDelegate\(System.IntPtr context, uint type\);", "[ObjCRuntime.MonoNativeFunctionWrapper] `$0"
+  #       $newContent = $newContent -replace "private static System.IntPtr CreateObject\(System.IntPtr context, uint type\)", "[ObjCRuntime.MonoPInvokeCallback (typeof (CreateObjectDelegate))] `$0"
 
-        If ($content -ne $newContent)
-        {
-          Write-Host "DllImport updated in $path\$_"
-          $newContent | Set-Content -Path $path\$_
-        }
-      }
+  #       If ($content -ne $newContent)
+  #       {
+  #         Write-Host "DllImport updated in $path\$_"
+  #         $newContent | Set-Content -Path $path\$_
+  #       }
+  #     }
 
-      $path = "$(buildFolder)\Source\Urho3D\ImGuiCSharp";
-      Get-ChildItem -Path $path -Filter *.cs -Recurse -Name | ForEach-Object {
-        $content = Get-Content -path $path\$_ -Raw
-        $newContent = $content -replace "DllImport\(\`"Urho3D", "DllImport(`"__Internal"
-        $newContent = $newContent -replace "DllImportModule = \`"Urho3D\`"", "DllImportModule = `"__Internal`""
-        $newContent = $newContent -replace "internal delegate System.IntPtr CreateObjectDelegate\(System.IntPtr context, uint type\);", "[ObjCRuntime.MonoNativeFunctionWrapper] `$0"
-        $newContent = $newContent -replace "private static System.IntPtr CreateObject\(System.IntPtr context, uint type\)", "[ObjCRuntime.MonoPInvokeCallback (typeof (CreateObjectDelegate))] `$0"
+  #     $path = "$(buildFolder)\Source\Urho3D\ImGuiCSharp";
+  #     Get-ChildItem -Path $path -Filter *.cs -Recurse -Name | ForEach-Object {
+  #       $content = Get-Content -path $path\$_ -Raw
+  #       $newContent = $content -replace "DllImport\(\`"Urho3D", "DllImport(`"__Internal"
+  #       $newContent = $newContent -replace "DllImportModule = \`"Urho3D\`"", "DllImportModule = `"__Internal`""
+  #       $newContent = $newContent -replace "internal delegate System.IntPtr CreateObjectDelegate\(System.IntPtr context, uint type\);", "[ObjCRuntime.MonoNativeFunctionWrapper] `$0"
+  #       $newContent = $newContent -replace "private static System.IntPtr CreateObject\(System.IntPtr context, uint type\)", "[ObjCRuntime.MonoPInvokeCallback (typeof (CreateObjectDelegate))] `$0"
 
-        If ($content -ne $newContent)
-        {
-          Write-Host "DllImport updated in $path\$_"
-          $newContent | Set-Content -Path $path\$_
-        }
-      }
-      Remove-Item -Path "$(buildFolder)/bin/${{ parameters.configuration }}/xamarin.ios10" -Recurse -Force
-    displayName: 'Replace DllImport'
+  #       If ($content -ne $newContent)
+  #       {
+  #         Write-Host "DllImport updated in $path\$_"
+  #         $newContent | Set-Content -Path $path\$_
+  #       }
+  #     }
+  #     Remove-Item -Path "$(buildFolder)/bin/${{ parameters.configuration }}/xamarin.ios10" -Recurse -Force
+  #   displayName: 'Replace DllImport'
 
-  - task: NuGetCommand@2
-    displayName: 'Restore rbfx dependencies'
-    inputs:
-      command: 'restore'
-      restoreSolution: '$(buildFolder)/*.sln'
+  # - task: NuGetCommand@2
+  #   displayName: 'Restore rbfx dependencies'
+  #   inputs:
+  #     command: 'restore'
+  #     restoreSolution: '$(buildFolder)/*.sln'
 
-  - task: MSBuild@1
-    displayName: 'Build Urho3DNet for iOS'
-    inputs:
-      solution: '$(buildFolder)/*.sln'
-      #msbuildLocationMethod: 'version' # Optional. Options: version, location
-      #msbuildVersion: 'latest' # Optional. Options: latest, 16.0, 15.0, 14.0, 12.0, 4.0
-      #msbuildArchitecture: 'x86' # Optional. Options: x86, x64
-      #msbuildLocation: # Optional
-      #platform: # Optional
-      configuration: ${{ parameters.configuration }}
-      msbuildArguments: /p:TargetFramework=xamarin.ios10 -target:Urho3DNet
-      #clean: true
-      #maximumCpuCount: false # Optional
-      #restoreNugetPackages: false # Optional
-      #logProjectEvents: false # Optional
-      #createLogFile: false # Optional
-      #logFileVerbosity: 'normal' # Optional. Options: quiet, minimal, normal, detailed, diagnostic
+  # - task: MSBuild@1
+  #   displayName: 'Build Urho3DNet for iOS'
+  #   inputs:
+  #     solution: '$(buildFolder)/*.sln'
+  #     configuration: ${{ parameters.configuration }}
+  #     msbuildArguments: /p:TargetFramework=xamarin.ios10 -target:Urho3DNet
 
   # - script: |
   #    msbuild /p:TargetFramework=xamarin.ios10 /p:Configuration=${{ parameters.configuration }} $(rbfxFolder)\Source\Urho3D\CSharp\Urho3DNet.csproj
   #   displayName: 'Build Urho3DNet for iOS'
 
-  - pwsh: |
-      New-Item -ItemType Directory -Path $(nugetFolder)/lib/xamarin.ios10/ -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/xamarin.ios10/Urho3DNet.dll $(nugetFolder)/lib/xamarin.ios10/Urho3DNet.dll -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/xamarin.ios10/Urho3DNet.pdb $(nugetFolder)/lib/xamarin.ios10/Urho3DNet.pdb -Force
-    displayName: 'Copy binary to output'
+  # - pwsh: |
+  #     New-Item -ItemType Directory -Path $(nugetFolder)/lib/xamarin.ios10/ -Force
+  #     copy-item $(buildFolder)/bin/${{ parameters.configuration }}/xamarin.ios10/Urho3DNet.dll $(nugetFolder)/lib/xamarin.ios10/Urho3DNet.dll -Force
+  #     copy-item $(buildFolder)/bin/${{ parameters.configuration }}/xamarin.ios10/Urho3DNet.pdb $(nugetFolder)/lib/xamarin.ios10/Urho3DNet.pdb -Force
+  #   displayName: 'Copy binary to output'
 
   - task: CopyFiles@2
     inputs:
