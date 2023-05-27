@@ -104,8 +104,8 @@ jobs:
       # CopyFiles -SourcePath $(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}/Urho3DNet.IOS.??? -DestinationPath $(nugetFolder)/lib/xamarin.ios10
 
       # Xamarin.Android assemblies
-      CopyFiles -SourcePath $(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}/net7.0-android/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0-android
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.Android.??? -DestinationPath $(nugetFolder)/lib/net7.0-android
+      CopyFiles -SourcePath $(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}/net7.0-android/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0-android31.0
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.Android.??? -DestinationPath $(nugetFolder)/lib/net7.0-android31.0
 
       # UWP assemblies
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.UWP.??? -DestinationPath $(nugetFolder)/lib/uap10.0
