@@ -10,6 +10,7 @@ jobs:
     rbfxFolder: $(Build.SourcesDirectory)/rbfx
     buildFolder: $(Build.SourcesDirectory)/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+    toolsFolder: $(Build.ArtifactStagingDirectory)/tools
 
   steps:
   - checkout: self
@@ -45,3 +46,17 @@ jobs:
     inputs:
       targetPath: '$(nugetFolder)'
       artifactName: 'linux-nuget'
+
+  - task: CopyFiles@2
+    displayName: 'Copy swig'
+    inputs:
+      sourceFolder: '$(buildFolder)/bin'
+      contents: 'swig' 
+      targetFolder: '$(toolsFolder)/'
+      overWrite: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish binaries'
+    inputs:
+      targetPath: '$(toolsFolder)'
+      artifactName: 'linux-swig'
