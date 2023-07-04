@@ -36,7 +36,14 @@ jobs:
     inputs:
       sourceFolder: '$(buildFolder)/bin/'
       contents: '*' 
-      targetFolder: '$(nugetFolder)'
+      targetFolder: '$(nugetFolder)/bin/'
+      overWrite: true
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(buildFolder)/shared/'
+      contents: '*' 
+      targetFolder: '$(nugetFolder)/shared/'
       overWrite: true
 
   - task: PublishPipelineArtifact@1
