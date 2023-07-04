@@ -1,0 +1,14 @@
+#Azure DevOps yaml script to build and publish rbfx game on 2 platforms
+
+trigger:
+- master
+
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  # iOS temporally disabled
+  # - template: Templates/Build-iOS.yaml
+  - template: Templates/Build-Win-SDK.yaml
+  - template: Templates/Build-Linux-SDK.yaml
+  - template: Templates/Build-Mac-SDK.yaml

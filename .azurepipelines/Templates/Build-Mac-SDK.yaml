@@ -1,0 +1,45 @@
+# Build project for Mac
+
+jobs:
+- job: Build_Mac_SDK
+  displayName: 'Build Mac SDK'
+  timeoutInMinutes: 90
+  pool:
+    vmImage: 'macOS-latest'
+  variables:
+    rbfxFolder: $(Build.SourcesDirectory)/rbfx
+    buildFolder: $(Build.SourcesDirectory)/rbfxbuild
+    nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+
+  steps:
+  - checkout: self
+    submodules: true
+    displayName: 'Checkout project'
+
+  - template: Add-ToolsToPath.yaml
+
+  - bash: |
+      brew install ccache
+    displayName: 'Install CCache'
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+
+  - template: Fetch-CCache.yaml
+
+  - template: Build-rbfx.yaml
+    parameters:
+      cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
+      buildDotNet: false
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(rbfxFolder)/bin/${{ parameters.configuration }}/'
+      contents: '*' 
+      targetFolder: '$(nugetFolder)/mac-sdk'
+      overWrite: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish SDK binaries'
+    inputs:
+      targetPath: '$(nugetFolder)'
+      artifactName: 'mac-sdk
+

@@ -1,0 +1,40 @@
+# Build Urho3D rbfx fork
+parameters:
+  buildDotNet: true
+  cmakeExtraArgs: ''
+  configuration: 'RelWithDebInfo'
+  enableCache: true
+  debugCache: false
+
+steps:
+- task: PowerShell@2
+  displayName: 'Generate version environment variable'
+  inputs:
+    filePath: '$(Build.SourcesDirectory)/.azurepipelines/Scripts/GenVersion.ps1'
+    arguments: '-versionTemplateFile $(Build.SourcesDirectory)/.azurepipelines/version.txt'
+
+- pwsh: |
+    Write-Host "##vso[task.setvariable variable=CI]ON";
+  displayName: 'Set CI environment variable'
+
+- script: mkdir rbfxbuild
+  displayName: 'Make rbfxbuild folder'
+  workingDirectory: $(Build.SourcesDirectory)
+  failOnStderr: true
+
+- task: CMake@1
+  displayName: 'Configure Urho3D'
+  inputs:
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: -DURHO3D_ENABLE_ALL=OFF -DBUILD_SHARED_LIBS=ON -DURHO3D_TOOLS="PackageTool;swig" ${{ parameters.cmakeExtraArgs }} -S $(rbfxFolder)
+
+- task: CMake@1
+  displayName: 'Build Urho3D'
+  inputs:
+    workingDirectory: '$(buildFolder)'
+    cmakeArgs: --build . --config ${{ parameters.configuration }} --target PackageTool swig
+
+- template: Publish-CCacheLog.yaml
+  parameters:
+    enableCache:  ${{ parameters.enableCache }}
+    debugCache:  ${{ parameters.debugCache }}

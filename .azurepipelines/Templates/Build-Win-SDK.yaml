@@ -1,0 +1,57 @@
+# Build project for Windows
+parameters:
+  configuration: 'RelWithDebInfo'
+  enableCache: true
+  debugCache: false
+
+jobs:
+- job: Build_Windows_SDK
+  displayName: 'Build Windows SDK'
+  timeoutInMinutes: 120
+  pool:
+    vmImage: 'windows-latest'
+  variables:
+    rbfxFolder: $(Build.SourcesDirectory)/rbfx
+    buildFolder: $(Build.SourcesDirectory)/rbfxbuild
+    nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+
+  steps:
+  - checkout: self
+    submodules: true
+    displayName: 'Checkout project'
+
+  - template: Add-ToolsToPath.yaml
+
+  - script: dotnet ezpipeline winsdkenv --build-platform x64
+    displayName: 'Setup Windows SDK Environment'
+
+  - script: dotnet ezpipeline vsenv --build-platform x64
+    displayName: 'Setup Visual Studio Environment'
+
+  - template: Fetch-CCache.yaml
+    parameters:
+      enableCache:  ${{ parameters.enableCache }}
+      debugCache:  ${{ parameters.debugCache }}
+
+  - template: Build-SDK.yaml
+    parameters:
+      enableCache:  ${{ parameters.enableCache }}
+      debugCache:  ${{ parameters.debugCache }}
+      cmakeExtraArgs: >-
+        -DCMAKE_BUILD_TYPE=${{ parameters.configuration }}
+        -DCMAKE_C_COMPILER="$(CMAKE_C_COMPILER)"
+        -DCMAKE_CXX_COMPILER="$(CMAKE_CXX_COMPILER)"
+      configuration: ${{ parameters.configuration }}
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(rbfxFolder)/bin/${{ parameters.configuration }}/'
+      contents: '*' 
+      targetFolder: '$(nugetFolder)/win-sdk'
+      overWrite: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish SDK binaries'
+    inputs:
+      targetPath: '$(nugetFolder)'
+      artifactName: 'win-sdk

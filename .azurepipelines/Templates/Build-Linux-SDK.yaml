@@ -1,0 +1,47 @@
+# Build project for Mac
+
+jobs:
+- job: Build_Linux_SDK
+  displayName: 'Build Linux SDK'
+  timeoutInMinutes: 90
+  pool:
+    vmImage: 'ubuntu-latest'
+  variables:
+    rbfxFolder: $(Build.SourcesDirectory)/rbfx
+    buildFolder: $(Build.SourcesDirectory)/rbfxbuild
+    nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+
+  steps:
+  - checkout: self
+    submodules: true
+    displayName: 'Checkout project'
+
+  - template: Add-ToolsToPath.yaml
+
+  - template: Install-LinuxLibs.yaml
+
+  - template: Fetch-CCache.yaml
+      
+  - template: Build-SDK.yaml
+    parameters:
+      cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
+      buildDotNet: false
+
+  - bash: strip ./libUrho3D.so
+    displayName: 'Strip libUrho3D.so'
+    workingDirectory: '$(buildFolder)/bin'
+    failOnStderr: true
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(rbfxFolder)/bin/${{ parameters.configuration }}/'
+      contents: '*' 
+      targetFolder: '$(nugetFolder)/linux-sdk'
+      overWrite: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish SDK binaries'
+    inputs:
+      targetPath: '$(nugetFolder)'
+      artifactName: 'linux-sdk
+
