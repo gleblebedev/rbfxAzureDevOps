@@ -34,7 +34,7 @@ jobs:
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(buildFolder)/../../../bin/'
+      sourceFolder: '$(buildFolder)/bin/'
       contents: '*' 
       targetFolder: '$(nugetFolder)'
       overWrite: true
