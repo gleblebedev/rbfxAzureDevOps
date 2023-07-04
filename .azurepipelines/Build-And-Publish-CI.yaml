@@ -2,6 +2,7 @@
 
 #trigger:
 #- master
+trigger: none
 
 stages:
 - stage: Build
