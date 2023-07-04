@@ -23,7 +23,7 @@ steps:
         Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS]1"
         Write-Host "##vso[task.setvariable variable=CCACHE_COMPRESS_LEVEL]9"
         Write-Host "##vso[task.setvariable variable=EM_COMPILER_WRAPPER]ccache"
-        Write-Host "##vso[task.setvariable variable=CCACHE_KEY]${{ parameters.folder }}$(Agent.JobName)"
+        Write-Host "##vso[task.setvariable variable=CCACHE_KEY]${{ parameters.folder }}$(Agent.JobName).zip"
       condition: true
       displayName: 'Enable CCache'
 
