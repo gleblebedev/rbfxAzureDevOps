@@ -54,9 +54,10 @@ jobs:
   - task: CopyFiles@2
     inputs:
       sourceFolder: '$(buildFolder)/share/'
-      contents: '*' 
+      contents: '**' 
       targetFolder: '$(nugetFolder)/share/'
       overWrite: true
+
   - task: PublishPipelineArtifact@1
     displayName: 'Publish SDK binaries'
     inputs:
