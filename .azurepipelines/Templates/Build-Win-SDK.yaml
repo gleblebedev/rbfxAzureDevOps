@@ -60,5 +60,4 @@ jobs:
   - script: |
       dotnet tool run ezpipeline -- zip-to-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -i "$(nugetFolder)" -c "sdk" -n "win.zip" -l Fastest --overwrite
     continueOnError: true 
-    condition: true
     displayName: 'Upload binary to container'

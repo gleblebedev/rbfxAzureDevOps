@@ -32,6 +32,7 @@ jobs:
   - bash: strip ./libUrho3D.so
     displayName: 'Strip libUrho3D.so'
     workingDirectory: '$(buildFolder)/bin'
+    continueOnError: true 
     failOnStderr: true
 
   - task: CopyFiles@2
@@ -50,5 +51,4 @@ jobs:
   - script: |
       dotnet tool run ezpipeline -- zip-to-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -i "$(nugetFolder)" -c "sdk" -n "linux.zip" -l Fastest --overwrite
     continueOnError: true 
-    condition: true
     displayName: 'Upload binary to container'

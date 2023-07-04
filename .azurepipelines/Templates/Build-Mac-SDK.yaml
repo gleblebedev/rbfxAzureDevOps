@@ -34,7 +34,7 @@ jobs:
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(buildFolder)/../../bin/'
+      sourceFolder: '$(buildFolder)/../../../bin/'
       contents: '*' 
       targetFolder: '$(nugetFolder)'
       overWrite: true
@@ -48,5 +48,4 @@ jobs:
   - script: |
       dotnet tool run ezpipeline -- zip-to-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -i "$(nugetFolder)" -c "sdk" -n "mac.zip" -l Fastest --overwrite
     continueOnError: true 
-    condition: true
     displayName: 'Upload binary to container'
