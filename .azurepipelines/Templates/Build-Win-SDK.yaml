@@ -32,6 +32,7 @@ jobs:
     parameters:
       enableCache:  ${{ parameters.enableCache }}
       debugCache:  ${{ parameters.debugCache }}
+      folder: 'sdk/'
 
   - template: Build-SDK.yaml
     parameters:
@@ -45,9 +46,9 @@ jobs:
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(rbfxFolder)/bin/${{ parameters.configuration }}/'
+      sourceFolder: '$(buildFolder)/bin/${{ parameters.configuration }}/'
       contents: '*' 
-      targetFolder: '$(nugetFolder)/win-sdk'
+      targetFolder: '$(nugetFolder)'
       overWrite: true
 
   - task: PublishPipelineArtifact@1
@@ -55,3 +56,9 @@ jobs:
     inputs:
       targetPath: '$(nugetFolder)'
       artifactName: 'win-sdk'
+
+  - script: |
+      dotnet tool run ezpipeline -- zip-to-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -i "$(nugetFolder)" -c "sdk" -n "win.zip" -l Fastest --overwrite
+    continueOnError: true 
+    condition: true
+    displayName: 'Upload binary to container'

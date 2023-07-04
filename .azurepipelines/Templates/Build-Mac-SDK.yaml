@@ -24,17 +24,19 @@ jobs:
     workingDirectory: '$(Build.ArtifactStagingDirectory)'
 
   - template: Fetch-CCache.yaml
+    parameters:
+      folder:  'sdk/'
 
-  - template: Build-rbfx.yaml
+  - template: Build-SDK.yaml
     parameters:
       cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
       buildDotNet: false
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(rbfxFolder)/bin/${{ parameters.configuration }}/'
+      sourceFolder: '$(buildFolder)/../../bin/'
       contents: '*' 
-      targetFolder: '$(nugetFolder)/mac-sdk'
+      targetFolder: '$(nugetFolder)'
       overWrite: true
 
   - task: PublishPipelineArtifact@1
@@ -43,3 +45,8 @@ jobs:
       targetPath: '$(nugetFolder)'
       artifactName: 'mac-sdk'
 
+  - script: |
+      dotnet tool run ezpipeline -- zip-to-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -i "$(nugetFolder)" -c "sdk" -n "mac.zip" -l Fastest --overwrite
+    continueOnError: true 
+    condition: true
+    displayName: 'Upload binary to container'
