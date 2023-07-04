@@ -41,5 +41,5 @@ jobs:
     displayName: 'Publish SDK binaries'
     inputs:
       targetPath: '$(nugetFolder)'
-      artifactName: 'mac-sdk
+      artifactName: 'mac-sdk'
 

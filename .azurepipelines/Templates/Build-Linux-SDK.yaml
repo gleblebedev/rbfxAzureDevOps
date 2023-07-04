@@ -43,5 +43,5 @@ jobs:
     displayName: 'Publish SDK binaries'
     inputs:
       targetPath: '$(nugetFolder)'
-      artifactName: 'linux-sdk
+      artifactName: 'linux-sdk'
 
