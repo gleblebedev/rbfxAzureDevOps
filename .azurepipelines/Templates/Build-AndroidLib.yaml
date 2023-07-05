@@ -27,12 +27,16 @@ jobs:
     parameters:
       enableCache: true
       debugCache: true
-      
+
   - task: UseDotNet@2
     displayName: 'Install .NET 6 SDK'
     inputs:
       packageType: 'sdk'
       version: '6.0.x'
+      
+  - script: dotnet tool restore
+    displayName: 'Restore dotnet tools'
+    workingDirectory: $(Build.SourcesDirectory)
 
   - pwsh: |
       dotnet tool run ezpipeline -- unzip-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -o "$(sdkFolder)" -c sdk -n "linux.zip"
