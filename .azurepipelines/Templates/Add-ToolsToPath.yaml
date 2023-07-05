@@ -1,6 +1,6 @@
 # Add tools to path
 steps:
-- template: Install-Dotnet.yaml
+- template: Install-DotNet.yaml
   
 - pwsh: |
     If ($IsWindows)
