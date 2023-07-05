@@ -17,6 +17,7 @@ jobs:
     rbfxFolder: $(Build.SourcesDirectory)/rbfx
     buildFolder: $(Build.SourcesDirectory)/rbfxbuild
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+    sdkFolder: $(Build.ArtifactStagingDirectory)/sdk
 
   steps:
   - checkout: self
@@ -24,6 +25,11 @@ jobs:
     displayName: 'Checkout project'
 
   - template: Add-ToolsToPath.yaml
+
+  - pwsh: |
+      dotnet tool run ezpipeline -- unzip-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -o "$(sdkFolder)" -c sdk -n "mac.zip"
+      Write-Host "##vso[task.setvariable variable=URHO3D_SDK]$(sdkFolder)"
+    displayName: 'Setup SDK'
 
   - bash: |
       brew info cmake

@@ -32,8 +32,7 @@ steps:
   displayName: 'Build Urho3D'
   inputs:
     workingDirectory: '$(buildFolder)'
-    cmakeArgs: --build . --config ${{ parameters.configuration }} --target swig
-    # PackageTool
+    cmakeArgs: --build . --config ${{ parameters.configuration }} --target swig PackageTool
 
 - template: Publish-CCacheLog.yaml
   parameters:
