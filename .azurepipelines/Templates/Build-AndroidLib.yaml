@@ -16,6 +16,8 @@ jobs:
     gradleFolder: $(Build.SourcesDirectory)/android/java
     buildFolder: $(Build.SourcesDirectory)/android/java/app/.cxx
     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+    sdkFolder: $(Build.ArtifactStagingDirectory)/sdk
+
   steps:
   - checkout: self
     submodules: recursive
@@ -25,6 +27,11 @@ jobs:
     parameters:
       enableCache: true
       debugCache: true
+
+  - pwsh: |
+      dotnet tool run ezpipeline -- unzip-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -o "$(sdkFolder)" -c sdk -n "linux.zip"
+      Write-Host "##vso[task.setvariable variable=URHO3D_SDK]$(sdkFolder)"
+    displayName: 'Setup SDK'
 
   - bash: cmake --version
     displayName: 'CMake Version'

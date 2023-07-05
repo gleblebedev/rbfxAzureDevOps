@@ -1,8 +1,8 @@
 #Azure DevOps yaml script to build and publish rbfx game on 2 platforms
 
-#trigger:
-#- master
-trigger: none
+trigger:
+- master
+# trigger: none
 
 stages:
 - stage: Build
