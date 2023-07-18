@@ -43,22 +43,6 @@ jobs:
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
-      artifact: 'android-GLES2-armeabi-v7a-nuget'
-
-  - template: Fetch-NugetArtifact.yaml
-    parameters:
-      artifact: 'android-GLES2-arm64-v8a-nuget'
-
-  - template: Fetch-NugetArtifact.yaml
-    parameters:
-      artifact: 'android-GLES2-x86-nuget'
-
-  - template: Fetch-NugetArtifact.yaml
-    parameters:
-      artifact: 'android-GLES2-x86_64-nuget'
-
-  - template: Fetch-NugetArtifact.yaml
-    parameters:
       artifact: 'android-GLES3-armeabi-v7a-nuget'
 
   - template: Fetch-NugetArtifact.yaml

@@ -4,30 +4,6 @@ jobs:
 - template: Build-AndroidLib.yaml
   parameters:
     abi: 'armeabi-v7a'
-    name: 'Build_Android_GLES2_armeabi_v7a'
-    graphics: 'GLES2'
-
-- template: Build-AndroidLib.yaml
-  parameters:
-    abi: 'arm64-v8a'
-    name: 'Build_Android_GLES2_arm64_v8a'
-    graphics: 'GLES2'
-
-- template: Build-AndroidLib.yaml
-  parameters:
-    abi: 'x86'
-    name: 'Build_Android_GLES2_x86'
-    graphics: 'GLES2'
-
-- template: Build-AndroidLib.yaml
-  parameters:
-    abi: 'x86_64'
-    name: 'Build_Android_GLES2_x86_64'
-    graphics: 'GLES2'
-
-- template: Build-AndroidLib.yaml
-  parameters:
-    abi: 'armeabi-v7a'
     name: 'Build_Android_GLES3_armeabi_v7a'
     graphics: 'GLES3'
 

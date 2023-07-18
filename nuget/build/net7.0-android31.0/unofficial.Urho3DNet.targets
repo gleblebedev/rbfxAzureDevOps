@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup Condition="'$(URHO3D_GRAPHICS_API)' == '' OR '$(URHO3D_GRAPHICS_API)' == 'GLES2'">
-    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)/../../native/android/GLES2/arm64-v8a/*.so">
-      <Abi>arm64-v8a</Abi>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)/../../native/android/GLES2/armeabi-v7a/*.so">
-      <Abi>armeabi-v7a</Abi>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)/../../native/android/GLES2/x86/*.so">
-      <Abi>x86</Abi>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)/../../native/android/GLES2/x86_64/*.so">
-      <Abi>x86_64</Abi>
-    </AndroidNativeLibrary>
-  </ItemGroup>
-  <ItemGroup Condition="'$(URHO3D_GRAPHICS_API)' == 'GLES3'">
+  <ItemGroup>
     <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)/../../native/android/GLES3/arm64-v8a/*.so">
       <Abi>arm64-v8a</Abi>
     </AndroidNativeLibrary>
