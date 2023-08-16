@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)/../../native/win/x64/*.*">
+    <None Include="$(MSBuildThisFileDirectory)/../../native/win/x64/*.*" Visible="false">
       <Link>%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)/../../native/osx/*.*">
+    <None Include="$(MSBuildThisFileDirectory)/../../native/osx/*.*" Visible="false">
       <Link>%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)/../../native/linux/*.*">
+    <None Include="$(MSBuildThisFileDirectory)/../../native/linux/*.*" Visible="false">
       <Link>%(FileName)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="$(MSBuildThisFileDirectory)/../../content/**">
+    <Content Include="$(MSBuildThisFileDirectory)/../../content/**" Visible="false">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

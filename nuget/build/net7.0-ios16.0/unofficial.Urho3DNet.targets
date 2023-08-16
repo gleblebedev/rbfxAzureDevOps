@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+      <NativeReference Include="$(MSBuildThisFileDirectory)../../native/ios/Urho3D.framework">
+      <Kind>Framework</Kind>
+      <SmartLink>False</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <IsCxx>True</IsCxx>
+    </NativeReference>
+    <!-- <Frameworks>OpenGLES AVFoundation AudioToolbox CoreMotion GameController CoreGraphics QuartzCore CoreBluetooth</Frameworks> -->
+    <BundleResource Include="$(MSBuildThisFileDirectory)unofficial.Urho3DNet.dll.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="$(MSBuildThisFileDirectory)../../content/**">
+      <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
+    </BundleResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <MtouchExtraArgs>--dynamic-symbol-mode=code</MtouchExtraArgs>
+  </PropertyGroup>
+</Project>

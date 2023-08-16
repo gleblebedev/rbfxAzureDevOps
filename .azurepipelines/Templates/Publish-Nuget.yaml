@@ -61,10 +61,9 @@ jobs:
   #   parameters:
   #     artifact: 'android-jar-nuget'
 
-  # iOS temporally disabled
-  # - template: Fetch-NugetArtifact.yaml
-  #   parameters:
-  #     artifact: 'ios-nuget'
+  - template: Fetch-NugetArtifact.yaml
+    parameters:
+      artifact: 'ios-nuget'
 
   - task: CopyFiles@2
     inputs:

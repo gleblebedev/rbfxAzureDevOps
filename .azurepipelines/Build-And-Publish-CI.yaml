@@ -8,8 +8,7 @@ stages:
 - stage: Build
   displayName: Build
   jobs:
-  # iOS temporally disabled
-  # - template: Templates/Build-iOS.yaml
+  - template: Templates/Build-iOS.yaml
   - template: Templates/Build-Win.yaml
   - template: Templates/Build-UWP.yaml
     parameters:
