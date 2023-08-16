@@ -81,7 +81,11 @@ jobs:
     displayName: 'Patch build system type'
 
   - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="-"
+    continueOnError: true
     displayName: 'Xcode build'
+
+  - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -scheme Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="-"
+    displayName: 'Xcode build again'
 
   - template: Publish-CCacheLog.yaml
 
