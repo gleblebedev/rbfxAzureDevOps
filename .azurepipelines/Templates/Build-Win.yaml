@@ -48,11 +48,10 @@ jobs:
         -DCMAKE_CXX_COMPILER="$(CMAKE_CXX_COMPILER)"
       configuration: ${{ parameters.configuration }}
 
-  - task: CMake@1
+  - script: dotnet build Urho3DNet.Desktop.csproj -p:TargetFramework=net7.0 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.Desktop'
-    inputs:
-      workingDirectory: '$(buildFolder)'
-      cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3DNet.Desktop
+    condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+    workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.Desktop'
 
   - task: CMake@1
     displayName: 'Build Urho3DNet.UWP'
@@ -60,17 +59,15 @@ jobs:
       workingDirectory: '$(buildFolder)'
       cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3DNet.UWP
 
-  # - task: CMake@1
-  #   displayName: 'Build Urho3DNet.IOS'
-  #   inputs:
-  #     workingDirectory: '$(buildFolder)'
-  #     cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3DNet.IOS
+  - script: dotnet build Urho3DNet.IOS.csproj -p:TargetFramework=net7.0-ios -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
+    displayName: 'Build Urho3DNet.IOS'
+    condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+    workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.IOS'
 
-  - task: CMake@1
+  - script: dotnet build Urho3DNet.Android.csproj -p:TargetFramework=net7.0-android -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.Android'
-    inputs:
-      workingDirectory: '$(buildFolder)'
-      cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3DNet.Android
+    condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+    workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.Android'
 
   - pwsh: |
       $managedDllFolder = "$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}"
@@ -99,15 +96,15 @@ jobs:
       CopyFiles -SourcePath $(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netstandard2.0
 
       # .Net 7.0 assemblies
-      CopyFiles -SourcePath $(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}/net7.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/net7.0
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net7.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net7.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/net7.0
 
       # iOS temporally disabled
-      # Xamarin.IOS assemblies
-      # CopyFiles -SourcePath $(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}/Urho3DNet.IOS.??? -DestinationPath $(nugetFolder)/lib/xamarin.ios10
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net7.0-ios/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0-ios16.0
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.IOS.??? -DestinationPath $(nugetFolder)/lib/net7.0-ios16.0
 
       # Xamarin.Android assemblies
-      CopyFiles -SourcePath $(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}/net7.0-android/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0-android31.0
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net7.0-android/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0-android31.0
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.Android.??? -DestinationPath $(nugetFolder)/lib/net7.0-android31.0
 
       # UWP assemblies

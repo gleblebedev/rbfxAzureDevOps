@@ -15,6 +15,7 @@
       <group targetFramework=".NETStandard2.0"></group>
       <group targetFramework=".NETFramework7.0"></group>
       <group targetFramework=".NETFramework7.0-android31.0"></group>
+      <group targetFramework=".NETFramework7.0-ios16.0"></group>
       <group targetFramework="UAP10.0"></group>
     </dependencies>
       <!-- <group targetFramework="net7.0-ios16.1"></group> -->

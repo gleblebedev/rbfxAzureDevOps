@@ -17,9 +17,9 @@ steps:
     Write-Host "##vso[task.setvariable variable=CI]ON";
   displayName: 'Set CI environment variable'
 
-- script: dotnet workload install android
+- script: dotnet workload install android ios
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
-  displayName: 'Install workload android'
+  displayName: 'Install mobile workloads'
 
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
@@ -31,14 +31,6 @@ steps:
   inputs:
     workingDirectory: '$(buildFolder)'
     cmakeArgs: -DBUILD_SHARED_LIBS=ON -DURHO3D_COMPUTE=OFF -DURHO3D_GLOW=ON -DURHO3D_FEATURES="CSHARP;SYSTEMUI" -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF -DURHO3D_RMLUI=ON ${{ parameters.cmakeExtraArgs }} $(rbfxFolder)
-
-- task: NuGetCommand@2
-  displayName: 'Restore rbfx dependencies'
-  continueOnError: true
-  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
-  inputs:
-    command: 'restore'
-    restoreSolution: '$(buildFolder)/*.sln'
 
 - script: dotnet restore $(buildFolder)/rbfx.sln
   displayName: 'Restore rbfx dependencies via dotnet'
@@ -66,10 +58,10 @@ steps:
   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
   workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-# - script: dotnet build Urho3DNet.csproj -p:TargetFramework=xamarin.ios10 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
-#   displayName: 'Build Urho3DNet xamarin.ios10'
-#   condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
-#   workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
+- script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-ios -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+  displayName: 'Build Urho3DNet net7.0-ios'
+  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+  workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
 - template: Publish-CCacheLog.yaml
   parameters:
