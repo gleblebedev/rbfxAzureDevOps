@@ -40,6 +40,11 @@ steps:
     command: 'restore'
     restoreSolution: '$(buildFolder)/*.sln'
 
+- script: dotnet restore $(buildFolder)/rbfx.sln
+  displayName: 'Restore rbfx dependencies via dotnet'
+  continueOnError: true
+  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+
 - task: CMake@1
   displayName: 'Build Urho3D'
   inputs:
