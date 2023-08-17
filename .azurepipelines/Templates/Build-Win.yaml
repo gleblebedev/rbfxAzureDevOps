@@ -50,7 +50,6 @@ jobs:
 
   - script: dotnet build Urho3DNet.Desktop.csproj -p:TargetFramework=net7.0 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.Desktop'
-    condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
     workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.Desktop'
 
   - task: CMake@1
@@ -61,12 +60,10 @@ jobs:
 
   - script: dotnet build Urho3DNet.IOS.csproj -p:TargetFramework=net7.0-ios -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.IOS'
-    condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
     workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.IOS'
 
   - script: dotnet build Urho3DNet.Android.csproj -p:TargetFramework=net7.0-android -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.Android'
-    condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
     workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.Android'
 
   - pwsh: |
