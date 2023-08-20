@@ -39,3 +39,5 @@ msbuild.log
 # Visual Studio 2015
 .vs/
 .ccache
+
+/cmake-build*

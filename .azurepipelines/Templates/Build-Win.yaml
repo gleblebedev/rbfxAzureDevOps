@@ -97,7 +97,7 @@ jobs:
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net7.0/Urho3DNet.Desktop.??? -DestinationPath $(nugetFolder)/lib/net7.0
 
       # iOS temporally disabled
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net7.0-ios/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0-ios16.0
+      dotnet tool run ezpipeline patch-dllimport --input $(buildFolder)/bin/${{ parameters.configuration }}/net7.0-ios/Urho3DNet.dll -v __Internal -o $(nugetFolder)/lib/net7.0-ios16.0/Urho3DNet.dll
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.IOS.??? -DestinationPath $(nugetFolder)/lib/net7.0-ios16.0
 
       # Xamarin.Android assemblies
