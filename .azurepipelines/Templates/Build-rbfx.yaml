@@ -61,6 +61,13 @@ steps:
     displayName: 'Build Urho3DNet net7.0-ios'
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
+- ${{ if eq(parameters.buildEditor, true) }}:
+  - task: CMake@1
+    displayName: 'Build libEditor'
+    inputs:
+      workingDirectory: '$(buildFolder)'
+      cmakeArgs: --build . --config ${{ parameters.configuration }} --target libEditor --parallel 2
+
 - template: Publish-CCacheLog.yaml
   parameters:
     enableCache:  ${{ parameters.enableCache }}

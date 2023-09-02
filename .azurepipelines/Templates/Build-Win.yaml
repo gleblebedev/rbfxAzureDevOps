@@ -47,6 +47,7 @@ jobs:
         -DURHO3D_PCH=Off
         -DCMAKE_C_COMPILER="$(CMAKE_C_COMPILER)"
         -DCMAKE_CXX_COMPILER="$(CMAKE_CXX_COMPILER)"
+        -DURHO3D_EDITOR=ON
       configuration: ${{ parameters.configuration }}
 
   - script: dotnet build Urho3DNet.Desktop.csproj -p:TargetFramework=net7.0 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
