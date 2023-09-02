@@ -3,11 +3,8 @@ parameters:
   cmakeExtraArgs: ''
   
 steps:
-- task: PowerShell@2
+- script: dotnet tool run ezpipeline git-height-version -i '$(Build.SourcesDirectory)/.azurepipelines/version.txt' -b 0.3.7.320 --variable VERSION
   displayName: 'Generate version environment variable'
-  inputs:
-    filePath: '$(Build.SourcesDirectory)/.azurepipelines/Scripts/GenVersion.ps1'
-    arguments: '-versionTemplateFile $(Build.SourcesDirectory)/.azurepipelines/version.txt'
 
 - pwsh: |
     $NUM_CPUS = dotnet tool run ezpipeline cpu-info

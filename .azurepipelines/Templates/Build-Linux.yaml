@@ -27,6 +27,7 @@ jobs:
     parameters:
       cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
       buildDotNet: false
+      buildEditor: false
 
   - bash: strip ./libUrho3D.so
     displayName: 'Strip libUrho3D.so'

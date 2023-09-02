@@ -3,15 +3,9 @@
   "isRoot": true,
   "tools": {
     "ezpipeline": {
-      "version": "0.0.22",
+      "version": "0.0.24",
       "commands": [
         "ezpipeline"
-      ]
-    },
-    "nbgv": {
-      "version": "3.6.128",
-      "commands": [
-        "nbgv"
       ]
     }
   }

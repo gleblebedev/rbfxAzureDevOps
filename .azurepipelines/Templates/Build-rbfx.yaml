@@ -1,17 +1,18 @@
 # Build Urho3D rbfx fork
 parameters:
   buildDotNet: true
+  buildEditor: false
   cmakeExtraArgs: ''
   configuration: 'RelWithDebInfo'
   enableCache: true
   debugCache: false
 
 steps:
-- task: PowerShell@2
+- script: dotnet tool run ezpipeline git-height-version -i '$(Build.SourcesDirectory)/.azurepipelines/version.txt' -b 0.3.7.320 --variable VERSION
   displayName: 'Generate version environment variable'
-  inputs:
-    filePath: '$(Build.SourcesDirectory)/.azurepipelines/Scripts/GenVersion.ps1'
-    arguments: '-versionTemplateFile $(Build.SourcesDirectory)/.azurepipelines/version.txt'
+
+- script: dotnet tool run ezpipeline set-msbuild-property -i $(Build.SourcesDirectory)/rbfx/Directory.Build.props -p=Version:$(VERSION)
+  displayName: 'Set version to Directory.Build.props'
 
 - pwsh: |
     Write-Host "##vso[task.setvariable variable=CI]ON";
@@ -43,25 +44,22 @@ steps:
     workingDirectory: '$(buildFolder)'
     cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3D --parallel 2
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=netstandard2.0 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
-  displayName: 'Build Urho3DNet netstandard2.0'
-  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
-  workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
+- ${{ if eq(parameters.buildDotNet, true) }}
+  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=netstandard2.0 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+    displayName: 'Build Urho3DNet netstandard2.0'
+    workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
-  displayName: 'Build Urho3DNet Net7.0'
-  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
-  workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
+  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+    displayName: 'Build Urho3DNet Net7.0'
+    workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-android -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
-  displayName: 'Build Urho3DNet net7.0-android'
-  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
-  workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
+  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-android -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+    displayName: 'Build Urho3DNet net7.0-android'
+    workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-- script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-ios -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
-  displayName: 'Build Urho3DNet net7.0-ios'
-  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
-  workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
+  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-ios -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+    displayName: 'Build Urho3DNet net7.0-ios'
+    workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
 - template: Publish-CCacheLog.yaml
   parameters:

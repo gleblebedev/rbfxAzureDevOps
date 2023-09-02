@@ -29,6 +29,7 @@ jobs:
     parameters:
       cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
       buildDotNet: false
+      buildEditor: false
 
   - task: CopyFiles@2
     inputs:

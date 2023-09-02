@@ -38,6 +38,7 @@ jobs:
       enableCache:  ${{ parameters.enableCache }}
       debugCache:  ${{ parameters.debugCache }}
       buildDotNet: true
+      buildEditor: true
       cmakeExtraArgs: >-
         -DCMAKE_BUILD_TYPE=${{ parameters.configuration }}
         -DURHO3D_GRAPHICS_API=D3D11
