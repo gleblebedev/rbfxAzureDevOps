@@ -73,15 +73,15 @@ steps:
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost'
 
   - script: |
-      dotnet tool run ezpipeline.exe append-zip -i $(Build.SourcesDirectory)/rbfx/bin/EditorData/ -o $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.*.nupkg -s tools/net7.0/any/EditorData
-      dotnet tool run ezpipeline.exe append-zip -i $(Build.SourcesDirectory)/rbfx/bin/CoreData/ -o $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.*.nupkg -s tools/net7.0/any/CoreData
-      dotnet tool run ezpipeline.exe append-zip -i $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }} -f libEditor\. -o $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.*.nupkg -s tools/net7.0/any/
-      dotnet tool run ezpipeline.exe append-zip -i $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }} -f Urho3D\. -o $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.*.nupkg -s tools/net7.0/any/
+      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/EditorData/ -o $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.*.nupkg -s tools/net7.0/any/EditorData
+      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/CoreData/ -o $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.*.nupkg -s tools/net7.0/any/CoreData
+      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }} -f libEditor\. -o $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.*.nupkg -s tools/net7.0/any/
+      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }} -f Urho3D\. -o $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.*.nupkg -s tools/net7.0/any/
     displayName: 'Append files to Editor nuget'
     workingDirectory: '$(Build.SourcesDirectory)/'
 
   - task: PublishPipelineArtifact@1
-    displayName: 'Publish Editor nuget'
+    displayName: 'Publish Editor nuget to $(System.JobName)/EditorNuget'
     inputs:
       targetPath: '$(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.$(Version).nupkg'
       artifactName: '$(System.JobName)/EditorNuget'

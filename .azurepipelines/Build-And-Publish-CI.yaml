@@ -33,4 +33,5 @@ stages:
     - Build
   jobs:
   - template: Templates/Publish-Nuget.yaml
+  - template: Templates/Publish-Editor-Nuget.yaml
   
