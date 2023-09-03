@@ -5,6 +5,11 @@ trigger:
 # trigger: none
 
 stages:
+- stage: SetBuildName
+  displayName: Set Build Name
+  jobs:
+  - template: Templates/Update-BuildNumber.yaml
+
 - stage: Build
   displayName: Build
   jobs:
