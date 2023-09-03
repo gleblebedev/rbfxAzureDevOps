@@ -84,7 +84,7 @@ steps:
     displayName: 'Publish Editor nuget to $(System.JobName)/EditorNuget'
     inputs:
       targetPath: '$(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/bin/${{ parameters.configuration }}/unofficial.Urho3DNet.Editor.$(Version).nupkg'
-      artifactName: '$(System.JobName)/EditorNuget'
+      artifactName: '$(Agent.OS)_EditorNuget'
 
 - template: Publish-CCacheLog.yaml
   parameters:

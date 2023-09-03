@@ -22,7 +22,7 @@ jobs:
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
-      artifact: 'Build Windows/EditorNuget'
+      artifact: 'Windows_NT_EditorNuget'
 
   - task: NuGetCommand@2
     displayName: 'Publish to local feed'
