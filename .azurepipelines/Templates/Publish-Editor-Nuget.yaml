@@ -1,8 +1,8 @@
 # Publish nuget package
 
 jobs:
-- job: Publish
-  displayName: 'Publish Nuget'
+- job: PublishEditor
+  displayName: 'Publish Editor Nuget'
   pool:
     vmImage: 'windows-latest'
   variables:
