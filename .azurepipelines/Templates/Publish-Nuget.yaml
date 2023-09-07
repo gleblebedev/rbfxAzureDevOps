@@ -23,38 +23,47 @@ jobs:
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'win-nuget'
+      path: $(nugetFolder)
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'osx-nuget'
+      path: $(nugetFolder)
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'linux-nuget'
+      path: $(nugetFolder)
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'win-x64-uap-nuget'
+      path: $(nugetFolder)
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'win-ARM64-uap-nuget'
+      path: $(nugetFolder)
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'android-GLES3-armeabi-v7a-nuget'
+      path: $(nugetFolder)
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'android-GLES3-arm64-v8a-nuget'
+      path: $(nugetFolder)
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'android-GLES3-x86-nuget'
+      path: $(nugetFolder)
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'android-GLES3-x86_64-nuget'
+      path: $(nugetFolder)
 
   # - template: Fetch-NugetArtifact.yaml
   #   parameters:
@@ -63,6 +72,7 @@ jobs:
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'ios-nuget'
+      path: $(nugetFolder)
 
   - task: CopyFiles@2
     inputs:
