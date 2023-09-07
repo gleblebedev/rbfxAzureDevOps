@@ -19,7 +19,7 @@ steps:
   displayName: 'Set CI environment variable'
 
 - script: dotnet workload install android ios
-  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+  condition: and(succeeded(), or(eq('${{ parameters.buildDotNet }}', true), eq('${{ parameters.buildEditor }}', true)))
   displayName: 'Install mobile workloads'
 
 - script: mkdir rbfxbuild
@@ -36,7 +36,7 @@ steps:
 - script: dotnet restore $(buildFolder)/rbfx.sln
   displayName: 'Restore rbfx dependencies via dotnet'
   continueOnError: true
-  condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
+  condition: and(succeeded(), or(eq('${{ parameters.buildDotNet }}', true), eq('${{ parameters.buildEditor }}', true)))
 
 - task: CMake@1
   displayName: 'Build Urho3D'
