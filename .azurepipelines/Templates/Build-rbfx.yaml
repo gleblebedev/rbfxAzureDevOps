@@ -18,9 +18,15 @@ steps:
     Write-Host "##vso[task.setvariable variable=CI]ON";
   displayName: 'Set CI environment variable'
 
-- script: dotnet workload install android ios
-  condition: and(succeeded(), or(eq('${{ parameters.buildDotNet }}', true), eq('${{ parameters.buildEditor }}', true)))
-  displayName: 'Install mobile workloads'
+- ${{ if eq(Agent.OS, 'Linux') }}:
+  - script: dotnet workload install android
+    condition: and(succeeded(), or(eq('${{ parameters.buildDotNet }}', true), eq('${{ parameters.buildEditor }}', true)))
+    displayName: 'Install mobile workloads'
+
+- ${{ if ne(Agent.OS, 'Linux') }}:
+  - script: dotnet workload install android ios
+    condition: and(succeeded(), or(eq('${{ parameters.buildDotNet }}', true), eq('${{ parameters.buildEditor }}', true)))
+    displayName: 'Install mobile workloads'
 
 - script: mkdir rbfxbuild
   displayName: 'Make rbfxbuild folder'
