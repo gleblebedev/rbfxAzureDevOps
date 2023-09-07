@@ -24,11 +24,19 @@ jobs:
     parameters:
       artifact: 'Windows_NT_EditorNuget'
 
+  - script: |
+      dotnet tool run ezpipeline resolve-path -i $(Build.ArtifactStagingDirectory)/**/*.$(VERSION).nupkg -v NupkgPath
+    displayName: 'Find nupkg'
+
+  - template: Fetch-NugetArtifact.yaml
+    parameters:
+      artifact: 'Linux_EditorNuget'
+
   - task: NuGetCommand@2
     displayName: 'Publish to local feed'
     inputs:
       command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      packagesToPush: '$(NupkgPath)'
       nuGetFeedType: 'internal'
       publishVstsFeed: '$(VstsFeed)'
       allowPackageConflicts: true
@@ -37,7 +45,7 @@ jobs:
     displayName: 'Publish to nuget.org'
     inputs:
       command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      packagesToPush: '$(NupkgPath)'
       publishFeedCredentials: 'rbfx_nuget_org'
       nuGetFeedType: 'external'
       versioningScheme: 'byEnvVar'
