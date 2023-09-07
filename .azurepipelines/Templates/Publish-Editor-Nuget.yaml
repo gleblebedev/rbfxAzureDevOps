@@ -13,7 +13,7 @@ jobs:
   steps:
   - template: Install-DotNet.yaml
   
-  - script: dotnet tool run ezpipeline git-height-version -i '$(Build.SourcesDirectory)/.azurepipelines/version.txt' -b 0.3.7.320 --variable VERSION
+  - script: dotnet tool run ezpipeline git-height-version -i $(Build.SourcesDirectory)/.azurepipelines/version.txt -b 0.3.7.320 --variable VERSION
     displayName: 'Generate version environment variable'
 
   - task: NuGetToolInstaller@1
@@ -23,14 +23,21 @@ jobs:
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'Windows_NT_EditorNuget'
+      path: $(Build.ArtifactStagingDirectory)/Windows_NT/
 
   - script: |
-      dotnet tool run ezpipeline resolve-path -i $(Build.ArtifactStagingDirectory)/**/*.$(VERSION).nupkg -v NupkgPath
+      dotnet tool run ezpipeline resolve-path -i $(Build.ArtifactStagingDirectory)/Windows_NT/**/*.nupkg -v NupkgPath
     displayName: 'Find nupkg'
 
   - template: Fetch-NugetArtifact.yaml
     parameters:
       artifact: 'Linux_EditorNuget'
+      path: $(Build.ArtifactStagingDirectory)/Linux/
+
+  - script: |
+      dotnet tool run ezpipeline unzip -i $(Build.ArtifactStagingDirectory)/Linux/**/*.nupkg -o $(Build.ArtifactStagingDirectory)/Linux/Unpacked
+      dotnet tool run ezpipeline append-zip -i $(Build.ArtifactStagingDirectory)/Linux/Unpacked -o $(NupkgPath)
+    displayName: 'Unpack and append Linux'
 
   - task: NuGetCommand@2
     displayName: 'Publish to local feed'

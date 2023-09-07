@@ -1,5 +1,6 @@
 parameters:
   artifact: ''
+  path: ''
 
 steps:
   - task: DownloadPipelineArtifact@2
@@ -7,4 +8,4 @@ steps:
     inputs:
       source: 'current'
       artifact: '${{ parameters.artifact }}'
-      path: '$(nugetFolder)'
+      path: '${{ parameters.path }}'
