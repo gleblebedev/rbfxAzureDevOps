@@ -84,8 +84,8 @@ steps:
   - script: |
       dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/EditorData/ -o $(NupkgPath) -s tools/net7.0/any/EditorData
       dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/CoreData/ -o $(NupkgPath) -s tools/net7.0/any/CoreData
-      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfxbuild/bin/${{ parameters.configuration }} -f libEditor\. -o $(NupkgPath) -s tools/net7.0/any/
-      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfxbuild/bin/${{ parameters.configuration }} -f Urho3D\. -o $(NupkgPath) -s tools/net7.0/any/
+      dotnet tool run ezpipeline append-zip -i $(NupkgPath)/../ -f libEditor\. -o $(NupkgPath) -s tools/net7.0/any/
+      dotnet tool run ezpipeline append-zip -i $(NupkgPath)/../ -f Urho3D\. -o $(NupkgPath) -s tools/net7.0/any/
     displayName: 'Append files to Editor nuget'
     workingDirectory: '$(Build.SourcesDirectory)/'
 
