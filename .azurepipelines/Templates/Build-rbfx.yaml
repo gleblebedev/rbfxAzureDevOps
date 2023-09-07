@@ -18,12 +18,12 @@ steps:
     Write-Host "##vso[task.setvariable variable=CI]ON";
   displayName: 'Set CI environment variable'
 
-- ${{ if eq(Agent.OS, 'Linux') }}:
+- ${{ if eq($(Agent.OS), 'Linux') }}:
   - script: dotnet workload install android
     condition: and(succeeded(), or(eq('${{ parameters.buildDotNet }}', true), eq('${{ parameters.buildEditor }}', true)))
     displayName: 'Install mobile workloads'
 
-- ${{ if ne(Agent.OS, 'Linux') }}:
+- ${{ if ne($(Agent.OS), 'Linux') }}:
   - script: dotnet workload install android ios
     condition: and(succeeded(), or(eq('${{ parameters.buildDotNet }}', true), eq('${{ parameters.buildEditor }}', true)))
     displayName: 'Install mobile workloads'
