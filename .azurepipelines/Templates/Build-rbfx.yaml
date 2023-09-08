@@ -75,7 +75,7 @@ steps:
   - script: strip ./libEditor.so
     displayName: 'Strip libEditor.so'
     workingDirectory: '$(buildFolder)/bin'
-    condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux')))
+    condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
     failOnStderr: true
 
   - script: dotnet build Editor.csproj -p:URHO3D_NETFX=netstandard2.0 -p:URHO3D_NETFX_RUNTIME=net7.0 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:GeneratePackageOnBuild=true
