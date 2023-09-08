@@ -72,8 +72,10 @@ steps:
       workingDirectory: '$(buildFolder)'
       cmakeArgs: --build . --config ${{ parameters.configuration }} --target libEditor --parallel 2
 
-  - script: strip ./libEditor.so
-    displayName: 'Strip libEditor.so'
+  - script: |
+      strip ./libEditor.so
+      strip ./libUrho3D.so
+    displayName: 'Strip .so'
     workingDirectory: '$(buildFolder)/bin'
     condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
     failOnStderr: true
