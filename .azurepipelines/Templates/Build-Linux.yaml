@@ -5,7 +5,7 @@ jobs:
   displayName: 'Build Linux'
   timeoutInMinutes: 90
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'ubuntu-20.04'
   variables:
     rbfxFolder: $(Build.SourcesDirectory)/rbfx
     buildFolder: $(Build.SourcesDirectory)/rbfxbuild
