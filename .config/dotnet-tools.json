@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "ezpipeline": {
-      "version": "0.0.28",
+      "version": "0.0.29",
       "commands": [
         "ezpipeline"
       ]
