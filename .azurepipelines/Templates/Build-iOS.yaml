@@ -3,11 +3,11 @@ parameters:
   configuration: 'Release'
 
 jobs:
-- template: Build-iOSLib.yaml
-  parameters:
-    sdk: 'iphonesimulator'
-    arch: arm64
-    name: 'Build_iphonesimulator'
+# - template: Build-iOSLib.yaml
+#   parameters:
+#     sdk: 'iphonesimulator'
+#     arch: arm64
+#     name: 'Build_iphonesimulator'
 
 - template: Build-iOSLib.yaml
   parameters:
@@ -17,7 +17,8 @@ jobs:
 
 - job: Merge_iOS
   displayName: 'Merge iOS Framework'
-  dependsOn: [ "Build_iphoneos", "Build_iphonesimulator" ]
+  # dependsOn: [ "Build_iphoneos", "Build_iphonesimulator" ]
+  dependsOn: [ "Build_iphoneos" ]
   pool:
     vmImage: 'macOS-latest'
   variables:
@@ -33,15 +34,15 @@ jobs:
       artifact: 'ios-nuget-iphoneos'
       path: '$(Build.ArtifactStagingDirectory)/iphoneos'
 
-  - task: DownloadPipelineArtifact@2
-    displayName: 'Download iphonesimulator'
-    inputs:
-      source: 'current'
-      artifact: 'ios-nuget-iphonesimulator'
-      path: '$(Build.ArtifactStagingDirectory)/iphonesimulator'
+  # - task: DownloadPipelineArtifact@2
+  #   displayName: 'Download iphonesimulator'
+  #   inputs:
+  #     source: 'current'
+  #     artifact: 'ios-nuget-iphonesimulator'
+  #     path: '$(Build.ArtifactStagingDirectory)/iphonesimulator'
 
-  - bash: lipo -create $(Build.ArtifactStagingDirectory)/iphoneos/native/ios/Urho3D.framework/Urho3D $(Build.ArtifactStagingDirectory)/iphonesimulator/native/ios/Urho3D.framework/Urho3D -output $(Build.ArtifactStagingDirectory)/iphoneos/native/ios/Urho3D.framework/Urho3D
-    displayName: 'Run lipo'
+  # - bash: lipo -create $(Build.ArtifactStagingDirectory)/iphoneos/native/ios/Urho3D.framework/Urho3D $(Build.ArtifactStagingDirectory)/iphonesimulator/native/ios/Urho3D.framework/Urho3D -output $(Build.ArtifactStagingDirectory)/iphoneos/native/ios/Urho3D.framework/Urho3D
+  #   displayName: 'Run lipo'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish binaries'
