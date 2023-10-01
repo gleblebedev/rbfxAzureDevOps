@@ -60,6 +60,9 @@ jobs:
   - bash: cmake --version
     displayName: 'CMake Version'
 
+  - bash: gradle --version
+    displayName: 'Gradle Version'
+
   - bash: gradle wrapper
     displayName: 'gradle wrapper'
     workingDirectory: $(Build.SourcesDirectory)/android/java
