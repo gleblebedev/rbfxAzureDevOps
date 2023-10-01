@@ -49,13 +49,12 @@ jobs:
     displayName: 'Install openjdk-11-jdk android-sdk'
 
   - pwsh: |
-      Get-ChildItem -Path /usr/lib/android-sdk/ -Filter d?.jar -Recurse -File -Name| ForEach-Object {
-          Write-Host $_
+      Get-ChildItem -Path "C:\path\to\search" -Recurse -Filter "d8.jar" | ForEach-Object {
+          $dx_path = $_.FullName.Replace("d8.jar", "dx.jar")
+          if (!(Test-Path $dx_path)) {
+              Copy-Item $_.FullName $dx_path
+          }
       }
-    displayName: 'Find all d?.jar'
-
-  - script: |
-      cp /usr/lib/android-sdk/build-tools/28.0.3/lib/d8.jar /usr/lib/android-sdk/build-tools/28.0.3/lib/dx.jar
     displayName: 'Workaround for java.lang.NumberFormatException: Not a number: 33x'
 
   - script: |
