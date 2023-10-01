@@ -5,25 +5,21 @@ jobs:
   parameters:
     abi: 'armeabi-v7a'
     name: 'Build_Android_GLES3_armeabi_v7a'
-    graphics: 'GLES3'
 
 - template: Build-AndroidLib.yaml
   parameters:
     abi: 'arm64-v8a'
     name: 'Build_Android_GLES3_arm64_v8a'
-    graphics: 'GLES3'
 
 - template: Build-AndroidLib.yaml
   parameters:
     abi: 'x86'
     name: 'Build_Android_GLES3_x86'
-    graphics: 'GLES3'
 
 - template: Build-AndroidLib.yaml
   parameters:
     abi: 'x86_64'
     name: 'Build_Android_GLES3_x86_64'
-    graphics: 'GLES3'
 
 # - job: Build_Android_JavaBindings
 #   displayName: 'Build Android Java Bindings'

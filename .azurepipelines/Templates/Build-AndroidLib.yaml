@@ -1,16 +1,13 @@
 parameters:
   abi: 'arm64-v8a'
-  graphics: 'GLES3'
   name: 'Build_Android'
 
 jobs:
+
 - job: '${{ parameters.name }}'
-  displayName: 'Build Android ${{ parameters.graphics }} ${{ parameters.abi }}'
+  displayName: 'Build Android GLES3 ${{ parameters.abi }}'
   pool:
     vmImage: 'ubuntu-latest'
-  container:
-    image: 'pipelines/android_dev'
-    endpoint: gloomproject-container-registry
   variables:
     rbfxFolder: $(Build.SourcesDirectory)/rbfx
     gradleFolder: $(Build.SourcesDirectory)/android/java
@@ -46,19 +43,19 @@ jobs:
   - bash: cmake --version
     displayName: 'CMake Version'
 
-  - bash: gradle wrapper
-    displayName: 'gradle wrapper for SDL activity'
+  - script: |
+      wget https://downloads.gradle-dn.com/distributions/gradle-6.5.1-bin.zip
+      unzip -d . gradle-6.5.1-bin.zip
+    workingDirectory: $(Build.SourcesDirectory)
+    displayName: Download Gradle 6.5.1
+
+  - bash: $(Build.SourcesDirectory)/gradle-6.5.1/bin/gradle wrapper
+    displayName: 'gradle wrapper'
     workingDirectory: $(Build.SourcesDirectory)/android/java
 
-  - task: Gradle@2
-    displayName: 'gradle build SDL activity'
-    inputs:
-      options: -P${{ parameters.abi }} -P${{ parameters.graphics }} --stacktrace --scan
-      workingDirectory: android/java
-      gradleWrapperFile: android/java/gradlew
-      gradleOptions: -Xmx3072m
-      publishJUnitResults: false
-      tasks: assembleRelease
+  - bash: $(Build.SourcesDirectory)/gradle-6.5.1/bin/gradle assembleRelease -Parm64-v8a -PGLES3 --stacktrace --scan -Xmx3072m
+    displayName: 'gradle assembleRelease'
+    workingDirectory: $(Build.SourcesDirectory)/android/java
 
   - template: Publish-CCacheLog.yaml
 
@@ -75,8 +72,8 @@ jobs:
     displayName: 'Find all *.jar'
 
   - pwsh: |
-      New-Item -ItemType File -Path $(nugetFolder)/native/android/${{ parameters.graphics }}/${{ parameters.abi }}/libUrho3D.so -Force
-      copy-item $(gradleFolder)/app/build/intermediates/stripped_native_libs/release/out/lib/${{ parameters.abi }}/libUrho3D.so $(nugetFolder)/native/android/${{ parameters.graphics }}/${{ parameters.abi }}/libUrho3D.so -Force
+      New-Item -ItemType File -Path $(nugetFolder)/native/android/GLES3/${{ parameters.abi }}/libUrho3D.so -Force
+      copy-item $(gradleFolder)/app/build/intermediates/stripped_native_libs/release/out/lib/${{ parameters.abi }}/libUrho3D.so $(nugetFolder)/native/android/GLES3/${{ parameters.abi }}/libUrho3D.so -Force
 
       New-Item -ItemType File -Path $(Build.ArtifactStagingDirectory)/jar/classes.jar -Force
       copy-item $(gradleFolder)/rbfxsdl/build/intermediates/runtime_library_classes_jar/release/classes.jar $(Build.ArtifactStagingDirectory)/jar/classes.jar -Force
@@ -86,10 +83,100 @@ jobs:
     displayName: 'Publish binaries'
     inputs:
       targetPath: '$(nugetFolder)'
-      artifactName: 'android-${{ parameters.graphics }}-${{ parameters.abi }}-nuget'
+      artifactName: 'android-GLES3-${{ parameters.abi }}-nuget'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish jar'
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/jar'
-      artifactName: 'android-${{ parameters.graphics }}-${{ parameters.abi }}-jar'
+      artifactName: 'android-GLES3-${{ parameters.abi }}-jar'
+
+# - job: '${{ parameters.name }}'
+#   displayName: 'Build Android GLES3 ${{ parameters.abi }}'
+#   pool:
+#     vmImage: 'ubuntu-latest'
+#   container:
+#     image: 'pipelines/android_dev'
+#     endpoint: gloomproject-container-registry
+#   variables:
+#     rbfxFolder: $(Build.SourcesDirectory)/rbfx
+#     gradleFolder: $(Build.SourcesDirectory)/android/java
+#     buildFolder: $(Build.SourcesDirectory)/android/java/app/.cxx
+#     nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+#     sdkFolder: $(Build.ArtifactStagingDirectory)/sdk
+
+#   steps:
+#   - checkout: self
+#     submodules: recursive
+#     displayName: 'Checkout project'
+
+#   - template: Fetch-CCache.yaml
+#     parameters:
+#       enableCache: true
+#       debugCache: true
+
+#   - task: UseDotNet@2
+#     displayName: 'Install .NET 7 SDK'
+#     inputs:
+#       packageType: 'sdk'
+#       version: '7.0.x'
+      
+#   - script: dotnet tool restore
+#     displayName: 'Restore dotnet tools'
+#     workingDirectory: $(Build.SourcesDirectory)
+
+#   - pwsh: |
+#       dotnet tool run ezpipeline -- unzip-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -o "$(sdkFolder)" -c sdk -n "linux.zip"
+#       Write-Host "##vso[task.setvariable variable=URHO3D_SDK]$(sdkFolder)"
+#     displayName: 'Setup SDK'
+
+#   - bash: cmake --version
+#     displayName: 'CMake Version'
+
+#   - bash: gradle wrapper
+#     displayName: 'gradle wrapper for SDL activity'
+#     workingDirectory: $(Build.SourcesDirectory)/android/java
+
+#   - task: Gradle@2
+#     displayName: 'gradle build SDL activity'
+#     inputs:
+#       options: -P${{ parameters.abi }} -PGLES3 --stacktrace --scan
+#       workingDirectory: android/java
+#       gradleWrapperFile: android/java/gradlew
+#       gradleOptions: -Xmx3072m
+#       publishJUnitResults: false
+#       tasks: assembleRelease
+
+#   - template: Publish-CCacheLog.yaml
+
+#   - pwsh: |
+#       Get-ChildItem -Path $(gradleFolder) -Filter *.so -Recurse -File -Name| ForEach-Object {
+#           Write-Host $_
+#       }
+#     displayName: 'Find all *.so'
+
+#   - pwsh: |
+#       Get-ChildItem -Path $(gradleFolder) -Filter *.jar -Recurse -File -Name| ForEach-Object {
+#           Write-Host $_
+#       }
+#     displayName: 'Find all *.jar'
+
+#   - pwsh: |
+#       New-Item -ItemType File -Path $(nugetFolder)/native/android/GLES3/${{ parameters.abi }}/libUrho3D.so -Force
+#       copy-item $(gradleFolder)/app/build/intermediates/stripped_native_libs/release/out/lib/${{ parameters.abi }}/libUrho3D.so $(nugetFolder)/native/android/GLES3/${{ parameters.abi }}/libUrho3D.so -Force
+
+#       New-Item -ItemType File -Path $(Build.ArtifactStagingDirectory)/jar/classes.jar -Force
+#       copy-item $(gradleFolder)/rbfxsdl/build/intermediates/runtime_library_classes_jar/release/classes.jar $(Build.ArtifactStagingDirectory)/jar/classes.jar -Force
+#     displayName: 'Copy *.so to output'
+
+#   - task: PublishPipelineArtifact@1
+#     displayName: 'Publish binaries'
+#     inputs:
+#       targetPath: '$(nugetFolder)'
+#       artifactName: 'android-GLES3-${{ parameters.abi }}-nuget'
+
+#   - task: PublishPipelineArtifact@1
+#     displayName: 'Publish jar'
+#     inputs:
+#       targetPath: '$(Build.ArtifactStagingDirectory)/jar'
+#       artifactName: 'android-GLES3-${{ parameters.abi }}-jar'
