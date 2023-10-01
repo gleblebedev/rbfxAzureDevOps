@@ -48,6 +48,16 @@ jobs:
       sudo chmod -R a+rw /usr/lib/android-sdk/
     displayName: 'Install openjdk-11-jdk android-sdk'
 
+  - pwsh: |
+      Get-ChildItem -Path /usr/lib/android-sdk/ -Filter d?.jar -Recurse -File -Name| ForEach-Object {
+          Write-Host $_
+      }
+    displayName: 'Find all d?.jar'
+
+  - script: |
+      cp /usr/lib/android-sdk/build-tools/28.0.3/lib/d8.jar /usr/lib/android-sdk/build-tools/28.0.3/lib/dx.jar
+    displayName: 'Workaround for java.lang.NumberFormatException: Not a number: 33x'
+
   - script: |
       dotnet tool run ezpipeline -- fetch-tool --name Gradle --path --version ${{ parameters.gradle }}
       dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output /usr/lib/android-sdk/ --path --version 7583922
