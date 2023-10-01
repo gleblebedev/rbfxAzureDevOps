@@ -31,7 +31,9 @@ jobs:
       packageType: 'sdk'
       version: '7.0.x'
       
-  - script: dotnet tool restore
+  - script: |
+      dotnet tool restore
+      sudo dotnet tool install ezpipeline --global
     displayName: 'Restore dotnet tools'
     workingDirectory: $(Build.SourcesDirectory)
 
