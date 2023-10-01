@@ -44,7 +44,7 @@ jobs:
     displayName: 'CMake Version'
 
   - script: |
-      wget https://downloads.gradle-dn.com/distributions/gradle-6.5.1-bin.zip
+      wget https://services.gradle.org/distributions/gradle-6.5.1-bin.zip
       unzip -d . gradle-6.5.1-bin.zip
     workingDirectory: $(Build.SourcesDirectory)
     displayName: Download Gradle 6.5.1
