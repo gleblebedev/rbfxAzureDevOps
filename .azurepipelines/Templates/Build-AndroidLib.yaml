@@ -49,9 +49,10 @@ jobs:
     displayName: 'Install openjdk-11-jdk android-sdk'
 
   - pwsh: |
-      Get-ChildItem -Path "C:\path\to\search" -Recurse -Filter "d8.jar" | ForEach-Object {
+      Get-ChildItem -Path  /usr/lib/android-sdk/ -Recurse -Filter "d8.jar" | ForEach-Object {
           $dx_path = $_.FullName.Replace("d8.jar", "dx.jar")
           if (!(Test-Path $dx_path)) {
+              Write-Host "$_.FullName
               Copy-Item $_.FullName $dx_path
           }
       }
