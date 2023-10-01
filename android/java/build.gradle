@@ -12,6 +12,14 @@ buildscript {
     }
 }
 
+// Opt-in for build scan in order to troubleshoot Gradle on TC
+if (hasProperty('buildScan')) {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
+}
+
 allprojects {
     repositories {
         google()
