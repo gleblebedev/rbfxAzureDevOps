@@ -33,7 +33,6 @@ jobs:
       
   - script: |
       dotnet tool restore
-      sudo dotnet tool install ezpipeline --global
     displayName: 'Restore dotnet tools'
     workingDirectory: $(Build.SourcesDirectory)
 
@@ -43,13 +42,14 @@ jobs:
     displayName: 'Setup SDK'
 
   - template: Install-LinuxLibs.yaml
-  - script: sudo apt-get install -y wget tar openjdk-11-jdk android-sdk unzip
+  - script: |
+      sudo apt-get install -y wget tar openjdk-11-jdk android-sdk unzip
+      sudo chmod -R a+rw /usr/lib/android-sdk/
     displayName: 'Install openjdk-11-jdk android-sdk'
 
   - script: |
       dotnet tool run ezpipeline -- fetch-tool --name Gradle --path --version 6.5.1
-      sudo dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output /usr/lib/android-sdk/ --path --version 7583922
-      sudo chmod -R a+rw /usr/lib/android-sdk/
+      dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output /usr/lib/android-sdk/ --path --version 7583922
       yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=/usr/lib/android-sdk/
       /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "patcher;v4"
     displayName: 'Setup Gradle and SDKManager'
