@@ -4,7 +4,7 @@ println "projectDir:${project.projectDir}"
 println "buildDir:${project.buildDir}"
 // Minimum required CMake version. This is same as in ../CMakeLists.txt.
 def cmakeVersion = '3.14.0.0+'
-def GRAPHICS_API = 'GLES2'
+def GRAPHICS_API = 'GLES3'
 if (project.hasProperty("GLES2")) {
     GRAPHICS_API = 'GLES2'
 } else if (project.hasProperty("GLES3")) {

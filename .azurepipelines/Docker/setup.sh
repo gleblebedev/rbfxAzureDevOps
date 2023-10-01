@@ -21,7 +21,7 @@ apt-get install \
     openjdk-11-jdk \
     android-sdk \
     p7zip-full \
-    dotnet-sdk-6.0 \
+    dotnet-sdk-7.0 \
     ca-certificates \
     curl \
     file \
