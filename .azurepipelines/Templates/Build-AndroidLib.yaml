@@ -40,10 +40,9 @@ jobs:
       Write-Host "##vso[task.setvariable variable=URHO3D_SDK]$(sdkFolder)"
     displayName: 'Setup SDK'
 
-  - script: |
-        apt-get update -y
-        apt-get install -y wget tar openjdk-11-jdk android-sdk unzip
-    displayName: 'Install dependencies'
+  - template: Install-LinuxLibs.yaml
+  - script: sudo apt-get install -y wget tar openjdk-11-jdk android-sdk unzip
+    displayName: 'Install openjdk-11-jdk android-sdk'
 
   - script: |
       dotnet tool run ezpipeline -- fetch-tool --name Gradle --path --version 6.5.1
@@ -51,7 +50,7 @@ jobs:
 
   - pwsh: |
       dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output /usr/lib/android-sdk/ --path --version 7583922
-      chmod -R a+rw /usr/lib/android-sdk/
+      sudo chmod -R a+rw /usr/lib/android-sdk/
       yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=/usr/lib/android-sdk/
       /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "patcher;v4"
       Write-Host "##vso[task.setvariable variable=ANDROID_SDK_ROOT]/usr/lib/android-sdk/"
