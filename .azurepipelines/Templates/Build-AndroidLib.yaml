@@ -1,6 +1,7 @@
 parameters:
   abi: 'arm64-v8a'
   name: 'Build_Android'
+  gradle: '6.5.1'
 
 jobs:
 
@@ -48,7 +49,7 @@ jobs:
     displayName: 'Install openjdk-11-jdk android-sdk'
 
   - script: |
-      dotnet tool run ezpipeline -- fetch-tool --name Gradle --path --version 6.5.1
+      dotnet tool run ezpipeline -- fetch-tool --name Gradle --path --version ${{ parameters.gradle }}
       dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output /usr/lib/android-sdk/ --path --version 7583922
       yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=/usr/lib/android-sdk/
       /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "patcher;v4"
@@ -60,14 +61,14 @@ jobs:
   - bash: cmake --version
     displayName: 'CMake Version'
 
-  - bash: gradle --version
+  - bash: $(Build.SourcesDirectory)/gradle-${{ parameters.gradle }}/bin/gradle --version
     displayName: 'Gradle Version'
 
-  - bash: gradle wrapper
+  - bash: $(Build.SourcesDirectory)/gradle-${{ parameters.gradle }}/bin/gradle wrapper
     displayName: 'gradle wrapper'
     workingDirectory: $(Build.SourcesDirectory)/android/java
 
-  - bash: gradle assembleRelease -Parm64-v8a -PGLES3 --stacktrace --scan
+  - bash: $(Build.SourcesDirectory)/gradle-${{ parameters.gradle }}/bin/gradle assembleRelease -Parm64-v8a -PGLES3 --stacktrace --scan
     displayName: 'gradle assembleRelease'
     workingDirectory: $(Build.SourcesDirectory)/android/java
 
