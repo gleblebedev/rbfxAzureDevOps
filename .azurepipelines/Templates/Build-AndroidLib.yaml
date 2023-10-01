@@ -53,7 +53,7 @@ jobs:
     displayName: 'gradle wrapper'
     workingDirectory: $(Build.SourcesDirectory)/android/java
 
-  - bash: $(Build.SourcesDirectory)/gradle-6.5.1/bin/gradle assembleRelease -Parm64-v8a -PGLES3 --stacktrace --scan -Xmx3072m
+  - bash: $(Build.SourcesDirectory)/gradle-6.5.1/bin/gradle assembleRelease -Parm64-v8a -PGLES3 --stacktrace --scan
     displayName: 'gradle assembleRelease'
     workingDirectory: $(Build.SourcesDirectory)/android/java
 
