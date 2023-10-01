@@ -44,7 +44,7 @@ jobs:
 
   - template: Install-LinuxLibs.yaml
   - script: |
-      sudo apt-get install -y wget tar openjdk-11-jdk android-sdk unzip
+      sudo apt-get install -y wget tar openjdk-11-jdk android-sdk unzip tree
       sudo chmod -R a+rw /usr/lib/android-sdk/
     displayName: 'Install openjdk-11-jdk android-sdk'
 
@@ -63,6 +63,9 @@ jobs:
 
   - bash: $(Build.SourcesDirectory)/gradle-${{ parameters.gradle }}/bin/gradle --version
     displayName: 'Gradle Version'
+
+  - script: tree
+    workingDirectory: /usr/lib/android-sdk/build-tools/
 
   - pwsh: |
       Get-ChildItem -Path  /usr/lib/android-sdk/ -Recurse -Filter "d8.jar" | ForEach-Object {
