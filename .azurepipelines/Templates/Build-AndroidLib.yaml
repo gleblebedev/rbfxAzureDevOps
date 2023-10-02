@@ -66,20 +66,6 @@ jobs:
   - bash: $(Build.SourcesDirectory)/gradle-${{ parameters.gradle }}/bin/gradle --version
     displayName: 'Gradle Version'
 
-  - script: tree
-    workingDirectory: /usr/lib/android-sdk/build-tools/
-
-  - pwsh: |
-      Get-ChildItem -Path  /usr/lib/android-sdk/ -Recurse -Filter "d8.jar" | ForEach-Object {
-          $dx_path = $_.FullName.Replace("d8.jar", "dx.jar")
-          Write-Host "Found $_"
-          if (!(Test-Path $dx_path)) {
-              Write-Host "Copy made of $_"
-              Copy-Item $_.FullName $dx_path
-          }
-      }
-    displayName: 'Workaround for java.lang.NumberFormatException: Not a number: 33x'
-
   - bash: $(Build.SourcesDirectory)/gradle-${{ parameters.gradle }}/bin/gradle wrapper
     displayName: 'gradle wrapper'
     workingDirectory: $(Build.SourcesDirectory)/android/java
