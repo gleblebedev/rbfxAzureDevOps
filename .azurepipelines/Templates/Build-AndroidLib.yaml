@@ -2,6 +2,7 @@ parameters:
   abi: 'arm64-v8a'
   name: 'Build_Android'
   gradle: '6.5.1'
+  cmake: '3.19.7'
 
 jobs:
 
@@ -50,6 +51,7 @@ jobs:
 
   - script: |
       dotnet tool run ezpipeline -- fetch-tool --name Gradle --path --version ${{ parameters.gradle }}
+      dotnet tool run ezpipeline -- fetch-tool --name CMake --path --version ${{ parameters.cmake }}
       dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output /usr/lib/android-sdk/ --path --version 7583922
       yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=/usr/lib/android-sdk/
       /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "patcher;v4"
