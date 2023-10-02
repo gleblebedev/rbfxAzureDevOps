@@ -51,11 +51,17 @@ jobs:
 
   - script: |
       dotnet tool run ezpipeline -- fetch-tool --name Gradle --path --version ${{ parameters.gradle }}
+    displayName: 'Setup Gradle'
+
+  - script: |
       dotnet tool run ezpipeline -- fetch-tool --name CMake --path --version ${{ parameters.cmake }}
+    displayName: 'Setup CMake'
+
+  - script: |
       dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output /usr/lib/android-sdk/ --path --version 7583922
       yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=/usr/lib/android-sdk/
       /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "patcher;v4"
-    displayName: 'Setup Gradle and SDKManager'
+    displayName: 'Setup SDKManager'
 
   - pwsh: Write-Host "##vso[task.setvariable variable=ANDROID_SDK_ROOT]/usr/lib/android-sdk/"
     displayName: 'Set ANDROID_SDK_ROOT'
