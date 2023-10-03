@@ -80,8 +80,8 @@ jobs:
 
   - bash: |
       dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output $ANDROID_HOME --path --version 7583922
-      yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=$ANDROID_HOME
-      /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_HOME --install "patcher;v4"
+      yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses --sdk_root=$ANDROID_HOME
+      $ANDROID_HOME/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_HOME --install "patcher;v4"
     displayName: 'Setup SDKManager'
 
   - bash: echo "##vso[task.setvariable variable=ANDROID_SDK_ROOT]$ANDROID_HOME"
