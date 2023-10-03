@@ -52,16 +52,16 @@ jobs:
       javac -version
     displayName: 'Switch to Java 8'
 
-  - bash: |
-      git clone https://github.com/jenv/jenv.git ~/.jenv
-      echo "##vso[task.setvariable variable=PATH]$HOME/.jenv/bin:$PATH"
-    displayName: 'Install jenv'
+  # - bash: |
+  #     git clone https://github.com/jenv/jenv.git ~/.jenv
+  #     echo "##vso[task.setvariable variable=PATH]$HOME/.jenv/bin:$PATH"
+  #   displayName: 'Install jenv'
 
-  - bash: |
-      jenv init -
-      jenv versions
-      jenv global temurin-8-jdk-amd64
-    displayName: 'jenv use java 1.8'
+  # - bash: |
+  #     jenv init -
+  #     jenv versions
+  #     jenv global temurin-8-jdk-amd64
+  #   displayName: 'jenv use java 1.8'
 
   - script: |
       sudo apt-get install -y wget tar android-sdk unzip tree
