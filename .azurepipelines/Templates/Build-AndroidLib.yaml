@@ -49,6 +49,9 @@ jobs:
       sudo apt-get install -y wget tar openjdk-8-jdk android-sdk unzip tree
       sudo chmod -R a+rw /usr/lib/android-sdk/
       javac -version
+      sudo update-java-alternatives --list
+      sudo update-java-alternatives --set /usr/lib/jvm/java-8-openjdk-amd64
+      javac -version
     displayName: 'Install openjdk and android-sdk'
 
   - script: |
