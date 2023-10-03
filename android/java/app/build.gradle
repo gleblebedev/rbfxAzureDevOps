@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 println "projectDir:${project.projectDir}"
 println "buildDir:${project.buildDir}"
 // Minimum required CMake version. This is same as in ../CMakeLists.txt.
-def cmakeVersion = '3.22.0.0+'
+def cmakeVersion = '3.18.0.0+'
 
 android {
     compileSdkVersion 33
