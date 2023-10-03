@@ -1,7 +1,7 @@
 parameters:
   abi: 'arm64-v8a'
   name: 'Build_Android'
-  gradle: '6.9.3'
+  gradle: '6.5.1'
   cmake: '3.19.7'
 
 jobs:
@@ -9,7 +9,7 @@ jobs:
 - job: '${{ parameters.name }}'
   displayName: 'Build Android GLES3 ${{ parameters.abi }}'
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'ubuntu-20.04'
   variables:
     rbfxFolder: $(Build.SourcesDirectory)/rbfx
     gradleFolder: $(Build.SourcesDirectory)/android/java
