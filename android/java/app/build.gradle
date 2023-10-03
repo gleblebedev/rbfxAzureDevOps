@@ -3,11 +3,10 @@ apply plugin: 'com.android.application'
 println "projectDir:${project.projectDir}"
 println "buildDir:${project.buildDir}"
 // Minimum required CMake version. This is same as in ../CMakeLists.txt.
-def cmakeVersion = '3.19.0.0+'
+def cmakeVersion = '3.22.0.0+'
 
 android {
-    compileSdkVersion 28
-    compileSdk 28
+    compileSdkVersion 33
     // buildToolsVersion "28.0.3"
 
     defaultConfig {
@@ -15,7 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
         minSdkVersion 17
-        targetSdkVersion 28
+        targetSdkVersion 33
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
@@ -38,7 +37,6 @@ android {
                           '-DURHO3D_PLAYER=OFF', '-DURHO3D_PROFILING=OFF', '-DURHO3D_GRAPHICS_API=GLES3',
                           '-DURHO3D_COMPUTE=OFF', '-DURHO3D_NETFX_RUNTIME_VERSION=7.0',
                           '-DURHO3D_GLOW=ON', '-DURHO3D_RMLUI=ON', '-DURHO3D_NETFX=netstandard2.0', '-DURHO3D_FEATURES=CSHARP;SYSTEMUI'
-                version "3.19.x"
             }
         }
     }
