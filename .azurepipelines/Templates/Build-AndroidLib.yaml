@@ -73,6 +73,7 @@ jobs:
     displayName: 'Setup Gradle'
 
   - script: |
+      sudo apt-get uninstall cmake
       dotnet tool run ezpipeline -- fetch-tool --name CMake --path --version ${{ parameters.cmake }}
     displayName: 'Setup CMake'
 
