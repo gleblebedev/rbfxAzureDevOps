@@ -47,9 +47,9 @@ jobs:
 
   - script: |
       sudo apt-get install -y wget tar openjdk-8-jdk android-sdk unzip tree
-      sudo update-alternatives --config java
       sudo chmod -R a+rw /usr/lib/android-sdk/
-    displayName: 'Install openjdk-11-jdk android-sdk'
+      javac -version
+    displayName: 'Install openjdk and android-sdk'
 
   - script: |
       dotnet tool run ezpipeline -- fetch-tool --name Gradle --path --version ${{ parameters.gradle }}
