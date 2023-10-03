@@ -50,7 +50,7 @@ jobs:
       sudo chmod -R a+rw /usr/lib/android-sdk/
       javac -version
       sudo update-java-alternatives --list
-      sudo update-java-alternatives --set /usr/lib/jvm/java-8-openjdk-amd64
+      sudo update-java-alternatives --set /usr/lib/jvm/java-1.8.0-openjdk-amd64
       javac -version
     displayName: 'Install openjdk and android-sdk'
 
