@@ -55,6 +55,7 @@ jobs:
       sudo update-java-alternatives --list
       sudo update-java-alternatives --set /usr/lib/jvm/temurin-8-jdk-amd64
       javac -version
+      jenv use java 1.8
     displayName: 'Switch to Java 8'
 
   - script: |
@@ -69,6 +70,7 @@ jobs:
       dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output /usr/lib/android-sdk/ --path --version 7583922
       yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=/usr/lib/android-sdk/
       /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "patcher;v4"
+      /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "ndk;21.1.6352462"
     displayName: 'Setup SDKManager'
 
   - pwsh: Write-Host "##vso[task.setvariable variable=ANDROID_SDK_ROOT]/usr/lib/android-sdk/"
