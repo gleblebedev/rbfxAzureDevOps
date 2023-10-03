@@ -87,7 +87,12 @@ jobs:
   - pwsh: Write-Host "##vso[task.setvariable variable=ANDROID_SDK_ROOT]/usr/lib/android-sdk/"
     displayName: 'Set ANDROID_SDK_ROOT'
 
-  - bash: cmake --version
+  - bash: |
+      cmake --version
+      cmakepath = $(which cmake)
+      sudo rm /usr/bin/cmake
+      echo "Linking /usr/bin/cmake to $cmakepath"
+      sudo ln -s $cmakepath /usr/bin/cmake
     displayName: 'CMake Version'
 
   - bash: gradle --version
