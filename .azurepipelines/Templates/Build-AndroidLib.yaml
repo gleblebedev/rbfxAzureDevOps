@@ -63,9 +63,10 @@ jobs:
   #     jenv global temurin-8-jdk-amd64
   #   displayName: 'jenv use java 1.8'
 
-  - script: |
+  - bash: |
       sudo apt-get install -y wget tar android-sdk unzip tree
-      sudo chmod -R a+rw /usr/lib/android-sdk/
+      echo $ANDROID_HOME
+      sudo chmod -R a+rw $ANDROID_HOME
     displayName: 'Install android-sdk'
 
   - script: |
@@ -77,14 +78,14 @@ jobs:
       dotnet tool run ezpipeline -- fetch-tool --name CMake --path --version ${{ parameters.cmake }}
     displayName: 'Setup CMake'
 
-  - script: |
-      dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output /usr/lib/android-sdk/ --path --version 7583922
-      yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=/usr/lib/android-sdk/
-      /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=/usr/lib/android-sdk/ --install "patcher;v4"
+  - bash: |
+      dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output $ANDROID_HOME --path --version 7583922
+      yes | /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=$ANDROID_HOME
+      /usr/lib/android-sdk/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_HOME --install "patcher;v4"
     displayName: 'Setup SDKManager'
 
-  - pwsh: Write-Host "##vso[task.setvariable variable=ANDROID_SDK_ROOT]/usr/lib/android-sdk/"
-    displayName: 'Set ANDROID_SDK_ROOT'
+  - bash: echo "##vso[task.setvariable variable=ANDROID_SDK_ROOT]$ANDROID_HOME"
+    displayName: 'Set ANDROID_SDK_ROOT to ANDROID_HOME'
 
   - bash: |
       cmake --version
@@ -101,7 +102,7 @@ jobs:
     displayName: 'gradle wrapper'
     workingDirectory: $(Build.SourcesDirectory)/android/java
 
-  - bash: gradle assembleRelease -P${{ parameters.abi }} -PGLES3 --stacktrace --scan
+  - bash: gradle assembleRelease -P${{ parameters.abi }} -PGLES3 --stacktrace
     displayName: 'gradle assembleRelease'
     workingDirectory: $(Build.SourcesDirectory)/android/java
 
