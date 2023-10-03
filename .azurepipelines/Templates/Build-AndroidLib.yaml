@@ -9,7 +9,7 @@ jobs:
 - job: '${{ parameters.name }}'
   displayName: 'Build Android GLES3 ${{ parameters.abi }}'
   pool:
-    vmImage: 'ubuntu-20.04'
+    vmImage: 'ubuntu-22.04'
   variables:
     rbfxFolder: $(Build.SourcesDirectory)/rbfx
     gradleFolder: $(Build.SourcesDirectory)/android/java
@@ -22,11 +22,6 @@ jobs:
     submodules: recursive
     displayName: 'Checkout project'
 
-  - template: Fetch-CCache.yaml
-    parameters:
-      enableCache: true
-      debugCache: true
-
   - task: UseDotNet@2
     displayName: 'Install .NET 7 SDK'
     inputs:
@@ -38,12 +33,18 @@ jobs:
     displayName: 'Restore dotnet tools'
     workingDirectory: $(Build.SourcesDirectory)
 
+  - template: Install-LinuxLibs.yaml
+
+  - template: Fetch-CCache.yaml
+    parameters:
+      enableCache: true
+      debugCache: true
+
   - pwsh: |
       dotnet tool run ezpipeline -- unzip-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -o "$(sdkFolder)" -c sdk -n "linux.zip"
       Write-Host "##vso[task.setvariable variable=URHO3D_SDK]$(sdkFolder)"
     displayName: 'Setup SDK'
 
-  - template: Install-LinuxLibs.yaml
   - script: |
       sudo apt-get install -y wget tar openjdk-11-jdk android-sdk unzip tree
       sudo chmod -R a+rw /usr/lib/android-sdk/
@@ -76,7 +77,7 @@ jobs:
     displayName: 'gradle wrapper'
     workingDirectory: $(Build.SourcesDirectory)/android/java
 
-  - bash: $(Build.SourcesDirectory)/gradle-${{ parameters.gradle }}/bin/gradle assembleRelease -Parm64-v8a -PGLES3 --stacktrace --scan
+  - bash: $(Build.SourcesDirectory)/gradle-${{ parameters.gradle }}/bin/gradle assembleRelease -Parm64-v8a -PGLES3 --stacktrace --scan --debug
     displayName: 'gradle assembleRelease'
     workingDirectory: $(Build.SourcesDirectory)/android/java
 
