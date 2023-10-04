@@ -6,6 +6,7 @@ parameters:
   configuration: 'RelWithDebInfo'
   enableCache: true
   debugCache: false
+  editorNetVersion: 'net6.0'
 
 steps:
 - script: dotnet tool run ezpipeline git-height-version -i $(Build.SourcesDirectory)/.azurepipelines/version.txt -b 0.3.7.320 --variable VERSION
@@ -80,7 +81,7 @@ steps:
     condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
     failOnStderr: true
 
-  - script: dotnet build Editor.csproj -p:URHO3D_NETFX=netstandard2.0 -p:URHO3D_NETFX_RUNTIME=net7.0 -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:GeneratePackageOnBuild=true
+  - script: dotnet build Editor.csproj -p:URHO3D_NETFX=netstandard2.0 -p:URHO3D_NETFX_RUNTIME=${{ parameters.editorNetVersion }} -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:GeneratePackageOnBuild=true
     displayName: 'Build unofficial.Urho3DNet.Editor'
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost'
 
@@ -91,10 +92,10 @@ steps:
     workingDirectory: '$(Build.SourcesDirectory)/'
 
   - script: |
-      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/EditorData/ -o $(NupkgPath) -s tools/net7.0/any/EditorData
-      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/CoreData/ -o $(NupkgPath) -s tools/net7.0/any/CoreData
-      dotnet tool run ezpipeline append-zip -i $(LibEditorPath) -f libEditor\. -o $(NupkgPath) -s tools/net7.0/any/
-      dotnet tool run ezpipeline append-zip -i $(LibEditorPath) -f Urho3D\. -o $(NupkgPath) -s tools/net7.0/any/
+      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/EditorData/ -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/EditorData
+      dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/CoreData/ -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/CoreData
+      dotnet tool run ezpipeline append-zip -i $(LibEditorPath) -f libEditor\. -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
+      dotnet tool run ezpipeline append-zip -i $(LibEditorPath) -f Urho3D\. -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
     displayName: 'Append files to Editor nuget'
     workingDirectory: '$(Build.SourcesDirectory)/'
 
