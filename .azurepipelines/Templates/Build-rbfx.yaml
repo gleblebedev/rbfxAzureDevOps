@@ -99,6 +99,14 @@ steps:
     displayName: 'Append files to Editor nuget'
     workingDirectory: '$(Build.SourcesDirectory)/'
 
+  - script: |
+        dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f MSVCP140.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
+        dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f VCRUNTIME140.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
+        dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f VCRUNTIME140_1.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
+        dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f D3DCOMPILER_47.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
+    condition: and( succeeded(), eq(variables['Agent.OS'], 'Linux') )
+    displayName: 'Copy runtime files'
+
   - task: PublishPipelineArtifact@1
     displayName: 'Publish Editor nuget to $(Agent.OS)/EditorNuget'
     inputs:
