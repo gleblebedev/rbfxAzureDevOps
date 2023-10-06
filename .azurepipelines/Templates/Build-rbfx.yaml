@@ -104,7 +104,7 @@ steps:
         dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f VCRUNTIME140.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
         dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f VCRUNTIME140_1.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
         dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f D3DCOMPILER_47.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
-    condition: and( succeeded(), eq(variables['Agent.OS'], 'Linux') )
+    condition: and( succeeded(), eq(variables['Agent.OS'], 'Windows_NT') )
     displayName: 'Copy runtime files'
 
   - task: PublishPipelineArtifact@1
