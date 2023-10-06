@@ -100,10 +100,12 @@ steps:
     workingDirectory: '$(Build.SourcesDirectory)/'
 
   - script: |
-        dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f MSVCP140.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
-        dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f VCRUNTIME140.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
-        dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f VCRUNTIME140_1.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
-        dotnet tool run ezpipeline append-zip -i "C:/Windows/System32" -f D3DCOMPILER_47.dll -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
+        mkdir runtime_libs
+        copy "C:\Windows\System32\MSVCP140.dll" runtime_libs
+        copy "C:\Windows\System32\VCRUNTIME140.dll" runtime_libs
+        copy "C:\Windows\System32\VCRUNTIME140_1.dll" runtime_libs
+        copy "C:\Windows\System32\D3DCOMPILER_47.dll" runtime_libs
+        dotnet tool run ezpipeline append-zip -i "runtime_libs" -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
     condition: and( succeeded(), eq(variables['Agent.OS'], 'Windows_NT') )
     displayName: 'Copy runtime files'
 
