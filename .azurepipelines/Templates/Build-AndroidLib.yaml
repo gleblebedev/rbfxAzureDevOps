@@ -3,7 +3,7 @@ parameters:
   name: 'Build_Android'
   gradle: '7.6.2'
   cmake: '3.19.8'
-  commandlinetools: '10406996'
+  commandlinetools: '9123335'
   # commandlinetools: '7583922'
 
 jobs:
