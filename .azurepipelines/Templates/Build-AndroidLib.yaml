@@ -3,6 +3,8 @@ parameters:
   name: 'Build_Android'
   gradle: '7.6.2'
   cmake: '3.19.8'
+  commandlinetools: '10406996'
+  # commandlinetools: '7583922'
 
 jobs:
 
@@ -79,7 +81,7 @@ jobs:
     displayName: 'Setup CMake'
 
   - bash: |
-      dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output $ANDROID_HOME --path --version 7583922
+      dotnet tool run ezpipeline -- fetch-tool --name AndroidSDKManager --output $ANDROID_HOME --path --version ${{ parameters.commandlinetools }}
       yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses --sdk_root=$ANDROID_HOME
       $ANDROID_HOME/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_HOME --install "patcher;v4"
     displayName: 'Setup SDKManager'
