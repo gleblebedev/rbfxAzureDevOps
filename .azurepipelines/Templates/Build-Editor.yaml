@@ -36,5 +36,5 @@ steps:
     workingDirectory: '$(buildFolder)'
     cmakeArgs: --build . --config RelWithDebInfo -j $(NUM_CPUS)
 
-- script: dotnet pack $(rbfxFolder)/Source/Editor/ManagedHost/Editor.csproj -c RelWithDebInfo -p:PackageVersion=$(VERSION) -o $(nugetFolder)
+- script: dotnet pack $(rbfxFolder)/Source/Editor/ManagedHost/EditorManaged.csproj -c RelWithDebInfo -p:PackageVersion=$(VERSION) -o $(nugetFolder)
   displayName: 'Pack nuget'
