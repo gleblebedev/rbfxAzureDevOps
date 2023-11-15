@@ -71,10 +71,10 @@ steps:
     displayName: 'Build libEditor'
     inputs:
       workingDirectory: '$(buildFolder)'
-      cmakeArgs: --build . --config ${{ parameters.configuration }} --target libEditor --parallel 2
+      cmakeArgs: --build . --config ${{ parameters.configuration }} --target libEditorWrapper --parallel 2
 
   - script: |
-      strip ./libEditor.so
+      strip ./libEditorWrapper.so
       strip ./libUrho3D.so
     displayName: 'Strip .so'
     workingDirectory: '$(buildFolder)/bin'
@@ -87,14 +87,14 @@ steps:
 
   - script: |
       dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/**/unofficial.Urho3DNet.Editor.*.nupkg -v NupkgPath
-      dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/rbfxbuild/bin/**/libEditor* -t 1 -d -v LibEditorPath
+      dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/rbfxbuild/bin/**/libEditorWrapper* -t 1 -d -v LibEditorPath
     displayName: 'Find nuget'
     workingDirectory: '$(Build.SourcesDirectory)/'
 
   - script: |
       dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/EditorData/ -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/EditorData
       dotnet tool run ezpipeline append-zip -i $(Build.SourcesDirectory)/rbfx/bin/CoreData/ -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/CoreData
-      dotnet tool run ezpipeline append-zip -i $(LibEditorPath) -f libEditor\. -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
+      dotnet tool run ezpipeline append-zip -i $(LibEditorPath) -f libEditorWrapper\. -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
       dotnet tool run ezpipeline append-zip -i $(LibEditorPath) -f Urho3D\. -o $(NupkgPath) -s tools/${{ parameters.editorNetVersion }}/any/
     displayName: 'Append files to Editor nuget'
     workingDirectory: '$(Build.SourcesDirectory)/'
