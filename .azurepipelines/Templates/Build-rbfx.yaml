@@ -83,10 +83,10 @@ steps:
 
   - script: dotnet build EditorManaged.csproj -p:URHO3D_NETFX=netstandard2.0 -p:URHO3D_NETFX_RUNTIME=${{ parameters.editorNetVersion }} -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:GeneratePackageOnBuild=true
     displayName: 'Build unofficial.Urho3DNet.Editor'
-    workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost'
+    workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Editor/EditorManaged'
 
   - script: |
-      dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/rbfx/Source/Editor/ManagedHost/**/unofficial.Urho3DNet.Editor.*.nupkg -v NupkgPath
+      dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/rbfx/Source/Editor/EditorManaged/**/unofficial.Urho3DNet.Editor.*.nupkg -v NupkgPath
       dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/rbfxbuild/bin/**/libEditorWrapper* -t 1 -d -v LibEditorPath
     displayName: 'Find nuget'
     workingDirectory: '$(Build.SourcesDirectory)/'
