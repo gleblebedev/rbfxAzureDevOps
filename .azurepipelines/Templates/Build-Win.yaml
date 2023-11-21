@@ -20,6 +20,12 @@ jobs:
     submodules: true
     displayName: 'Checkout project'
 
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '11'
+      jdkArchitectureOption: x64
+      jdkSourceOption: PreInstalled
+
   - template: Add-ToolsToPath.yaml
 
   - script: dotnet ezpipeline winsdkenv --build-platform x64

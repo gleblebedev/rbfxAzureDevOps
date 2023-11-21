@@ -23,6 +23,12 @@ jobs:
 
   - template: Add-ToolsToPath.yaml
 
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '11'
+      jdkArchitectureOption: x64
+      jdkSourceOption: PreInstalled
+
   - script: dotnet tool run ezpipeline winsdkenv --build-platform x64
     displayName: 'Setup Windows SDK Environment'
 
