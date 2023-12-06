@@ -6,7 +6,7 @@ parameters:
   configuration: 'RelWithDebInfo'
   enableCache: true
   debugCache: false
-  editorNetVersion: 'net6.0'
+  editorNetVersion: 'net7.0'
 
 steps:
 - script: dotnet tool run ezpipeline git-height-version -i $(Build.SourcesDirectory)/.azurepipelines/version.txt -b 0.3.7.320 --variable VERSION
