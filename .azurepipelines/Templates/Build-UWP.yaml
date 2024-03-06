@@ -73,11 +73,6 @@ jobs:
     displayName: 'Copy binary to output'
 
   - script: |
-      dotnet tool run ezpipeline resolve-path -i $(buildFolder)/**/Urho3DNet.dll
-    displayName: 'Find Urho3DNet.dll'
-    workingDirectory: '$(Build.SourcesDirectory)/'
-
-  - script: |
       dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/**/netstandard2.0/Urho3DNet.dll -t 1 -v URHO3DNET_PATH
     displayName: 'Find netstandard2.0/Urho3DNet.dll'
     workingDirectory: '$(Build.SourcesDirectory)/'
