@@ -74,7 +74,7 @@ jobs:
 
   - pwsh: |
       New-Item -ItemType Directory -Path $(nugetFolder)/lib/uap10.0 -Force
-      copy-item $(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.dll $(nugetFolder)/lib/uap10.0/Urho3DNet.dll -Force
+      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.dll $(nugetFolder)/lib/uap10.0/Urho3DNet.dll -Force
     displayName: 'Copy .net binary to output'
     condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
 

@@ -98,7 +98,7 @@ jobs:
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb -DestinationPath $(nugetFolder)/native/win/x64/
 
       # .Net Standard 2.0 assembly
-      CopyFiles -SourcePath $(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netstandard2.0
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netstandard2.0
 
       # .Net 7.0 assemblies
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net7.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net7.0
