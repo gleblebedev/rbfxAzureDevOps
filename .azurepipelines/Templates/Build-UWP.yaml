@@ -72,9 +72,19 @@ jobs:
       copy-item $(buildFolder)/bin/${{ parameters.configuration }}/Urho3D.pdb $(nugetFolder)/native/uap/${{ parameters.platform }}/Urho3D.pdb -Force
     displayName: 'Copy binary to output'
 
+  - script: |
+      dotnet tool run ezpipeline resolve-path -i $(buildFolder)/**/Urho3DNet.dll
+    displayName: 'Find Urho3DNet.dll'
+    workingDirectory: '$(Build.SourcesDirectory)/'
+
+  - script: |
+      dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/**/netstandard2.0/Urho3DNet.dll -t 1 -v URHO3DNET_PATH
+    displayName: 'Find netstandard2.0/Urho3DNet.dll'
+    workingDirectory: '$(Build.SourcesDirectory)/'
+
   - pwsh: |
       New-Item -ItemType Directory -Path $(nugetFolder)/lib/uap10.0 -Force
-      copy-item $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.dll $(nugetFolder)/lib/uap10.0/Urho3DNet.dll -Force
+      copy-item $(URHO3DNET_PATH) $(nugetFolder)/lib/uap10.0/Urho3DNet.dll -Force
     displayName: 'Copy .net binary to output'
     condition: and(succeeded(), eq('${{ parameters.buildDotNet }}', true))
 
