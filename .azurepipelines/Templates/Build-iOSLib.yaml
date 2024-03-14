@@ -34,9 +34,9 @@ jobs:
   - bash: |
       brew info cmake
       brew uninstall cmake
-      curl -OL "https://github.com/Kitware/CMake/releases/download/v3.19.1/cmake-3.19.1-Darwin-x86_64.tar.gz"
-      tar xf "cmake-3.19.1-Darwin-x86_64.tar.gz"
-      mv "cmake-3.19.1-Darwin-x86_64" cmake
+      curl -OL "https://github.com/Kitware/CMake/releases/download/v3.21.7/cmake-3.21.7-Darwin-x86_64.tar.gz"
+      tar xf "cmake-3.21.7-Darwin-x86_64.tar.gz"
+      mv "cmake-3.21.7-Darwin-x86_64" cmake
       ln -s $(Build.ArtifactStagingDirectory)/cmake/CMake.app/Contents/bin/cmake /usr/local/bin/
       cmake --version
     displayName: 'Downgrade cmake'
