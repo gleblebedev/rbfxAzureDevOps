@@ -33,7 +33,7 @@ android {
                 }
                 arguments '-DCMAKE_CXX_COMPILER_LAUNCHER=ccache', '-DCMAKE_C_COMPILER_LAUNCHER=ccache',
                           '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21', '-DANDROID=1',
-                          '-DANDROID_ARM_MODE=arm', '-DBUILD_SHARED_LIBS=ON', '-DURHO3D_SAMPLES=OFF',
+                          '-DANDROID_ARM_MODE=armeabi', '-DBUILD_SHARED_LIBS=ON', '-DURHO3D_SAMPLES=OFF',
                           '-DURHO3D_PLAYER=OFF', '-DURHO3D_PROFILING=OFF', '-DURHO3D_GRAPHICS_API=GLES3',
                           '-DURHO3D_COMPUTE=OFF', '-DURHO3D_NETFX_RUNTIME_VERSION=7.0',
                           '-DURHO3D_GLOW=ON', '-DURHO3D_RMLUI=ON', '-DURHO3D_NETFX=netstandard2.0', '-DURHO3D_FEATURES=CSHARP;SYSTEMUI'
