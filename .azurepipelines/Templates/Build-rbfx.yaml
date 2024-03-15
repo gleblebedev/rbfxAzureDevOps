@@ -50,19 +50,19 @@ steps:
     cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3D --parallel 2
 
 - ${{ if eq(parameters.buildDotNet, true) }}:
-  - script: dotnet build Urho3DNet.csproj -v d -p:TargetFramework=netstandard2.0 -p:RBFX_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+  - script: dotnet build Urho3DNet.csproj -v d -p:TargetFramework=netstandard2.0 -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }}
     displayName: 'Build Urho3DNet netstandard2.0'
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0 -p:RBFX_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0 -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }}
     displayName: 'Build Urho3DNet Net7.0'
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-android -p:RBFX_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-android -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }}
     displayName: 'Build Urho3DNet net7.0-android'
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
-  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-ios -p:RBFX_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/
+  - script: dotnet build Urho3DNet.csproj -p:TargetFramework=net7.0-ios -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }}
     displayName: 'Build Urho3DNet net7.0-ios'
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
@@ -81,7 +81,7 @@ steps:
     condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
     failOnStderr: true
 
-  - script: dotnet build EditorManaged.csproj -p:URHO3D_NETFX=netstandard2.0 -p:URHO3D_NETFX_RUNTIME=${{ parameters.editorNetVersion }} -p:RBFX_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:GeneratedCodePath=$(buildFolder)/Source/Urho3D/ -p:GeneratePackageOnBuild=true
+  - script: dotnet build EditorManaged.csproj -p:URHO3D_NETFX=netstandard2.0 -p:URHO3D_NETFX_RUNTIME=${{ parameters.editorNetVersion }} -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:GeneratePackageOnBuild=true
     displayName: 'Build unofficial.Urho3DNet.Editor'
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Editor/EditorManaged'
 
