@@ -67,6 +67,11 @@ steps:
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
 
 - ${{ if eq(parameters.buildEditor, true) }}:
+  - pwsh: |
+      Get-ChildItem -Path $(Build.SourcesDirectory) -Filter *.cs -Recurse -Name| ForEach-Object {
+          Write-Host $_
+      }
+    displayName: 'Find all *.cs'
   - task: CMake@1
     displayName: 'Build libEditor'
     inputs:
