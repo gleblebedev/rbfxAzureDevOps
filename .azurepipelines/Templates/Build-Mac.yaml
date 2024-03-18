@@ -27,7 +27,7 @@ jobs:
 
   - template: Build-rbfx.yaml
     parameters:
-      cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER)
+      cmakeExtraArgs: -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_BUILD_TYPE=RelWithDebInfo
       buildDotNet: false
       buildEditor: false
 
