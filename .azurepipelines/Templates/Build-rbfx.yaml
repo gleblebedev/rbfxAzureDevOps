@@ -92,7 +92,7 @@ steps:
 
   - script: |
       dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/rbfx/Source/Editor/EditorManaged/**/unofficial.Urho3DNet.Editor.*.nupkg -v NupkgPath
-      dotnet tool run ezpipeline resolve-path -i $(Build.SourcesDirectory)/rbfxbuild/bin/**/libEditorWrapper* -t 1 -d -v LibEditorPath
+      dotnet tool run ezpipeline resolve-path -i $(buildFolder)/bin/**/libEditorWrapper* -t 1 -d -v LibEditorPath
     displayName: 'Find nuget'
     workingDirectory: '$(Build.SourcesDirectory)/'
 
