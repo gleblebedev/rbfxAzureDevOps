@@ -91,7 +91,7 @@ steps:
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Editor/EditorManaged'
 
   - script: |
-      dotnet tool run ezpipeline resolve-path -i $(buildFolder)/bin/unofficial.Urho3DNet.Editor.*.nupkg -v NupkgPath
+      dotnet tool run ezpipeline resolve-path -i $(buildFolder)/bin/**/unofficial.Urho3DNet.Editor.*.nupkg -v NupkgPath
     displayName: 'Find unofficial.Urho3DNet.Editor.*.nupkg'
     workingDirectory: '$(Build.SourcesDirectory)/'
 
