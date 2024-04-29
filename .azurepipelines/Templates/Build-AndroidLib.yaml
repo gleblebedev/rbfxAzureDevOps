@@ -25,12 +25,7 @@ jobs:
     displayName: 'Checkout project'
 
   - template: Install-DotNet.yaml
-      
-  - script: |
-      dotnet tool restore
-    displayName: 'Restore dotnet tools'
-    workingDirectory: $(Build.SourcesDirectory)
-
+  
   - template: Install-LinuxLibs.yaml
 
   - template: Fetch-CCache.yaml
