@@ -12,11 +12,21 @@
     <tags>rbfx Urho3D gamedev csharp dotnet gameengine</tags>
     <repository url="https://github.com/gleblebedev/rbfxAzureDevOps" />
     <dependencies>
-      <group targetFramework=".NETStandard2.0"></group>
-      <group targetFramework=".NETFramework8.0"></group>
-      <group targetFramework=".NETFramework8.0-android34.0"></group>
-      <group targetFramework=".NETFramework8.0-ios16.0"></group>
-      <group targetFramework="UAP10.0"></group>
+      <group targetFramework=".NETStandard2.0">
+          <dependency id="System.Text.Json" version="8.0.3"/>
+      </group>
+      <group targetFramework=".NETFramework8.0">
+          <dependency id="System.Text.Json" version="8.0.3"/>
+      </group>
+      <group targetFramework=".NETFramework8.0-android34.0">
+          <dependency id="System.Text.Json" version="8.0.3"/>
+      </group>
+      <group targetFramework=".NETFramework8.0-ios16.0">
+          <dependency id="System.Text.Json" version="8.0.3"/>
+      </group>
+      <group targetFramework="UAP10.0">
+          <dependency id="System.Text.Json" version="8.0.3"/>
+      </group>
     </dependencies>
       <!-- <group targetFramework="net7.0-ios16.1"></group> -->
   </metadata>
