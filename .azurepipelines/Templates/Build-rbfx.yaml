@@ -78,18 +78,18 @@ steps:
       }
     displayName: 'Find all *.cs'
   - pwsh: |
-      $sourceFilePath = "$(buildFolder)/bin/Urho3DNet.CodeGenerator.dll"
+      $sourceFilePath = Get-ChildItem -Path "$(buildFolder)/bin/" -Recurse -Include "Urho3DNet.CodeGenerator.dll"
       $destinationFolderPath = "$(buildFolder)/bin/linux-x64"
       if (-not (Test-Path -Path $destinationFolderPath)) {
           New-Item -Path $destinationFolderPath -ItemType Directory
       }
-      Copy-Item -Path $sourceFilePath -Destination $destinationFolderPath -Force
+      Copy-Item -Path $sourceFilePath.FullName -Destination $destinationFolderPath -Force
 
       $destinationFolderPath = "$(buildFolder)/bin/win-x64"
       if (-not (Test-Path -Path $destinationFolderPath)) {
           New-Item -Path $destinationFolderPath -ItemType Directory
       }
-      Copy-Item -Path $sourceFilePath -Destination $destinationFolderPath -Force
+      Copy-Item -Path $sourceFilePath.FullName -Destination $destinationFolderPath -Force
     displayName: 'Create platform folder'
 
   - task: CMake@1
