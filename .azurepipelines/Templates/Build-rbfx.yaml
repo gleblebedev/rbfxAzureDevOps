@@ -77,6 +77,17 @@ steps:
           Write-Host $_
       }
     displayName: 'Find all *.cs'
+  - pwsh: |
+      $folderPath = "$(buildFolder)/bin/linux-x64"
+      if (-not (Test-Path -Path $folderPath)) {
+          New-Item -Path $folderPath -ItemType Directory
+      }
+      $folderPath = "$(buildFolder)/bin/win-x64"
+      if (-not (Test-Path -Path $folderPath)) {
+          New-Item -Path $folderPath -ItemType Directory
+      }
+    displayName: 'Create platform folder'
+
   - task: CMake@1
     displayName: 'Build libEditor'
     inputs:
