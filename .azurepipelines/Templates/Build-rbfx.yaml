@@ -49,11 +49,12 @@ steps:
     workingDirectory: '$(buildFolder)'
     cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3D --parallel 2
 
-- ${{ if eq(parameters.buildDotNet, true) }}:
+- ${{ if or(eq(parameters.buildDotNet, true), eq(parameters.buildEditor, true)) }}:
   - script: dotnet build Urho3DNet.CodeGenerator.csproj -p:Configuration=${{ parameters.configuration }} -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.CodeGenerator'
     workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharp'
 
+- ${{ if eq(parameters.buildDotNet, true) }}:
   - script: dotnet build Urho3DNet.csproj -v d -p:TargetFramework=netstandard2.0 -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }}
     displayName: 'Build Urho3DNet netstandard2.0'
     workingDirectory: '$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp'
