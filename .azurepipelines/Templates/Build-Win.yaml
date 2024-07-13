@@ -56,6 +56,10 @@ jobs:
         -DURHO3D_EDITOR=ON
       configuration: ${{ parameters.configuration }}
 
+  - script: dotnet build Urho3DNet.CodeGenerator.csproj -p:Configuration=${{ parameters.configuration }} -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
+    displayName: 'Build Urho3DNet.CodeGenerator'
+    workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharp'
+
   - script: dotnet build Urho3DNet.Desktop.csproj -p:TargetFramework=net8.0 -p:Configuration=${{ parameters.configuration }} -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.Desktop'
     workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.Desktop'
@@ -73,6 +77,12 @@ jobs:
   - script: dotnet build Urho3DNet.Android.csproj -p:TargetFramework=net8.0-android -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.Android'
     workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.Android'
+
+  - pwsh: |
+      Get-ChildItem -Path $(buildFolder)/bin/${{ parameters.configuration }} -Recurse -Filter "*.dll" | ForEach-Object {
+        Write-Host $_.FullName
+      }
+    displayName: 'Find all DLLs'
 
   - pwsh: |
       $managedDllFolder = "$(Build.SourcesDirectory)/rbfx/Source/Urho3D/CSharp/bin/${{ parameters.configuration }}"
@@ -99,6 +109,9 @@ jobs:
 
       # .Net Standard 2.0 assembly
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netstandard2.0
+
+      # Code Generator assembly
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.CodeGenerator.??? -DestinationPath $(nugetFolder)/analyzers/dotnet/cs
 
       # .Net 7.0 assemblies
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net8.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net8.0
