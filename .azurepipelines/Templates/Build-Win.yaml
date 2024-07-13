@@ -56,10 +56,6 @@ jobs:
         -DURHO3D_EDITOR=ON
       configuration: ${{ parameters.configuration }}
 
-  - script: dotnet build Urho3DNet.CodeGenerator.csproj -p:Configuration=${{ parameters.configuration }} -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
-    displayName: 'Build Urho3DNet.CodeGenerator'
-    workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharp'
-
   - script: dotnet build Urho3DNet.Desktop.csproj -p:TargetFramework=net8.0 -p:Configuration=${{ parameters.configuration }} -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.Desktop'
     workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.Desktop'
