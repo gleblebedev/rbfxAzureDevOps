@@ -107,7 +107,7 @@ jobs:
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/netstandard2.0
 
       # Code Generator assembly
-      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/netstandard2.0/Urho3DNet.CodeGenerator.??? -DestinationPath $(nugetFolder)/analyzers/dotnet/cs
+      CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/Urho3DNet.CodeGenerator.??? -DestinationPath $(nugetFolder)/analyzers/dotnet/cs
 
       # .Net 7.0 assemblies
       CopyFiles -SourcePath $(buildFolder)/bin/${{ parameters.configuration }}/net8.0/Urho3DNet.??? -DestinationPath $(nugetFolder)/lib/net8.0
