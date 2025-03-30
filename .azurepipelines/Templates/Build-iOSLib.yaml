@@ -42,6 +42,16 @@ jobs:
     displayName: 'Downgrade cmake'
     workingDirectory: '$(Build.ArtifactStagingDirectory)'
 
+  - script: dotnet tool run ezpipeline git-height-version -i $(Build.SourcesDirectory)/.azurepipelines/version.txt -b 0.3.7.320 --variable VERSION
+    displayName: 'Generate version environment variable'
+
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $(VERSION)" $(Build.SourcesDirectory)/rbfx/Source/Urho3D/Info.plist
+    displayName: 'Update CFBundleVersion in Info.plist'
+
   - bash: |
       brew install ccache
     displayName: 'Install CCache'
