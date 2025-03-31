@@ -13,7 +13,7 @@ jobs:
   steps:
   - template: Install-DotNet.yaml
   
-  - script: dotnet tool run ezpipeline git-height-version -i $(Build.SourcesDirectory)/.azurepipelines/version.txt -b 0.3.7.320 --variable VERSION
+  - script: dotnet tool run ezpipeline git-height-version -i $(Build.SourcesDirectory)/.azurepipelines/version.txt -b 0.4.0 --variable VERSION
     displayName: 'Generate version environment variable'
 
   - task: NuGetToolInstaller@1

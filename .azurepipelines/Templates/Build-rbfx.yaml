@@ -9,7 +9,7 @@ parameters:
   editorNetVersion: 'net8.0'
 
 steps:
-- script: dotnet tool run ezpipeline git-height-version -i $(Build.SourcesDirectory)/.azurepipelines/version.txt -b 0.3.7.320 --variable VERSION
+- script: dotnet tool run ezpipeline git-height-version -i $(Build.SourcesDirectory)/.azurepipelines/version.txt -b 0.4.0 --variable VERSION
   displayName: 'Generate version environment variable'
 
 - script: dotnet tool run ezpipeline set-msbuild-property -i $(Build.SourcesDirectory)/rbfx/Directory.Build.props -p=Version:$(VERSION)
