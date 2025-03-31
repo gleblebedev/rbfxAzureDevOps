@@ -50,7 +50,9 @@ jobs:
       targetType: 'inline'
       script: |
         /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $(VERSION)" $(Build.SourcesDirectory)/rbfx/Source/Urho3D/Info.plist
-    displayName: 'Update CFBundleVersion in Info.plist'
+        /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $(VERSION)" $(Build.SourcesDirectory)/rbfx/Source/Urho3D/Info.plist
+    displayName: 'Update Info.plist'
+
 
   - bash: |
       brew install ccache
