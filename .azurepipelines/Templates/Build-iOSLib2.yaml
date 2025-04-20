@@ -1,0 +1,125 @@
+# Build project for iOS
+parameters:
+  configuration: 'Release'
+  sdk: 'iphoneos'
+  nativeFolder: 'ios'
+  arch: arm64
+  platform: 'OS64COMBINED'
+  name: 'Build_iOS'
+
+jobs:
+- job: '${{ parameters.name }}'
+  displayName: 'Build ${{ parameters.name }}'
+  timeoutInMinutes: 90
+  pool:
+    vmImage: 'macOS-latest'
+  variables:
+    rbfxFolder: $(Build.SourcesDirectory)/rbfx
+    buildFolder: $(Build.SourcesDirectory)/rbfxbuild
+    nugetFolder: $(Build.ArtifactStagingDirectory)/nuget
+    sdkFolder: $(Build.ArtifactStagingDirectory)/sdk
+
+  steps:
+  - checkout: self
+    submodules: true
+    displayName: 'Checkout project'
+
+  - template: Add-ToolsToPath.yaml
+
+  - pwsh: |
+      dotnet tool run ezpipeline -- unzip-blob --connection-string "$(CCACHE_BLOB_CONNECTION_STRING)" -o "$(sdkFolder)" -c sdk -n "mac.zip"
+      Write-Host "##vso[task.setvariable variable=URHO3D_SDK]$(sdkFolder)"
+    displayName: 'Setup SDK'
+
+  - bash: |
+      brew info cmake
+      brew uninstall cmake
+      curl -OL "https://github.com/Kitware/CMake/releases/download/v3.31.6/cmake-3.31.6-macos-universal.tar.gz"
+      tar xf "cmake-3.31.6-macos-universal.tar.gz"
+      mv "cmake-3.31.6-macos-universal" cmake
+      ln -s $(Build.ArtifactStagingDirectory)/cmake/CMake.app/Contents/bin/cmake /usr/local/bin/
+      cmake --version
+    displayName: 'Downgrade cmake'
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+
+  - script: dotnet tool run ezpipeline git-height-version -i $(Build.SourcesDirectory)/.azurepipelines/version.txt -b 0.4.0 --variable VERSION
+    displayName: 'Generate version environment variable'
+
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $(VERSION)" $(Build.SourcesDirectory)/rbfx/Source/Urho3D/Info.plist
+        /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $(VERSION)" $(Build.SourcesDirectory)/rbfx/Source/Urho3D/Info.plist
+    displayName: 'Update Info.plist'
+
+
+  - bash: |
+      brew install ccache
+    displayName: 'Install CCache'
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+
+  - template: Fetch-CCache.yaml
+
+  - bash: xcodebuild -showsdks
+    displayName: 'xcodebuild -showsdks'
+
+  - bash: xcode-select -p
+    displayName: 'xcode-select -p'
+
+  - bash: sudo xcode-select --reset
+    displayName: 'xcode-select --reset'
+
+  - bash: xcode-select -p
+    displayName: 'xcode-select -p'
+
+  - script: mkdir $(buildFolder)
+    displayName: 'Make rbfxbuild folder'
+    failOnStderr: true
+
+  - script: |
+      sdk_path=$(xcrun --sdk ${{ parameters.sdk }} --show-sdk-path)
+      echo "##vso[task.setvariable variable=IOS_SDK_PATH]$sdk_path"
+    displayName: 'Retrieve and Set iOS SDK Path'
+
+  - task: CMake@1
+    displayName: 'Configure Urho3D'
+    inputs:
+      workingDirectory: '$(buildFolder)'
+      cmakeArgs: -G Xcode -DCMAKE_CXX_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_C_COMPILER_LAUNCHER=$(EM_COMPILER_WRAPPER) -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=$(IOS_SDK_PATH) -DCMAKE_OSX_ARCHITECTURE=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=15.0 -DENABLE_BITCODE=OFF -DURHO3D_COMPUTE=OFF -DURHO3D_GRAPHICS_API=GLES3 -DBUILD_SHARED_LIBS=ON -DURHO3D_GLOW=ON -DURHO3D_FEATURES="CSHARP;SYSTEMUI" -DURHO3D_NETFX=netstandard2.0 -DURHO3D_PROFILING=OFF -DSWIG_MODULE_Urho3D_DLLIMPORT=__Internal -DSWIG_MODULE_ImGui_DLLIMPORT=__Internal -DURHO3D_PLAYER=OFF -DURHO3D_EXTRAS=OFF -DURHO3D_TOOLS=OFF -DURHO3D_RMLUI=ON -S $(rbfxFolder) -B $(buildFolder)
+
+  - pwsh: |
+      Get-ChildItem -Path $(buildFolder) -Filter *.xcodeproj -Recurse -Name| ForEach-Object {
+          Write-Host $_
+      }
+    displayName: 'Find all *.xcodeproj'
+
+  - script: dotnet tool run ezpipeline xcode-setbuildsystemtype -i $(buildFolder) --build-system-type Original
+    displayName: 'Patch build system type'
+
+  - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -list -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="-"
+    continueOnError: true
+    displayName: 'Xcode list targets'
+
+  - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -target Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="-"
+    continueOnError: true
+    displayName: 'Xcode build'
+
+  - bash: /usr/bin/xcodebuild -sdk ${{ parameters.sdk }} -arch ${{ parameters.arch }} -configuration ${{ parameters.configuration }} -project $(buildFolder)/rbfx.xcodeproj -target Urho3D build -verbose OTHER_CFLAGS="-v" CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="-"
+    displayName: 'Xcode build again'
+
+  - template: Publish-CCacheLog.yaml
+
+  - pwsh: |
+      Get-ChildItem -Path $(buildFolder)/bin/${{ parameters.configuration }}/ -Filter *.framework -Name| ForEach-Object {
+          Write-Host $_
+          New-Item -ItemType Directory -Path $(nugetFolder)/native/${{ parameters.nativeFolder }}/$_ -Force
+          Copy-item $(buildFolder)/bin/${{ parameters.configuration }}/$_ $(nugetFolder)/native/${{ parameters.nativeFolder }}/ -Recurse -Force
+      }
+    displayName: 'Copy framework'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish binaries'
+    inputs:
+      targetPath: '$(nugetFolder)'
+      artifactName: 'ios-nuget-${{ parameters.sdk }}'

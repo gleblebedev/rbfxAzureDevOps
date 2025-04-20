@@ -66,11 +66,11 @@ jobs:
       workingDirectory: '$(buildFolder)'
       cmakeArgs: --build . --config ${{ parameters.configuration }} --target Urho3DNet.UWP
 
-  - script: dotnet build Urho3DNet.IOS.csproj -p:TargetFramework=net8.0-ios -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
+  - script: dotnet build Urho3DNet.IOS.csproj -p:TargetFramework=net8.0-ios -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:Platform=AnyCPU -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.IOS'
     workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.IOS'
 
-  - script: dotnet build Urho3DNet.Android.csproj -p:TargetFramework=net8.0-android -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
+  - script: dotnet build Urho3DNet.Android.csproj -p:TargetFramework=net8.0-android -p:CMAKE_BINARY_DIR=$(buildFolder)/ -p:Configuration=${{ parameters.configuration }} -p:Platform=AnyCPU -p:BaseOutputPath=$(buildFolder)/bin/${{ parameters.configuration }}/
     displayName: 'Build Urho3DNet.Android'
     workingDirectory: '$(rbfxFolder)/Source/Urho3D/CSharpPlatforms/Urho3DNet.Android'
 
