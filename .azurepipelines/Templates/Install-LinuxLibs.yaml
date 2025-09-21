@@ -18,5 +18,5 @@ steps:
     displayName: 'Install libs'
     inputs:
       targetType: inline
-      script: 'sudo apt-get install -y ccache libgl1-mesa-dev libxcursor-dev libxi-dev libxinerama-dev libxrandr-dev libxrender-dev libxss-dev libasound2-dev libpulse-dev libibus-1.0-dev libdbus-1-dev libreadline6-dev libudev-dev uuid-dev libtbb-dev'
-      failOnStderr: true
+      script: 'sudo apt-get install -y uuid-dev libgl-dev libssl-dev libasound2-dev libpulse-dev ccache libdbus-1-dev'
+      failOnStderr: false
